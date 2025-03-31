@@ -66,6 +66,9 @@ dependencies {
 
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+	// Redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
 	// H2 데이터베이스 런타임 의존성
 	runtimeOnly 'com.h2database:h2'
 
