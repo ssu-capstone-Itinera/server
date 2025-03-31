@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8
+    container_name: itinera_mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: itinera
+      MYSQL_DATABASE: itinera_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: itinera
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    container_name: itinera_redis_container
+    restart: always
+    ports:
+      - "6379:6379"
+
+volumes:
+  mysql_data:
+
