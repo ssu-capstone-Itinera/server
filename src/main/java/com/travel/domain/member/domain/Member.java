@@ -1,5 +1,6 @@
 package com.travel.domain.member.domain;
 
+import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Builder
 @Setter
-public class Member {
+public class Member extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
