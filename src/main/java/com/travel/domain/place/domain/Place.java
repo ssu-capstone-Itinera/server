@@ -1,6 +1,6 @@
 package com.travel.domain.place.domain;
 
-import com.travel.domain.categories.domain.Categories;
+import com.travel.domain.categories.domain.Category;
 import com.travel.domain.itineraryitem.domain.ItineraryItem;
 import com.travel.domain.tag.domain.Tag;
 import com.travel.global.common.entity.BaseTimeEntity;
@@ -12,23 +12,27 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "place")
-@Getter
-@Setter
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "place_type")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Place extends BaseTimeEntity {
+@Getter
+@Setter
+public abstract class Place extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "categories_id")
-    private Categories categories;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private Category category;
 
     @Column(name = "name", length = 100)
     private String name;
@@ -47,5 +51,7 @@ public class Place extends BaseTimeEntity {
 
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<Tag> tags = new ArrayList<>();
+
+    public abstract Map<String, Object> getDetails();
 }
 
