@@ -2,15 +2,13 @@ package com.travel.domain.member.domain;
 
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "member")
 @Getter
-@Builder
 @Setter
+@NoArgsConstructor
 public class Member extends BaseTimeEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +20,10 @@ public class Member extends BaseTimeEntity{
     @Column
     private String email;
 
+
+    @Column
+    private String profileImage;
+
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
@@ -30,5 +32,15 @@ public class Member extends BaseTimeEntity{
     @Column
     private String providerId;
 
+    @Builder
+    public Member(String nickName, String email, String profileImage, MemberRole role,
+                  Provider provider, String providerId) {
+        this.nickName = nickName;
+        this.email = email;
+        this.profileImage = profileImage;
+        this.role = role;
+        this.provider = provider;
+        this.providerId = providerId;
+    }
 
 }

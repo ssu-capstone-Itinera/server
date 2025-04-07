@@ -1,4 +1,4 @@
-package com.travel.domain.categories.domain;
+package com.travel.domain.categories.entity;
 
 public enum Category {
     RESTAURANT,

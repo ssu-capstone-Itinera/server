@@ -72,6 +72,9 @@ dependencies {
 	// H2 데이터베이스 런타임 의존성
 	runtimeOnly 'com.h2database:h2'
 
+	// Spring WebFlux
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
