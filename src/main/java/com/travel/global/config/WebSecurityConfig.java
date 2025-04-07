@@ -1,6 +1,9 @@
 package com.travel.global.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
+import com.travel.global.security.JwtAuthenticationFilter;
+import com.travel.global.util.CookieUtil;
+import com.travel.security.auth.service.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,8 +24,8 @@ import java.util.Collections;
 @RequiredArgsConstructor
 public class WebSecurityConfig {
 
-//    private final JwtTokenService jwtTokenService;
-//    private final CookieUtil cookieUtil;
+    private final JwtTokenService jwtTokenService;
+    private final CookieUtil cookieUtil;
 
     private void defaultFilterChain(HttpSecurity http) throws Exception {
         http.httpBasic(AbstractHttpConfigurer::disable)
@@ -48,14 +51,12 @@ public class WebSecurityConfig {
                                 ).permitAll()
                                 .requestMatchers("/api/itinera/**")
                                 .permitAll()
-                                .requestMatchers("/auth/register")
+                                .requestMatchers("/api/v1/auth/register\"")
                                 .authenticated() // 소셜 로그인 임시 토큰으로 인증
-                                .requestMatchers("/auth/**")
+                                .requestMatchers("/api/vi/auth/**")
                                 .permitAll() // 임시 회원가입 / 로그인 + OAuth2 로그인
-                                .requestMatchers("/v1/**")
+                                .requestMatchers("/api/v1/**")
                                 .permitAll() // 임시로 모든 요청 허용
-                                .requestMatchers("/oauth2/**")
-                                .permitAll()
                                 .anyRequest()
                                 .authenticated());
 
@@ -63,10 +64,10 @@ public class WebSecurityConfig {
                 exception ->
                         exception.authenticationEntryPoint(
                                 (request, response, authException) -> response.setStatus(401)));
-//
-//        http.addFilterBefore(
-//                jwtAuthenticationFilter(jwtTokenService, cookieUtil),
-//                UsernamePasswordAuthenticationFilter.class);
+
+        http.addFilterBefore(
+                jwtAuthenticationFilter(jwtTokenService, cookieUtil),
+                UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -86,9 +87,9 @@ public class WebSecurityConfig {
         return source;
     }
 
-//    @Bean
-//    public JwtAuthenticationFilter jwtAuthenticationFilter(
-//            JwtTokenService jwtTokenService, CookieUtil cookieUtil) {
-//        return new JwtAuthenticationFilter(jwtTokenService, cookieUtil);
-//    }
+    @Bean
+    public JwtAuthenticationFilter jwtAuthenticationFilter(
+            JwtTokenService jwtTokenService, CookieUtil cookieUtil) {
+        return new JwtAuthenticationFilter(jwtTokenService, cookieUtil);
+    }
 }

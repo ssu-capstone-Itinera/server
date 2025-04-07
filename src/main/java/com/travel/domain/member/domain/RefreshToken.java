@@ -1,13 +1,13 @@
 package com.travel.domain.member.domain;
 
 import jakarta.persistence.Column;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.redis.core.RedisHash;
 import org.springframework.data.redis.core.TimeToLive;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RedisHash(value = "refreshToken")
 public class RefreshToken {
 

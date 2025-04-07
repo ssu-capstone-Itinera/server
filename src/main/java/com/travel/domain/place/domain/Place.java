@@ -1,6 +1,6 @@
 package com.travel.domain.place.domain;
 
-import com.travel.domain.categories.domain.Category;
+import com.travel.domain.categories.entity.Category;
 import com.travel.domain.itineraryitem.domain.ItineraryItem;
 import com.travel.domain.tag.domain.Tag;
 import com.travel.global.common.entity.BaseTimeEntity;

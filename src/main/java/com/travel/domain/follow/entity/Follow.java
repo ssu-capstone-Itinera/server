@@ -1,4 +1,4 @@
-package com.travel.domain.follow.domain;
+package com.travel.domain.follow.entity;
 
 import com.travel.domain.member.domain.Member;
 import com.travel.global.common.entity.BaseTimeEntity;
