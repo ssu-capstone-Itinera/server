@@ -20,13 +20,15 @@ public class AuthController {
     private final AuthService authService;
 
     @Operation(
-            summary = "소셜 로그인")
+            summary = "카카오 로그인")
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> loginByKakao(
             @RequestBody RegisterRequest registerRequest) {
         return new ResponseEntity<>(authService.signIn(registerRequest), HttpStatus.OK);
     }
 
+    @Operation(
+            summary = "회원 탈퇴")
     @DeleteMapping("/withdraw")
     public void withdraw(@AuthenticationPrincipal Long memberId) {
         authService.withdraw(memberId);
