@@ -17,7 +17,7 @@ public class KakaoTokenResponse {
     private String refresh_token;
     private int refresh_token_expires_in;
 
-    /** 인증된 사용자의 정보 조회 권한 범위 */
+    /* 인증된 사용자의 정보 조회 권한 범위 */
     private String scope;
 }
 

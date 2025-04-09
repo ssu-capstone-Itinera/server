@@ -10,6 +10,9 @@ import com.travel.global.common.error.ErrorCode;
 @Component
 public class SecurityUtil {
 
+    /*
+    @AuthenticationPrincipal 사용하지 않더라도 .getCurrentMemberId()로 memberId 가져올 수 있음
+     */
     public Long getCurrentMemberId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         try {
