@@ -86,8 +86,8 @@ public class AuthService {
     }
 
     @Transactional
-    public void withdraw() {
-        memberRepository.deleteAll();
-        refreshTokenRepository.deleteAll();
+    public void withdraw(Long memberId) {
+        memberRepository.deleteById(memberId);
+        refreshTokenRepository.deleteByMemberId(memberId);
     }
 }

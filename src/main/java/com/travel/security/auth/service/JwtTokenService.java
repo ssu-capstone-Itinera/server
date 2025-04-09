@@ -77,10 +77,8 @@ public class JwtTokenService {
             return null;
         }
 
-        //redis에서 해당 memberId에 해당하는 refreshToken 가져오기
         Optional<RefreshToken> refreshToken = getRefreshTokenFromRedis(refreshTokenDto.memberId());
 
-        // Redis에 토큰이 존재하고, 쿠키의 토큰과 값이 일치하면 DTO 반환
         if (refreshToken.isPresent()
                 && refreshTokenDto.token().equals(refreshToken.get().getRefreshToken())) {
             return refreshTokenDto;
