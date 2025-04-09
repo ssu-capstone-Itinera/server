@@ -3,6 +3,7 @@ import static org.springframework.security.config.Customizer.withDefaults;
 
 import com.travel.global.security.JwtAuthenticationFilter;
 import com.travel.global.util.CookieUtil;
+import com.travel.global.util.JwtUtil;
 import com.travel.security.auth.service.JwtTokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -66,7 +67,7 @@ public class WebSecurityConfig {
                                 (request, response, authException) -> response.setStatus(401)));
 
         http.addFilterBefore(
-                jwtAuthenticationFilter(jwtTokenService, cookieUtil),
+                jwtAuthenticationFilter(jwtTokenService),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
@@ -89,7 +90,7 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter(
-            JwtTokenService jwtTokenService, CookieUtil cookieUtil) {
-        return new JwtAuthenticationFilter(jwtTokenService, cookieUtil);
+            JwtTokenService jwtTokenService) {
+        return new JwtAuthenticationFilter(jwtTokenService);
     }
 }

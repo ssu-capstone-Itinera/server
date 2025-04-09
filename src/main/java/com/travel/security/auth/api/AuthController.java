@@ -28,8 +28,8 @@ public class AuthController {
     }
 
     @DeleteMapping("/withdraw")
-    public void withdraw() {
-        authService.withdraw();
+    public void withdraw(@AuthenticationPrincipal Long memberId) {
+        authService.withdraw(memberId);
     }
 
 }

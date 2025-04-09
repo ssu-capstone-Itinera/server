@@ -7,6 +7,7 @@ import com.travel.security.auth.dto.token.AccessTokenDto;
 import com.travel.security.auth.dto.token.RefreshTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,6 @@ import static com.travel.global.common.constants.SecurityConstants.TOKEN_ROLE_NA
 @RequiredArgsConstructor
 public class JwtUtil {
     private final JwtProperties jwtProperties;
-
 
 
 
@@ -92,7 +92,7 @@ public class JwtUtil {
 
     public AccessTokenDto parseAccessToken(String token) throws ExpiredJwtException {
         try {
-            Jws<Claims> claims = getClaims(token, getAccessTokenKey());
+            Jws<Claims> claims = getClaims(token);
 
             return new AccessTokenDto(
                     Long.parseLong(claims.getBody().getSubject()),
@@ -107,7 +107,7 @@ public class JwtUtil {
 
     public RefreshTokenDto parseRefreshToken(String token) throws ExpiredJwtException {
         try {
-            Jws<Claims> claims = getClaims(token, getRefreshTokenKey());
+            Jws<Claims> claims = getClaims(token);
 
             return new RefreshTokenDto(
                     Long.parseLong(claims.getBody().getSubject()),
@@ -125,7 +125,8 @@ public class JwtUtil {
     그냥 Claims로 반환하면 JWT에서 Payload(Claims) 부분만 추출
     Jws<Claims>를 반환하면 헤더(Header), 서명(Signature) 정보까지 포함한 전체 JWT 파싱 결과를 얻을 수 있음.
      */
-    private Jws<Claims> getClaims(String token, Key key) {
+    public Jws<Claims> getClaims(String token) {
+        Key key = getAccessTokenKey();
         return Jwts.parserBuilder()
                 .requireIssuer(jwtProperties.getIssuer())
                 .setSigningKey(key)
