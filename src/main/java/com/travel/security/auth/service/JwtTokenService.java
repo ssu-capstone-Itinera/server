@@ -1,8 +1,8 @@
 package com.travel.security.auth.service;
 
 import com.travel.domain.member.dao.RefreshTokenRepository;
-import com.travel.domain.member.domain.MemberRole;
-import com.travel.domain.member.domain.RefreshToken;
+import com.travel.domain.member.entity.MemberRole;
+import com.travel.domain.member.entity.RefreshToken;
 import com.travel.global.util.JwtUtil;
 import com.travel.security.auth.dto.token.AccessTokenDto;
 import com.travel.security.auth.dto.token.RefreshTokenDto;

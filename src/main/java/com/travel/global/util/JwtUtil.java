@@ -1,13 +1,12 @@
 package com.travel.global.util;
 
 
-import com.travel.domain.member.domain.MemberRole;
+import com.travel.domain.member.entity.MemberRole;
 import com.travel.infra.config.jwt.JwtProperties;
 import com.travel.security.auth.dto.token.AccessTokenDto;
 import com.travel.security.auth.dto.token.RefreshTokenDto;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

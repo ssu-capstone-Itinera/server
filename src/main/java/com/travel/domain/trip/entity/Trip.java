@@ -1,9 +1,9 @@
-package com.travel.domain.trip.domain;
+package com.travel.domain.trip.entity;
 
-import com.travel.domain.itinerary.domain.Itinerary;
-import com.travel.domain.member.domain.Member;
+import com.travel.domain.itinerary.entity.Itinerary;
+import com.travel.domain.member.entity.Member;
 import com.travel.domain.post.post.domain.Post;
-import com.travel.domain.tripshare.domain.TripShare;
+import com.travel.domain.tripshare.entity.TripShare;
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

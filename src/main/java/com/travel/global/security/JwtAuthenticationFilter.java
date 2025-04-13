@@ -1,13 +1,8 @@
 package com.travel.global.security;
 
-import com.travel.domain.member.domain.MemberRole;
-import com.travel.global.util.CookieUtil;
-import com.travel.global.util.JwtUtil;
+import com.travel.domain.member.entity.MemberRole;
 import com.travel.security.auth.dto.token.AccessTokenDto;
-import com.travel.security.auth.dto.token.RefreshTokenDto;
 import com.travel.security.auth.service.JwtTokenService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;

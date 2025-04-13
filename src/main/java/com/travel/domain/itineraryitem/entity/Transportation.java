@@ -1,4 +1,4 @@
-package com.travel.domain.itineraryitem.domain;
+package com.travel.domain.itineraryitem.entity;
 
 import lombok.Getter;
 

@@ -1,6 +1,6 @@
 package com.travel.security.auth.dto;
 
-import com.travel.domain.member.domain.Member;
+import com.travel.domain.member.entity.Member;
 
 public interface UserInfo {
     String getProviderId();

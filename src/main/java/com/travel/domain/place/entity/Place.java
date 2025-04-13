@@ -1,8 +1,8 @@
-package com.travel.domain.place.domain;
+package com.travel.domain.place.entity;
 
 import com.travel.domain.categories.entity.Category;
-import com.travel.domain.itineraryitem.domain.ItineraryItem;
-import com.travel.domain.tag.domain.Tag;
+import com.travel.domain.itineraryitem.entity.ItineraryItem;
+import com.travel.domain.tag.entity.Tag;
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

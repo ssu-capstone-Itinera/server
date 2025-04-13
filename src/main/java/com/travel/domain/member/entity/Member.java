@@ -1,4 +1,4 @@
-package com.travel.domain.member.domain;
+package com.travel.domain.member.entity;
 
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;

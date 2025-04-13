@@ -1,6 +1,6 @@
-package com.travel.domain.tripshare.domain;
+package com.travel.domain.tripshare.entity;
 
-import com.travel.domain.trip.domain.Trip;
+import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
