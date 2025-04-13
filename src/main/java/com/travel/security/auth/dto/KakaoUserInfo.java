@@ -1,8 +1,8 @@
 package com.travel.security.auth.dto;
 
-import com.travel.domain.member.domain.Member;
-import com.travel.domain.member.domain.MemberRole;
-import com.travel.domain.member.domain.Provider;
+import com.travel.domain.member.entity.Member;
+import com.travel.domain.member.entity.MemberRole;
+import com.travel.domain.member.entity.Provider;
 import lombok.*;
 
 import java.util.Map;

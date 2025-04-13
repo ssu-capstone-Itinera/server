@@ -1,4 +1,4 @@
-package com.travel.domain.member.domain;
+package com.travel.domain.member.entity;
 
 import jakarta.persistence.Column;
 import lombok.*;

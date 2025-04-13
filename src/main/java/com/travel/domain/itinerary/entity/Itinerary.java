@@ -1,7 +1,7 @@
-package com.travel.domain.itinerary.domain;
+package com.travel.domain.itinerary.entity;
 
-import com.travel.domain.itineraryitem.domain.ItineraryItem;
-import com.travel.domain.trip.domain.Trip;
+import com.travel.domain.itineraryitem.entity.ItineraryItem;
+import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,6 +1,6 @@
 package com.travel.domain.post.post.domain;
 
-import com.travel.domain.member.domain.Member;
+import com.travel.domain.member.entity.Member;
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,7 +1,7 @@
 package com.travel.domain.post.post.domain;
 
 import com.travel.domain.post.comment.domain.PostComment;
-import com.travel.domain.trip.domain.Trip;
+import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,6 +1,6 @@
-package com.travel.domain.tagtype.domain;
+package com.travel.domain.tagtype.entity;
 
-import com.travel.domain.tag.domain.Tag;
+import com.travel.domain.tag.entity.Tag;
 import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.Getter;

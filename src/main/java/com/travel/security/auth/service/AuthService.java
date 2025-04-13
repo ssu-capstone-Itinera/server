@@ -2,11 +2,9 @@ package com.travel.security.auth.service;
 
 import com.travel.domain.member.dao.MemberRepository;
 import com.travel.domain.member.dao.RefreshTokenRepository;
-import com.travel.domain.member.domain.Member;
-import com.travel.domain.member.domain.MemberRole;
-import com.travel.domain.member.domain.RefreshToken;
-import com.travel.global.common.error.CustomException;
-import com.travel.global.common.error.ErrorCode;
+import com.travel.domain.member.entity.Member;
+import com.travel.domain.member.entity.MemberRole;
+import com.travel.domain.member.entity.RefreshToken;
 import com.travel.global.util.JwtUtil;
 import com.travel.security.auth.dto.UserInfo;
 import com.travel.security.auth.dto.request.RegisterRequest;
