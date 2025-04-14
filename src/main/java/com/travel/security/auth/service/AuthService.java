@@ -1,5 +1,8 @@
 package com.travel.security.auth.service;
 
+import java.util.Date;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.travel.domain.member.dao.MemberRepository;
 import com.travel.domain.member.dao.RefreshTokenRepository;
 import com.travel.domain.member.entity.Member;
@@ -13,10 +16,6 @@ import com.travel.security.auth.oauth.Oauth2Factory;
 import com.travel.security.auth.oauth.Oauth2Service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Date;
 
 @Slf4j
 @Service
@@ -27,7 +26,6 @@ public class AuthService {
     private final RefreshTokenRepository refreshTokenRepository;
 
     private final Oauth2Factory oauth2Factory;
-
 
     @Transactional
     public AuthResponse signIn(RegisterRequest request) {
@@ -48,13 +46,15 @@ public class AuthService {
         String refreshToken = jwtUtil.generateRefreshToken(memberId);
 
         // 리프레시 토큰 저장 또는 업데이트
-        refreshTokenRepository.findByMemberId(memberId)
+        refreshTokenRepository
+                .findByMemberId(memberId)
                 .ifPresentOrElse(
                         token -> {
                             token.updateRefreshToken(refreshToken);
                         },
-                        () -> refreshTokenRepository.save(new RefreshToken(memberId, refreshToken))
-                );
+                        () ->
+                                refreshTokenRepository.save(
+                                        new RefreshToken(memberId, refreshToken)));
 
         // 토큰의 만료 시간 파싱
         Date accessTokenExpiration = jwtUtil.getTokenExpirationDate(accessToken, true);
@@ -73,7 +73,8 @@ public class AuthService {
     }
 
     private Member findOrSignUp(UserInfo userInfo) {
-        return memberRepository.findByProviderId(userInfo.getProviderId())
+        return memberRepository
+                .findByProviderId(userInfo.getProviderId())
                 .orElseGet(() -> saveMember(userInfo));
     }
 

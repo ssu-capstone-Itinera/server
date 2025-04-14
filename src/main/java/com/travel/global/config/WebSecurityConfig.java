@@ -1,11 +1,9 @@
 package com.travel.global.config;
+
 import static org.springframework.security.config.Customizer.withDefaults;
 
-import com.travel.global.security.JwtAuthenticationFilter;
-import com.travel.global.util.CookieUtil;
-import com.travel.global.util.JwtUtil;
-import com.travel.security.auth.service.JwtTokenService;
-import lombok.RequiredArgsConstructor;
+import java.util.Collections;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -18,7 +16,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Collections;
+import com.travel.global.security.JwtAuthenticationFilter;
+import com.travel.global.util.CookieUtil;
+import com.travel.security.auth.service.JwtTokenService;
+
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
@@ -44,16 +46,14 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests(
                 authorize ->
                         authorize
-                                //swagger
+                                // swagger
                                 .requestMatchers(
-                                        "/v3/api-docs/**",
-                                        "/swagger-ui/**",
-                                        "/swagger-ui.html"
-                                ).permitAll()
+                                        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+                                .permitAll()
                                 .requestMatchers("/api/itinera/**")
                                 .permitAll()
-                                .requestMatchers("/api/v1/auth/register\"")
-                                .authenticated() // 소셜 로그인 임시 토큰으로 인증
+                                .requestMatchers("/api/v1/auth/register")
+                                .permitAll() // 소셜 로그인 임시 토큰으로 인증
                                 .requestMatchers("/api/vi/auth/**")
                                 .permitAll() // 임시 회원가입 / 로그인 + OAuth2 로그인
                                 .requestMatchers("/api/v1/**")
@@ -73,7 +73,6 @@ public class WebSecurityConfig {
         return http.build();
     }
 
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -89,8 +88,7 @@ public class WebSecurityConfig {
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(
-            JwtTokenService jwtTokenService) {
+    public JwtAuthenticationFilter jwtAuthenticationFilter(JwtTokenService jwtTokenService) {
         return new JwtAuthenticationFilter(jwtTokenService);
     }
 }
