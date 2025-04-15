@@ -1,11 +1,12 @@
 package com.travel.security.auth.dto;
 
+import java.util.Map;
+
 import com.travel.domain.member.entity.Member;
 import com.travel.domain.member.entity.MemberRole;
 import com.travel.domain.member.entity.Provider;
-import lombok.*;
 
-import java.util.Map;
+import lombok.*;
 
 @Builder
 @Getter
@@ -47,5 +48,4 @@ public class KakaoUserInfo implements UserInfo {
         Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
         return profile != null ? profile.get("profile_image_url").toString() : null;
     }
-
 }

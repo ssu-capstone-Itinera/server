@@ -1,18 +1,20 @@
 package com.travel.domain.place.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import jakarta.persistence.*;
+
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.itineraryitem.entity.ItineraryItem;
 import com.travel.domain.tag.entity.Tag;
 import com.travel.global.common.entity.BaseTimeEntity;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Entity
 @Table(name = "place")
@@ -28,7 +30,6 @@ public abstract class Place extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "place_id")
     private Long id;
-
 
     @Enumerated(EnumType.STRING)
     @Column(name = "category", nullable = false)
@@ -54,4 +55,3 @@ public abstract class Place extends BaseTimeEntity {
 
     public abstract Map<String, Object> getDetails();
 }
-

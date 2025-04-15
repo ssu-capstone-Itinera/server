@@ -1,11 +1,7 @@
 package com.travel.security.auth.oauth;
 
-import com.travel.global.common.error.CustomException;
-import com.travel.global.common.error.ErrorCode;
-import com.travel.security.auth.dto.KakaoUserInfo;
-import com.travel.security.auth.dto.response.KakaoTokenResponse;
-import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONObject;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -13,10 +9,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import com.travel.global.common.error.CustomException;
+import com.travel.global.common.error.ErrorCode;
+import com.travel.security.auth.dto.KakaoUserInfo;
+import com.travel.security.auth.dto.response.KakaoTokenResponse;
+
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Map;
-
+import net.minidev.json.JSONObject;
 
 @Service
 @Slf4j
@@ -67,11 +68,7 @@ public class KakaoOauth2Service implements Oauth2Service {
             // API 호출
             ResponseEntity<KakaoTokenResponse> responseEntity =
                     restTemplate.exchange(
-                            tokenUri,
-                            HttpMethod.POST,
-                            requestEntity,
-                            KakaoTokenResponse.class
-                    );
+                            tokenUri, HttpMethod.POST, requestEntity, KakaoTokenResponse.class);
 
             // 응답 결과 반환
             if (responseEntity.getStatusCode() == HttpStatus.OK) {
@@ -88,13 +85,14 @@ public class KakaoOauth2Service implements Oauth2Service {
     }
 
     private KakaoUserInfo getUserInfoWithToken(String accessToken) {
-        JSONObject response = WebClient.create()
-                .get()
-                .uri(KAKAO_USER_INFO_URI)
-                .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
-                .retrieve()
-                .bodyToMono(JSONObject.class)
-                .block();
+        JSONObject response =
+                WebClient.create()
+                        .get()
+                        .uri(KAKAO_USER_INFO_URI)
+                        .headers(httpHeaders -> httpHeaders.setBearerAuth(accessToken))
+                        .retrieve()
+                        .bodyToMono(JSONObject.class)
+                        .block();
 
         if (response == null) {
             throw new CustomException(ErrorCode.KAKAO_USER_INFO_FAILED);
@@ -103,7 +101,6 @@ public class KakaoOauth2Service implements Oauth2Service {
         KakaoUserInfo userInfo = new KakaoUserInfo();
         userInfo.setId(response.get("id").toString());
         userInfo.setKakao_account((Map<String, Object>) response.get("kakao_account"));
-
 
         return userInfo;
     }

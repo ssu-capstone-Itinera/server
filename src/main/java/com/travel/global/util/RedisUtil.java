@@ -7,11 +7,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class RedisUtil {
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    @Autowired private RedisTemplate<String, Object> redisTemplate;
 
-    //refreshToken
-    public void set(String key, String value){
+    // refreshToken
+    public void set(String key, String value) {
         redisTemplate.opsForValue().set(key, value);
     }
 
@@ -22,5 +21,4 @@ public class RedisUtil {
     public void delete(String key) {
         redisTemplate.delete(key);
     }
-
 }

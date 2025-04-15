@@ -1,10 +1,5 @@
 package com.travel.global.common.response;
 
-import com.travel.global.common.error.CustomException;
-import com.travel.global.common.error.ErrorCode;
-import com.travel.global.common.error.ErrorResponse;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +7,13 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import com.travel.global.common.error.CustomException;
+import com.travel.global.common.error.ErrorCode;
+import com.travel.global.common.error.ErrorResponse;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestControllerAdvice
@@ -41,4 +43,3 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(errorCode.getStatus()).body(response);
     }
 }
-

@@ -1,19 +1,20 @@
 package com.travel.security.auth.service;
 
+import static com.travel.global.common.constants.SecurityConstants.TOKEN_ROLE_NAME;
+
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import com.travel.domain.member.dao.RefreshTokenRepository;
 import com.travel.domain.member.entity.MemberRole;
 import com.travel.domain.member.entity.RefreshToken;
 import com.travel.global.util.JwtUtil;
 import com.travel.security.auth.dto.token.AccessTokenDto;
 import com.travel.security.auth.dto.token.RefreshTokenDto;
+
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
-import java.util.Optional;
-
-import static com.travel.global.common.constants.SecurityConstants.TOKEN_ROLE_NAME;
-
 
 @Service
 @RequiredArgsConstructor
@@ -53,8 +54,6 @@ public class JwtTokenService {
         return refreshTokenDto;
     }
 
-
-
     public AccessTokenDto retrieveOrReissueAccessToken(String accessTokenValue) {
         try {
             return jwtUtil.parseAccessToken(accessTokenValue);
@@ -67,8 +66,6 @@ public class JwtTokenService {
             return null;
         }
     }
-
-
 
     public RefreshTokenDto retrieveRefreshToken(String refreshTokenValue) {
         RefreshTokenDto refreshTokenDto = jwtUtil.parseRefreshToken(refreshTokenValue);
@@ -90,5 +87,4 @@ public class JwtTokenService {
     private Optional<RefreshToken> getRefreshTokenFromRedis(Long memberId) {
         return refreshTokenRepository.findById(memberId);
     }
-
 }

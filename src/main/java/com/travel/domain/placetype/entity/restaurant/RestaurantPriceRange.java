@@ -12,5 +12,4 @@ public enum RestaurantPriceRange {
     EXPENSIVE("고급"),
     PREMINUM("최고급");
     private final String value;
-
 }
