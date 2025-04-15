@@ -23,10 +23,8 @@ jobs:
 
       - name: Decode application.yml from GitHub Secret
         run: |
-          cd main-server
           mkdir -p src/main/resources
           echo "${{ secrets.APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
-         
 
       - name: Build with Gradle
         run: ./gradlew build
