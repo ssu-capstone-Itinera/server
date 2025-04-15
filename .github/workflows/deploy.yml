@@ -60,7 +60,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            cd ~/docker
+            cd ~/itinera-app
             docker-compose down app                 
             docker-compose rm app                   
             docker rmi itinera-app                  
