@@ -32,7 +32,17 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
-      # SCP 액션
+
+      - name: Remove existing container
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            rm -f ~/itinera-app/*.jar
+
+
       - name: Copy files to EC2
         uses: appleboy/scp-action@master
         with:
@@ -42,7 +52,7 @@ jobs:
           source: "build/libs/*.jar,docker-compose.yml,Dockerfile"
           target: "~/itinera-app"
 
-      # SSH 액션
+
       - name: Deploy to EC2
         uses: appleboy/ssh-action@master
         with:
@@ -50,10 +60,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            # 디렉토리가 없으면 생성
             mkdir -p ~/itinera-app
             cd ~/itinera-app
-            
-            # Docker 컨테이너 재시작
+
             docker-compose down
             docker-compose up -d --build
