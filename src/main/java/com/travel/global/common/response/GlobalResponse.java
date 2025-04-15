@@ -1,8 +1,8 @@
 package com.travel.global.common.response;
 
-import com.travel.global.common.error.ErrorResponse;
-
 import java.time.LocalDateTime;
+
+import com.travel.global.common.error.ErrorResponse;
 
 public record GlobalResponse(boolean success, int status, Object data, LocalDateTime timestamp) {
     public static GlobalResponse success(int status, Object data) {

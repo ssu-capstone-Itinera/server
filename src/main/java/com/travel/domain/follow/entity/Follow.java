@@ -1,12 +1,14 @@
 package com.travel.domain.follow.entity;
 
+import jakarta.persistence.*;
+
 import com.travel.domain.member.entity.Member;
 import com.travel.global.common.entity.BaseTimeEntity;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "follow")

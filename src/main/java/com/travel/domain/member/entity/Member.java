@@ -1,7 +1,9 @@
 package com.travel.domain.member.entity;
 
-import com.travel.global.common.entity.BaseTimeEntity;
 import jakarta.persistence.*;
+
+import com.travel.global.common.entity.BaseTimeEntity;
+
 import lombok.*;
 
 @Entity
@@ -9,32 +11,33 @@ import lombok.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Member extends BaseTimeEntity{
+public class Member extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column
-    String nickName;
+    @Column String nickName;
 
-    @Column
-    private String email;
+    @Column private String email;
 
-
-    @Column
-    private String profileImage;
+    @Column private String profileImage;
 
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
-    @Column
-    private String providerId;
+
+    @Column private String providerId;
 
     @Builder
-    public Member(String nickName, String email, String profileImage, MemberRole role,
-                  Provider provider, String providerId) {
+    public Member(
+            String nickName,
+            String email,
+            String profileImage,
+            MemberRole role,
+            Provider provider,
+            String providerId) {
         this.nickName = nickName;
         this.email = email;
         this.profileImage = profileImage;
@@ -42,5 +45,4 @@ public class Member extends BaseTimeEntity{
         this.provider = provider;
         this.providerId = providerId;
     }
-
 }

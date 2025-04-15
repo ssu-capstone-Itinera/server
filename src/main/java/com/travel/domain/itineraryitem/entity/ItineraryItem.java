@@ -1,13 +1,15 @@
 package com.travel.domain.itineraryitem.entity;
 
+import jakarta.persistence.*;
+
 import com.travel.domain.itinerary.entity.Itinerary;
 import com.travel.domain.place.entity.Place;
 import com.travel.global.common.entity.BaseTimeEntity;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "itinerary_item")
@@ -42,6 +44,4 @@ public class ItineraryItem extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "place_id")
     private Place place;
-
-
 }

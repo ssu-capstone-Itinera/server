@@ -1,14 +1,16 @@
 package com.travel.domain.tripshare.entity;
 
+import java.time.LocalDateTime;
+
+import jakarta.persistence.*;
+
 import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.entity.BaseTimeEntity;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
-import lombok.AllArgsConstructor;
 
-import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "trip_share")
@@ -35,6 +37,8 @@ public class TripShare extends BaseTimeEntity {
     private LocalDateTime sharedAt;
 
     public enum Permission {
-        READ, EDIT, ADMIN
+        READ,
+        EDIT,
+        ADMIN
     }
 }

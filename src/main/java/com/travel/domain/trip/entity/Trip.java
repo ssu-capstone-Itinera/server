@@ -1,19 +1,21 @@
 package com.travel.domain.trip.entity;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
 import com.travel.domain.itinerary.entity.Itinerary;
 import com.travel.domain.member.entity.Member;
 import com.travel.domain.post.post.domain.Post;
 import com.travel.domain.tripshare.entity.TripShare;
 import com.travel.global.common.entity.BaseTimeEntity;
-import jakarta.persistence.*;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "trip")

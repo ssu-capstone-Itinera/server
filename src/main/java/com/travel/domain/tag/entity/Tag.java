@@ -1,13 +1,15 @@
 package com.travel.domain.tag.entity;
 
+import jakarta.persistence.*;
+
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.tagtype.entity.TagType;
 import com.travel.global.common.entity.BaseTimeEntity;
-import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.NoArgsConstructor;
+
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "tag")

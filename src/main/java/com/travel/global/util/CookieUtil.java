@@ -1,14 +1,14 @@
 package com.travel.global.util;
 
+import static com.travel.global.common.constants.SecurityConstants.ACCESS_TOKEN_COOKIE_NAME;
+import static com.travel.global.common.constants.SecurityConstants.REFRESH_TOKEN_COOKIE_NAME;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.boot.web.server.Cookie;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Component;
 
-import static com.travel.global.common.constants.SecurityConstants.ACCESS_TOKEN_COOKIE_NAME;
-import static com.travel.global.common.constants.SecurityConstants.REFRESH_TOKEN_COOKIE_NAME;
+import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor

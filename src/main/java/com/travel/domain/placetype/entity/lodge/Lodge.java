@@ -1,15 +1,17 @@
 package com.travel.domain.placetype.entity.lodge;
 
-import com.travel.domain.place.entity.Place;
+import java.util.HashMap;
+import java.util.Map;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
+
+import com.travel.domain.place.entity.Place;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @Entity
 @DiscriminatorValue("LODGE")
@@ -35,5 +37,4 @@ public class Lodge extends Place {
         details.put("local feature", locationFeature);
         return details;
     }
-
 }

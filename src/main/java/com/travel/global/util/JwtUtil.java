@@ -1,21 +1,21 @@
 package com.travel.global.util;
 
+import static com.travel.global.common.constants.SecurityConstants.TOKEN_ROLE_NAME;
+
+import java.security.Key;
+import java.util.Date;
+
+import org.springframework.stereotype.Component;
 
 import com.travel.domain.member.entity.MemberRole;
 import com.travel.infra.config.jwt.JwtProperties;
 import com.travel.security.auth.dto.token.AccessTokenDto;
 import com.travel.security.auth.dto.token.RefreshTokenDto;
+
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
-
-import java.security.Key;
-import java.util.Date;
-
-import static com.travel.global.common.constants.SecurityConstants.TOKEN_ROLE_NAME;
-
 
 @Slf4j
 @Component
@@ -23,21 +23,15 @@ import static com.travel.global.common.constants.SecurityConstants.TOKEN_ROLE_NA
 public class JwtUtil {
     private final JwtProperties jwtProperties;
 
-
-
     public String generateAccessToken(Long memberId, MemberRole memberRole) {
         Date issuedAt = new Date();
-        Date expiredAt =
-                new Date(issuedAt.getTime() + jwtProperties.getAccessTokenExpiration());
+        Date expiredAt = new Date(issuedAt.getTime() + jwtProperties.getAccessTokenExpiration());
         return buildAccessToken(memberId, memberRole, issuedAt, expiredAt);
     }
 
-
-
     public String generateRefreshToken(Long memberId) {
         Date issuedAt = new Date();
-        Date expiredAt =
-                new Date(issuedAt.getTime() + jwtProperties.getRefreshTokenExpiration());
+        Date expiredAt = new Date(issuedAt.getTime() + jwtProperties.getRefreshTokenExpiration());
         return buildRefreshToken(memberId, issuedAt, expiredAt);
     }
 
@@ -54,8 +48,7 @@ public class JwtUtil {
         Date expiredAt =
                 new Date(issuedAt.getTime() + jwtProperties.refreshTokenExpirationMilliTime());
         String tokenValue = buildRefreshToken(memberId, issuedAt, expiredAt);
-        return new RefreshTokenDto(
-                memberId, tokenValue, jwtProperties.getRefreshTokenExpiration());
+        return new RefreshTokenDto(memberId, tokenValue, jwtProperties.getRefreshTokenExpiration());
     }
 
     private String buildAccessToken(
@@ -79,7 +72,6 @@ public class JwtUtil {
                 .signWith(getRefreshTokenKey())
                 .compact();
     }
-
 
     private Key getRefreshTokenKey() {
         return Keys.hmacShaKeyFor(jwtProperties.getRefreshTokenSecret().getBytes());
@@ -119,7 +111,6 @@ public class JwtUtil {
         }
     }
 
-
     /*
     그냥 Claims로 반환하면 JWT에서 Payload(Claims) 부분만 추출
     Jws<Claims>를 반환하면 헤더(Header), 서명(Signature) 정보까지 포함한 전체 JWT 파싱 결과를 얻을 수 있음.
@@ -136,12 +127,13 @@ public class JwtUtil {
     public Date getTokenExpirationDate(String token, boolean isAccessToken) {
         try {
             Key key = isAccessToken ? getAccessTokenKey() : getRefreshTokenKey();
-            Claims claims = Jwts.parserBuilder()
-                    .requireIssuer(jwtProperties.getIssuer())
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getBody();
+            Claims claims =
+                    Jwts.parserBuilder()
+                            .requireIssuer(jwtProperties.getIssuer())
+                            .setSigningKey(key)
+                            .build()
+                            .parseClaimsJws(token)
+                            .getBody();
 
             return claims.getExpiration();
         } catch (Exception e) {
@@ -150,9 +142,7 @@ public class JwtUtil {
         }
     }
 
-
     public Long getRefreshTokenExpirationTime() {
         return jwtProperties.getRefreshTokenExpiration();
     }
 }
-

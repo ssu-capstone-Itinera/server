@@ -14,4 +14,3 @@ public class RegisterRequest {
     private String code;
     private String providerName;
 }
-
