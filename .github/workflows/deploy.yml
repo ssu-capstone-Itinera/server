@@ -61,7 +61,7 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/itinera-app
-            docker-compose down app                 
-            docker-compose rm app                   
+            docker rm -f itinera_app_container || true
+            docker-compose down                              
             docker rmi itinera-app                  
             docker-compose up -d app   
