@@ -1,7 +1,11 @@
 package com.travel.domain.member.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
+import com.travel.domain.itinerary.entity.Itinerary;
 import com.travel.global.common.entity.BaseTimeEntity;
 
 import lombok.*;
@@ -27,6 +31,9 @@ public class Member extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     private Provider provider;
+
+    @OneToMany(mappedBy = "member")
+    private List<Itinerary> itinerarys = new ArrayList<>();
 
     @Column private String providerId;
 

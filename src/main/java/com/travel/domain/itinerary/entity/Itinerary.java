@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.*;
 
 import com.travel.domain.itineraryitem.entity.ItineraryItem;
+import com.travel.domain.member.entity.Member;
 import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.entity.BaseTimeEntity;
 
@@ -36,6 +37,10 @@ public class Itinerary extends BaseTimeEntity {
 
     @Column(name = "note", length = 1000)
     private String note;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "itinerary", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ItineraryItem> itineraryItems = new ArrayList<>();
