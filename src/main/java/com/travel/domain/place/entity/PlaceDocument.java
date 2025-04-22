@@ -1,8 +1,6 @@
 package com.travel.domain.place.entity;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import jakarta.persistence.Id;
@@ -18,8 +16,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(indexName = "place")
-//@Setting(settingPath = "elasticsearch/settings.json")
-//@Mapping(mappingPath = "elasticsearch/mappings.json")
+@Setting(settingPath = "elasticsearch/settings.json")
+@Mapping(mappingPath = "elasticsearch/mappings.json")
 public class PlaceDocument {
     @Id private Long id;
 

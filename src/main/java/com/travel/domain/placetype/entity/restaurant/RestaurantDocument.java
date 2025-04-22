@@ -15,8 +15,8 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(indexName = "restaurant")
-//@Setting(settingPath = "elasticsearch/settings.json")
-//@Mapping(mappingPath = "elasticsearch/mappings.json")
+@Setting(settingPath = "elasticsearch/settings.json")
+@Mapping(mappingPath = "elasticsearch/mappings.json")
 public class RestaurantDocument extends PlaceDocument {
     @Field(type = FieldType.Keyword)
     private RestaurantType restaurantType;

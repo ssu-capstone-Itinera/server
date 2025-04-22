@@ -1,0 +1,16 @@
+{
+  "properties": {
+    "name": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "location": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "description": {
+      "type": "text",
+      "analyzer": "korean"
+    }
+  }
+}
