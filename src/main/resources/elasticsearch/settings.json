@@ -5,10 +5,11 @@
     "analysis": {
       "analyzer": {
         "korean": {
-          "type": "nori",
-          "tokenizer": "nori_tokenizer"
+          "type": "nori"
         }
       }
     }
   }
 }
+
+
