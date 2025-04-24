@@ -64,4 +64,4 @@ jobs:
             docker rm -f itinera_app_container || true
             docker-compose down                              
             docker rmi itinera-app                  
-            docker-compose up -d app   
+            docker-compose up -d --build
