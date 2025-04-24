@@ -79,6 +79,10 @@ public class WebSecurityConfig {
 
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+
+        configuration.addAllowedOrigin("http://3.36.60.221");
+        configuration.addAllowedOrigin("http://3.36.60.221:8080");
+
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Collections.singletonList("*"));
 
