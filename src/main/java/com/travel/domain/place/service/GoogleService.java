@@ -131,7 +131,7 @@ public class GoogleService {
                             .queryParam("place_id", placeId)
                             .queryParam("key", googleApiKey)
                             .queryParam("language", "ko")
-                            .queryParam("fields", "name,formatted_address,photos,opening_hours,website,reviews")
+                            .queryParam("fields", "name,formatted_address,photos,opening_hours,website,reviews,rating,price_level")
                             .build())
                     .retrieve()
                     .bodyToMono(Map.class)
@@ -172,10 +172,13 @@ public class GoogleService {
                 }
             }
 
+
             return TourAttractionDetailDto.builder()
                     .name((String) result.get("name"))
                     .address((String) result.get("formatted_address"))
                     .photos(photos)
+                    .priceLevel(result.containsKey("price_level") ? (String)result.get("price_level") : "가격정보 없음")
+                    .rating((Double) result.get("rating"))
                     .openingHours(openingHours)
                     .website((String) result.get("website"))
                     .reviews(reviews)
