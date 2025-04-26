@@ -18,8 +18,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(indexName = "tourattraction")
- @Setting(settingPath = "elasticsearch/settings.json")
- @Mapping(mappingPath = "elasticsearch/mappings.json")
+@Setting(settingPath = "elasticsearch/settings.json")
+@Mapping(mappingPath = "elasticsearch/mappings.json")
 public class TourattractionDoc extends PlaceDocument {
     @Field(type = FieldType.Keyword)
     private String attractionType;
