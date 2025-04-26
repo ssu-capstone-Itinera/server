@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.itineraryitem.entity.ItineraryItem;
-import com.travel.domain.tag.entity.Tag;
 import com.travel.global.common.entity.BaseTimeEntity;
 
 import lombok.AllArgsConstructor;
@@ -50,8 +49,8 @@ public abstract class Place extends BaseTimeEntity {
     @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
     private List<ItineraryItem> itineraryItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-    private List<Tag> tags = new ArrayList<>();
+//    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+//    private List<Tag> tags = new ArrayList<>();
 
     public abstract Map<String, Object> getDetails();
 }
