@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Builder
 public class TourAttractionDetailDto {
+    private String placeId;
     private String name;
     private String address;
     private List<String> photos;  // 사진 목록

@@ -3,6 +3,7 @@ package com.travel.domain.place.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.travel.domain.place.dto.TourAttractionLLMDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,4 +44,13 @@ public class PlaceController {
         }
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "장소 조회 후 태깅 (tourAttraction test) - 사용 api 아님")
+    @PostMapping("/llm/tagging")
+    public ResponseEntity<List<TourAttractionLLMDto>> getLLMTagging(
+            @RequestBody GoogleRequest googleRequest) {
+        List<TourAttractionLLMDto> response = placeService.saveTourAttraction(googleRequest);
+        return ResponseEntity.ok(response);
+    }
+
 }
