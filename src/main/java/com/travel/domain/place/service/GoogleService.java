@@ -174,6 +174,7 @@ public class GoogleService {
 
 
             return TourAttractionDetailDto.builder()
+                    .placeId(placeId)
                     .name((String) result.get("name"))
                     .address((String) result.get("formatted_address"))
                     .photos(photos)
