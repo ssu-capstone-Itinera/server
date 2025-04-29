@@ -1,7 +1,7 @@
 package com.travel.domain.datapipeline.google.service;
 
 
-import com.travel.domain.datapipeline.google.dto.TourAttractionDetailDto;
+import com.travel.domain.datapipeline.google.dto.PlaceDetailDto;
 import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import com.travel.domain.datapipeline.llm.dto.TourAttractionReviewDto;
 import com.travel.domain.datapipeline.llm.service.GeminiService;
@@ -24,20 +24,20 @@ LLM과 PlaceService 사이 데이터 가공
 public class LLMService {
     private final GeminiService geminiService;
 
-    public List<TourAttractionLLMDto> generateTagsWithGemini(List<TourAttractionDetailDto> tourAttractionDetailDtos) {
+    public List<TourAttractionLLMDto> generateTagsWithGemini(List<PlaceDetailDto> placeDetailDtos) {
 
-        List<TourAttractionReviewDto> tourAttractionReviewDtos = extractsReviews(tourAttractionDetailDtos);
+        List<TourAttractionReviewDto> tourAttractionReviewDtos = extractsReviews(placeDetailDtos);
         List<List<String>> tagLists = geminiService.extractTourAttractionTags(tourAttractionReviewDtos);
 
         if (tagLists.size() != tourAttractionReviewDtos.size()) {
             throw new CustomException(ErrorCode.TAG_LIST_SIZE_MISMATCH);
         }
-        List<TourAttractionLLMDto> result = getTourAttractionLLMDtos(tourAttractionDetailDtos, tourAttractionReviewDtos, tagLists);
+        List<TourAttractionLLMDto> result = getTourAttractionLLMDtos(placeDetailDtos, tourAttractionReviewDtos, tagLists);
 
         return result;
     }
 
-    private static List<TourAttractionLLMDto> getTourAttractionLLMDtos(List<TourAttractionDetailDto> tourAttractionDetailDtos, List<TourAttractionReviewDto> tourAttractionReviewDtos, List<List<String>> tagLists) {
+    private static List<TourAttractionLLMDto> getTourAttractionLLMDtos(List<PlaceDetailDto> placeDetailDtos, List<TourAttractionReviewDto> tourAttractionReviewDtos, List<List<String>> tagLists) {
         List<TourAttractionLLMDto> result = new ArrayList<>();
 
 
@@ -51,11 +51,11 @@ public class LLMService {
                     .toList();
 
 
-            TourAttractionDetailDto detailDto = tourAttractionDetailDtos.get(i);
+            PlaceDetailDto detailDto = placeDetailDtos.get(i);
 
 
             TourAttractionLLMDto tourAttractionLLMDto = TourAttractionLLMDto.builder()
-                    .tourAttractionDetailDtoList(List.of(detailDto))
+                    .placeDetailDtoList(List.of(detailDto))
                     .subjectiveTags(subjectiveTagList)
                     .build();
 
@@ -64,8 +64,8 @@ public class LLMService {
         return result;
     }
 
-    private List<TourAttractionReviewDto> extractsReviews(List<TourAttractionDetailDto> tourAttractionDetailDtos) {
-        return tourAttractionDetailDtos.stream()
+    private List<TourAttractionReviewDto> extractsReviews(List<PlaceDetailDto> placeDetailDtos) {
+        return placeDetailDtos.stream()
                 .map(detailDto -> TourAttractionReviewDto.builder()
                         .name(detailDto.getName())
                         .placeId(detailDto.getPlaceId())
