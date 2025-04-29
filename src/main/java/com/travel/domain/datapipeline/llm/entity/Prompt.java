@@ -1,7 +1,8 @@
-package com.travel.domain.llm.entity;
+package com.travel.domain.datapipeline.llm.entity;
 
 
-import com.travel.domain.llm.dto.TourAttractionReviewDto;
+
+import com.travel.domain.datapipeline.llm.dto.TourAttractionReviewDto;
 import lombok.*;
 
 import java.util.List;

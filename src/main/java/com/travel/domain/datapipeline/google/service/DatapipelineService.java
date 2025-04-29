@@ -1,22 +1,20 @@
-package com.travel.domain.place.service;
+package com.travel.domain.datapipeline.google.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import com.travel.domain.llm.dto.TourAttractionReviewDto;
-import com.travel.domain.place.dto.TourAttractionLLMDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.travel.domain.place.dto.TourAttractionDetailDto;
-import com.travel.domain.place.dto.TourAttractionListDto;
-import com.travel.domain.place.dto.request.GoogleRequest;
+import com.travel.domain.datapipeline.google.dto.TourAttractionDetailDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionListDto;
+import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class PlaceService {
+public class DatapipelineService {
     private final GoogleService googleService;
     private final LLMService llmService;
 

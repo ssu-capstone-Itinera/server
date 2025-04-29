@@ -1,4 +1,4 @@
-package com.travel.domain.place.dto;
+package com.travel.domain.datapipeline.google.dto;
 
 
 import lombok.Builder;

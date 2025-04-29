@@ -1,4 +1,4 @@
-package com.travel.domain.llm.dto;
+package com.travel.domain.datapipeline.llm.dto;
 
 import lombok.Builder;
 import lombok.Getter;
