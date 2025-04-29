@@ -37,6 +37,7 @@ public class PlaceService {
     public List<TourAttractionDetailDto> searchPlaceDetail(GoogleRequest googleRequest) {
         TourAttractionListDto tourAttractionListDto =
                 googleService.searchTourAttraction(googleRequest);
+
         return googleService.getDetailedTourAttractions(tourAttractionListDto);
     }
 
@@ -51,11 +52,7 @@ public class PlaceService {
 
        List<TourAttractionDetailDto> tourAttractionDetailDtos = googleService.getDetailedTourAttractions(tourAttractionListDto);
 
-
-
        return llmService.generateTagsWithGemini(tourAttractionDetailDtos);
     }
-
-
 
 }
