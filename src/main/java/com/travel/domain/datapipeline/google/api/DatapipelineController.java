@@ -1,16 +1,16 @@
-package com.travel.domain.place.api;
+package com.travel.domain.datapipeline.google.api;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.travel.domain.place.dto.TourAttractionLLMDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.travel.domain.place.dto.TourAttractionDetailDto;
-import com.travel.domain.place.dto.TourAttractionListDto;
-import com.travel.domain.place.dto.request.GoogleRequest;
-import com.travel.domain.place.service.PlaceService;
+import com.travel.domain.datapipeline.google.dto.TourAttractionDetailDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionListDto;
+import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
+import com.travel.domain.datapipeline.google.service.DatapipelineService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,38 +18,38 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/place")
-@Tag(name = "Place", description = "장소 추천 API")
-public class PlaceController {
-    private final PlaceService placeService;
+@RequestMapping("/api/v1/datapipeline")
+@Tag(name = "datapipeline", description = "google map api -> llm -> db저장 api (프론트 구현 필요 X) ")
+public class DatapipelineController {
+    private final DatapipelineService datapipelineService;
 
-    @Operation(summary = "장소 조회 (tourAttraction test) - 사용 api 아님")
+    @Operation(summary = "장소 조회 (tourAttraction test) ")
     @PostMapping("/search")
     public ResponseEntity<TourAttractionListDto> searchAttractions(
             @RequestBody GoogleRequest googleRequest) {
         TourAttractionListDto response = new TourAttractionListDto();
         if (googleRequest.getPlaceType().equals("tourist_attraction")) {
-            response = placeService.searchPlace(googleRequest);
+            response = datapipelineService.searchPlace(googleRequest);
         }
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "장소 조회 디테일(tourAttraction test) - 사용 api 아님")
+    @Operation(summary = "장소 조회 디테일(tourAttraction test) ")
     @PostMapping("/search/detail")
     public ResponseEntity<List<TourAttractionDetailDto>> searchDetailAttraction(
             @RequestBody GoogleRequest googleRequest) {
         List<TourAttractionDetailDto> response = new ArrayList<>();
         if (googleRequest.getPlaceType().equals("tourist_attraction")) {
-            response = placeService.searchPlaceDetail(googleRequest);
+            response = datapipelineService.searchPlaceDetail(googleRequest);
         }
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "장소 조회 후 태깅 (tourAttraction test) - 사용 api 아님")
+    @Operation(summary = "장소 조회 후 태깅 (tourAttraction test) ")
     @PostMapping("/llm/tagging")
     public ResponseEntity<List<TourAttractionLLMDto>> getLLMTagging(
             @RequestBody GoogleRequest googleRequest) {
-        List<TourAttractionLLMDto> response = placeService.saveTourAttraction(googleRequest);
+        List<TourAttractionLLMDto> response = datapipelineService.saveTourAttraction(googleRequest);
         return ResponseEntity.ok(response);
     }
 

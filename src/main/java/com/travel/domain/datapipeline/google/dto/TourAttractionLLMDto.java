@@ -1,9 +1,8 @@
-package com.travel.domain.place.dto;
+package com.travel.domain.datapipeline.google.dto;
 
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 

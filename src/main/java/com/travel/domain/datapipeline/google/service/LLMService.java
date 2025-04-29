@@ -1,15 +1,14 @@
-package com.travel.domain.place.service;
+package com.travel.domain.datapipeline.google.service;
 
-import com.travel.domain.llm.dto.TourAttractionReviewDto;
-import com.travel.domain.llm.service.GeminiService;
-import com.travel.domain.place.dto.TourAttractionDetailDto;
-import com.travel.domain.place.dto.TourAttractionLLMDto;
+
+import com.travel.domain.datapipeline.google.dto.TourAttractionDetailDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
+import com.travel.domain.datapipeline.llm.dto.TourAttractionReviewDto;
+import com.travel.domain.datapipeline.llm.service.GeminiService;
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import org.springframework.stereotype.Service;
-
-import com.travel.domain.place.dto.TourAttractionListDto;
 
 import lombok.RequiredArgsConstructor;
 

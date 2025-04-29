@@ -1,9 +1,9 @@
-package com.travel.domain.llm.service;
+package com.travel.domain.datapipeline.llm.service;
 
-import com.travel.domain.llm.dto.GeminiResponse;
-import com.travel.domain.llm.dto.TourAttractionReviewDto;
-import com.travel.domain.llm.dto.GeminiRequest;
-import com.travel.domain.llm.entity.Prompt;
+import com.travel.domain.datapipeline.llm.dto.GeminiRequest;
+import com.travel.domain.datapipeline.llm.dto.GeminiResponse;
+import com.travel.domain.datapipeline.llm.dto.TourAttractionReviewDto;
+import com.travel.domain.datapipeline.llm.entity.Prompt;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;

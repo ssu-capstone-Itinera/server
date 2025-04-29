@@ -1,9 +1,9 @@
-package com.travel.domain.place.service;
+package com.travel.domain.datapipeline.google.service;
 
-import com.travel.domain.place.dto.request.GoogleRequest;
-import com.travel.domain.place.dto.PlaceDto;
-import com.travel.domain.place.dto.TourAttractionDetailDto;
-import com.travel.domain.place.dto.TourAttractionListDto;
+import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
+import com.travel.domain.datapipeline.google.dto.PlaceDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionDetailDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionListDto;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;

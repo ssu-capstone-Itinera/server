@@ -1,6 +1,7 @@
-package com.travel.domain.place.dto.request;
+package com.travel.domain.datapipeline.google.dto.request;
 
 import com.travel.domain.placetype.entity.tourattraction.ApiTag;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

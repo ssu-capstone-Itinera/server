@@ -1,8 +1,8 @@
-package com.travel.domain.place.dto;
-
-import lombok.*;
+package com.travel.domain.datapipeline.google.dto;
 
 import java.util.List;
+
+import lombok.*;
 
 @Getter
 @Setter
