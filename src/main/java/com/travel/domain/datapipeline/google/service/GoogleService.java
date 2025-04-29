@@ -2,7 +2,7 @@ package com.travel.domain.datapipeline.google.service;
 
 import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
 import com.travel.domain.datapipeline.google.dto.PlaceDto;
-import com.travel.domain.datapipeline.google.dto.TourAttractionDetailDto;
+import com.travel.domain.datapipeline.google.dto.PlaceDetailDto;
 import com.travel.domain.datapipeline.google.dto.TourAttractionListDto;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
@@ -35,7 +35,6 @@ public class GoogleService {
     public TourAttractionListDto searchTourAttraction(GoogleRequest googleRequest) {
         String type = "tourist_attraction";
         try {
-            // 먼저 Map으로 응답을 받음
             Map<String, Object> apiResponse = WebClient.create(nearBySearchUrl)
                     .get()
                     .uri(uriBuilder -> uriBuilder
@@ -115,7 +114,7 @@ public class GoogleService {
         }
     }
 
-    public List<TourAttractionDetailDto> getDetailedTourAttractions(TourAttractionListDto tourAttractionListDto) {
+    public List<PlaceDetailDto> getDetailedTourAttractions(TourAttractionListDto tourAttractionListDto) {
         return tourAttractionListDto.getResults().stream()
                 .map(PlaceDto::getPlaceId)
                 .map(this::getDetailByPlaceId)
@@ -123,7 +122,7 @@ public class GoogleService {
                 .collect(Collectors.toList());
     }
 
-    private TourAttractionDetailDto getDetailByPlaceId(String placeId) {
+    private PlaceDetailDto getDetailByPlaceId(String placeId) {
         try {
             Map<String, Object> response = WebClient.create(placeUrl)
                     .get()
@@ -131,12 +130,13 @@ public class GoogleService {
                             .queryParam("place_id", placeId)
                             .queryParam("key", googleApiKey)
                             .queryParam("language", "ko")
-                            .queryParam("fields", "name,formatted_address,photos,opening_hours,website,reviews,rating,price_level")
+                            .queryParam("fields", "name,formatted_address,photos,opening_hours,website,reviews,rating,price_level,formatted_phone_number")
                             .build())
                     .retrieve()
                     .bodyToMono(Map.class)
                     .block();
 
+            log.info("place detail Google API 응답 받음: {}", response);
 
             Map<String, Object> result = (Map<String, Object>) response.get("result");
 
@@ -172,8 +172,7 @@ public class GoogleService {
                 }
             }
 
-
-            return TourAttractionDetailDto.builder()
+            return PlaceDetailDto.builder()
                     .placeId(placeId)
                     .name((String) result.get("name"))
                     .address((String) result.get("formatted_address"))
@@ -182,6 +181,7 @@ public class GoogleService {
                     .rating((Double) result.get("rating"))
                     .openingHours(openingHours)
                     .website((String) result.get("website"))
+                    .phoneNumber((String) result.get("formatted_phone_number"))
                     .reviews(reviews)
                     .build();
 

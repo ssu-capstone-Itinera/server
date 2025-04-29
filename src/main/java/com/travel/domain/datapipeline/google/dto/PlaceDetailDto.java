@@ -10,10 +10,11 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
-public class TourAttractionDetailDto {
+public class PlaceDetailDto {
     private String placeId;
     private String name;
     private String address;
+    private String phoneNumber;
     private List<String> photos;  // 사진 목록
     private List<String> openingHours;  // 오픈 시간 목록
     private String website;

@@ -6,7 +6,7 @@ import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.travel.domain.datapipeline.google.dto.TourAttractionDetailDto;
+import com.travel.domain.datapipeline.google.dto.PlaceDetailDto;
 import com.travel.domain.datapipeline.google.dto.TourAttractionListDto;
 import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
 
@@ -32,7 +32,7 @@ public class DatapipelineService {
     /*
    정적 키워드로 장소 '세부정보' 리스트 반환 함수
     */
-    public List<TourAttractionDetailDto> searchPlaceDetail(GoogleRequest googleRequest) {
+    public List<PlaceDetailDto> searchPlaceDetail(GoogleRequest googleRequest) {
         TourAttractionListDto tourAttractionListDto =
                 googleService.searchTourAttraction(googleRequest);
 
@@ -48,9 +48,9 @@ public class DatapipelineService {
         TourAttractionListDto tourAttractionListDto =
                 googleService.searchTourAttraction(googleRequest);
 
-       List<TourAttractionDetailDto> tourAttractionDetailDtos = googleService.getDetailedTourAttractions(tourAttractionListDto);
+       List<PlaceDetailDto> placeDetailDtos = googleService.getDetailedTourAttractions(tourAttractionListDto);
 
-       return llmService.generateTagsWithGemini(tourAttractionDetailDtos);
+       return llmService.generateTagsWithGemini(placeDetailDtos);
     }
 
 }
