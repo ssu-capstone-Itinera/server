@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/*
+LLM과 PlaceService 사이 데이터 가공
+ */
 @Service
 @RequiredArgsConstructor
 public class LLMService {

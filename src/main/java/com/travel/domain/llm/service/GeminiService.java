@@ -32,24 +32,18 @@ public class GeminiService {
     @Value("${ai.gemini.api-url}")
     private String apiUrl;
 
-    // WebClient를 직접 생성하도록 수정
+
     private WebClient webClient = WebClient.create();
 
     public List<List<String>> extractTourAttractionTags(List<TourAttractionReviewDto> tourAttractionReviewDtos) {
-        // Prompt 객체 생성
         Prompt prompt = Prompt.builder()
                 .reviews(tourAttractionReviewDtos)
                 .build();
 
-        log.info("logggg");
-        log.info(String.valueOf( tourAttractionReviewDtos.size()));
-
-        // GeminiRequest 객체로 변환
         GeminiRequest request = convertPromptToGeminiRequest(prompt);
 
         log.info(request.toString());
 
-        // Gemini API에 요청 보내기
         return extractTags(request);
     }
 
@@ -68,11 +62,10 @@ public class GeminiService {
             throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
         }
 
-
         String resultText = response.getCandidates().get(0).getContent().getParts().get(0).getText();
 
 
-        log.info(resultText);
+        //log.info(resultText);
 
         return parseFixedFormatResult(resultText);
     }
@@ -80,7 +73,7 @@ public class GeminiService {
     private List<List<String>> parseFixedFormatResult(String resultText) {
         List<List<String>> tagLists = new ArrayList<>();
 
-        // 태그 패턴에 맞는 내용을 추출
+        //( ) 안의 내용 찾기
         Pattern pattern = Pattern.compile("\\((.*?)\\)");
         Matcher matcher = pattern.matcher(resultText);
 
