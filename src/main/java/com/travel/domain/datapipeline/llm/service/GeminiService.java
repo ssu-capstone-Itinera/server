@@ -65,7 +65,7 @@ public class GeminiService {
         String resultText = response.getCandidates().get(0).getContent().getParts().get(0).getText();
 
 
-        //log.info(resultText);
+        log.info(resultText);
 
         return parseFixedFormatResult(resultText);
     }
