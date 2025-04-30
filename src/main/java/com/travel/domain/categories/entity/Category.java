@@ -1,12 +1,8 @@
 package com.travel.domain.categories.entity;
 
 public enum Category {
+    TOURATTRACTION,
     RESTAURANT,
     CAFE,
-    SHOPPING,
-    ACCOMMODATION,
-    ATTRACTION,
-    ENTERTAINMENT,
-    TRANSPORTATION,
     OTHER
 }

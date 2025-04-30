@@ -1,6 +1,7 @@
 package com.travel.domain.datapipeline.google.dto;
 
 
+import com.travel.domain.placetype.entity.tourattraction.ApiTag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

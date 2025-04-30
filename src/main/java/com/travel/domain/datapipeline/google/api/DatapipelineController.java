@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
+import com.travel.domain.datapipeline.google.dto.response.SaveTourAttractionDto;
+import com.travel.domain.place.entity.PlaceDocument;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +51,17 @@ public class DatapipelineController {
     @PostMapping("/llm/tagging")
     public ResponseEntity<List<TourAttractionLLMDto>> getLLMTagging(
             @RequestBody GoogleRequest googleRequest) {
-        List<TourAttractionLLMDto> response = datapipelineService.saveTourAttraction(googleRequest);
+        List<TourAttractionLLMDto> response = datapipelineService.searchTourAttractionWithLLM(googleRequest);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "장소 조회 후 태깅, document 저장 (tourAttraction test) ")
+    @PostMapping("/tourattraction/save")
+    public ResponseEntity<List<SaveTourAttractionDto>> saveTourAttraction(
+            @RequestBody GoogleRequest googleRequest) {
+        List<SaveTourAttractionDto> response = datapipelineService.saveTourAttraction(googleRequest);
+
         return ResponseEntity.ok(response);
     }
 
