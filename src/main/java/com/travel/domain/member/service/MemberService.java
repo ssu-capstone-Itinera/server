@@ -2,9 +2,8 @@ package com.travel.domain.member.service;
 
 import com.travel.domain.follow.service.FollowService;
 import com.travel.domain.member.dto.response.ProfileResponse;
-import com.travel.domain.post.service.PostLikeService;
-import com.travel.domain.post.service.PostService;
-import com.travel.domain.trip.dao.TripRepository;
+import com.travel.domain.post.post.service.PostLikeService;
+import com.travel.domain.post.post.service.PostService;
 import com.travel.domain.trip.service.TripService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +43,7 @@ public class MemberService {
                 .followerCounts(followService.getFollowerCounts(member))
                 .follwingCounts(followService.getFollowingCounts(member))
                 .tripList(tripService.getTripList(member))
-                .postList(postService.getPostList(member))
+                .postResponseList(postService.getPostList(member))
                 .postLikeList(postLikeService.getPostLikeList(member))
                 .build();
     }
