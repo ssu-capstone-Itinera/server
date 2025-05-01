@@ -1,10 +1,10 @@
 package com.travel.domain.member.dto.response;
 
-import com.travel.domain.itinerary.entity.Itinerary;
-import com.travel.domain.post.post.domain.Post;
-import com.travel.domain.post.post.domain.PostLike;
+
+import com.travel.domain.post.post.dto.response.PostLikeResponse;
+import com.travel.domain.post.post.dto.response.PostResponse;
 import com.travel.domain.trip.dto.response.TripResponse;
-import com.travel.domain.trip.entity.Trip;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class ProfileResponse {
     private int follwingCounts;
     private int followerCounts;
     private List<TripResponse> tripList;
-    private List<Post> postList;
-    private List<PostLike> postLikeList;
+    private List<PostResponse> postResponseList;
+    private List<PostLikeResponse> postLikeList;
 
 }
