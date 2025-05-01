@@ -49,8 +49,6 @@ public class Trip extends BaseTimeEntity {
     @Column(name = "is_public")
     private Boolean isPublic;
 
-    @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Itinerary> itineraries = new ArrayList<>();
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
