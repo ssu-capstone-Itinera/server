@@ -3,6 +3,7 @@ package com.travel.domain.post.post.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.travel.domain.member.entity.Member;
 import jakarta.persistence.*;
 
 import com.travel.domain.post.comment.domain.PostComment;
@@ -26,6 +27,10 @@ public class Post extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "post_id")
     private Long id;
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "trip_id")
