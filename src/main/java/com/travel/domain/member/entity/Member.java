@@ -3,6 +3,11 @@ package com.travel.domain.member.entity;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.travel.domain.post.comment.domain.PostComment;
+import com.travel.domain.post.comment.domain.PostCommentLike;
+import com.travel.domain.post.post.domain.Post;
+import com.travel.domain.post.post.domain.PostLike;
+import com.travel.domain.trip.entity.Trip;
 import jakarta.persistence.*;
 
 import com.travel.domain.itinerary.entity.Itinerary;
@@ -32,8 +37,7 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Provider provider;
 
-    @OneToMany(mappedBy = "member")
-    private List<Itinerary> itinerarys = new ArrayList<>();
+
 
     @Column private String providerId;
 
