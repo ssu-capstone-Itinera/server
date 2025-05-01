@@ -65,9 +65,4 @@ public class Place extends BaseTimeEntity {
     @Column(name = "description", length = 1000)
     private String description;
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-    private List<ItineraryItem> itineraryItems = new ArrayList<>();
-
-
-   // public abstract Map<String, Object> getDetails();
 }
