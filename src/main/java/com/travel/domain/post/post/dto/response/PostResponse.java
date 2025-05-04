@@ -12,6 +12,7 @@ import lombok.Getter;
 @Builder
 @AllArgsConstructor
 public class PostResponse {
+    private Long postId;
     private Trip trip;
 
     private String title;
@@ -20,6 +21,7 @@ public class PostResponse {
 
     public static PostResponse of(Post post) {
         return PostResponse.builder()
+                .postId(post.getId())
                 .trip(post.getTrip())
                 .title(post.getTitle())
                 .content(post.getContent())
