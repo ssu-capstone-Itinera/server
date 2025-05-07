@@ -1,12 +1,13 @@
 package com.travel.domain.placetype.entity.cafe;
 
+
+import org.springframework.data.elasticsearch.annotations.*;
 import com.travel.domain.place.entity.PlaceDocument;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.elasticsearch.annotations.Document;
-import org.springframework.data.elasticsearch.annotations.Mapping;
-import org.springframework.data.elasticsearch.annotations.Setting;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -15,4 +16,6 @@ import org.springframework.data.elasticsearch.annotations.Setting;
 @Setting(settingPath = "elasticsearch/settings.json")
 @Mapping(mappingPath = "elasticsearch/mappings.json")
 public class CafeDoc extends PlaceDocument {
+    @Field(type = FieldType.Nested)
+    private List<CafeTag> cafeTags;
 }
