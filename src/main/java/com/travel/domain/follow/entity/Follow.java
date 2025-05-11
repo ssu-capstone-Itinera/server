@@ -14,7 +14,6 @@ import lombok.Setter;
 @Table(name = "follow")
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Follow extends BaseTimeEntity {
 
@@ -30,4 +29,9 @@ public class Follow extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "following")
     private Member following;
+
+    public Follow(Member follower, Member following){
+        this.follower = follower;
+        this.following = following;
+    }
 }
