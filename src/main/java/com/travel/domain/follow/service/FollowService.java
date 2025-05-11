@@ -93,13 +93,13 @@ public class FollowService {
     }
 
     @Transactional(readOnly = true)
-    public int getFollowingNums(Long memberId) {
+    public int getFollowingCounts(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
         return followRepository.findFollowersByFollowing(member).size();
     }
 
     @Transactional(readOnly = true)
-    public int getfollwerNums(Long memberId) {
+    public int getFollowerCounts(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
         return followRepository.findFollowingByFollower(member).size();
     }
