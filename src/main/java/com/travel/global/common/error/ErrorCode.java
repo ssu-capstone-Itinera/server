@@ -20,9 +20,10 @@ public enum ErrorCode {
     //Gemini
     GEMINI_API_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "Gemini API 호출에 실패하였습니다."),
     GEMINI_EMPTY_RESPONSE(HttpStatus.INTERNAL_SERVER_ERROR, "Gemini 응답이 비어 있습니다."),
-    TAG_LIST_SIZE_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR, "요청 장소 수와 태그 리스트 수가 일치하지 않습니다.")
+    TAG_LIST_SIZE_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR, "요청 장소 수와 태그 리스트 수가 일치하지 않습니다."),
 
-    ;
+    FOLLOW_MYSELF_FAILED(HttpStatus.BAD_REQUEST, "본인 계정을 팔로우 할 수 없습니다."),
+    ALREADY_FOLLOWED(HttpStatus.BAD_REQUEST, "이미 팔로우한 계정입니다.");
 
     private final HttpStatus status;
     private final String message;
