@@ -1,17 +1,23 @@
 package com.travel.domain.datapipeline.google.service;
 
+import com.travel.domain.datapipeline.google.dto.ReviewDto;
 import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
 import com.travel.domain.datapipeline.google.dto.PlaceDto;
 import com.travel.domain.datapipeline.google.dto.PlaceDetailDto;
-import com.travel.domain.datapipeline.google.dto.TourAttractionListDto;
+import com.travel.domain.datapipeline.google.dto.PlaceListDto;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +38,13 @@ public class GoogleService {
     @Value("${google.api.place-url}")
     private String placeUrl;
 
-    public TourAttractionListDto searchTourAttraction(GoogleRequest googleRequest) {
-        String type = "tourist_attraction";
+    @Value("${google.api.textsearch-url}")
+    private String textSearchUrl;
+
+    @Value("${google.api.addresssearch-url}")
+    private String addressSearchUrl;
+
+
         try {
             Map<String, Object> apiResponse = WebClient.create(nearBySearchUrl)
                     .get()
