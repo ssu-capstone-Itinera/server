@@ -50,14 +50,11 @@ public class DatapipelineController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "장소 조회 디테일(tourAttraction test) ")
-    @PostMapping("/search/detail")
-    public ResponseEntity<List<PlaceDetailDto>> searchDetailAttraction(
-            @RequestBody GoogleRequest googleRequest) {
-        List<PlaceDetailDto> response = new ArrayList<>();
-        if (googleRequest.getPlaceType().equals("tourist_attraction")) {
-            response = datapipelineService.searchPlaceDetail(googleRequest);
-        }
+    @Operation(summary = "장소 상세 조회")
+    @PostMapping("/GoogleSearch/detail")
+    public ResponseEntity<List<PlaceDetailDto>> searchDetailPlace(
+            @RequestBody PlaceDetailRequest request) {
+        List<PlaceDetailDto> response = datapipelineService.searchPlaceDetail(request);
         return ResponseEntity.ok(response);
     }
 
