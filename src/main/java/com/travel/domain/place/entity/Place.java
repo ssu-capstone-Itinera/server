@@ -31,6 +31,13 @@ public class Place extends BaseTimeEntity {
     @Column(name = "category", nullable = false)
     private Category category;
 
+    @Column(name = "lat", nullable = false)
+    private double lat;
+
+    @Column(name = "lng", nullable = false)
+    private double lng;
+
+
     @Column(name = "place_google_id", length = 100)
     private String placeGoogleId;
 
@@ -64,5 +71,8 @@ public class Place extends BaseTimeEntity {
 
     @Column(name = "description", length = 1000)
     private String description;
+
+    @Column(name = "reviews")
+    private List<String> reviews;
 
 }

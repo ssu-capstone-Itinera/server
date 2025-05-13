@@ -14,6 +14,7 @@ import com.travel.security.auth.dto.request.RegisterRequest;
 import com.travel.security.auth.dto.response.AuthResponse;
 import com.travel.security.auth.oauth.Oauth2Factory;
 import com.travel.security.auth.oauth.Oauth2Service;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -80,7 +81,6 @@ public class AuthService {
 
     private Member saveMember(UserInfo userInfo) {
         Member member = userInfo.toEntity();
-        memberRepository.save(member);
         return memberRepository.save(member);
     }
 

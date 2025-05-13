@@ -1,14 +1,16 @@
 package com.travel.domain.placetype.entity.restaurant;
 
+import java.util.Map;
+
+import jakarta.persistence.Id;
+import org.springframework.data.elasticsearch.annotations.*;
+
+import com.travel.domain.place.entity.PlaceDocument;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.elasticsearch.annotations.*;
-import com.travel.domain.place.entity.PlaceDocument;
-
-import java.util.Map;
 
 @Getter
 @Setter
@@ -17,7 +19,7 @@ import java.util.Map;
 @Document(indexName = "restaurant")
 @Setting(settingPath = "elasticsearch/settings.json")
 @Mapping(mappingPath = "elasticsearch/mappings.json")
-public class RestaurantDocument extends PlaceDocument {
+public class RestaurantDoc extends PlaceDocument {
     @Field(type = FieldType.Keyword)
     private RestaurantType restaurantType;
 
@@ -26,5 +28,4 @@ public class RestaurantDocument extends PlaceDocument {
 
     @Field(type = FieldType.Object)
     private Map<String, Object> searchFilters;
-
 }

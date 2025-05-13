@@ -2,6 +2,7 @@ package com.travel.domain.placetype.entity.tourattraction;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+
 @Getter
 @AllArgsConstructor
 public enum ApiTag {

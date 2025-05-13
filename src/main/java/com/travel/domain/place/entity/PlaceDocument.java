@@ -1,17 +1,12 @@
 package com.travel.domain.place.entity;
 
-import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
 
+import com.travel.domain.categories.entity.Category;
 import jakarta.persistence.Id;
 
 import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.elasticsearch.annotations.*;
-
-import com.travel.domain.categories.entity.Category;
 
 import lombok.*;
 
@@ -29,10 +24,24 @@ public class PlaceDocument {
     private Integer id;
 
     @Field(type = FieldType.Keyword)
+    private Category Category;
+
+    @Field(type = FieldType.Keyword)
     private String placeType;
 
     @Field(type = FieldType.Text)
-    private String placeId;
+    private String placeGoogleId;
+
+    @Field(type = FieldType.Text)
+    private String placeName;
+
+    @Field(type = FieldType.Text)
+    private String address;
+
+    @Field(type = FieldType.Double)
+    private Double rating;
+
+
 
 
     @Field(type = FieldType.Object)

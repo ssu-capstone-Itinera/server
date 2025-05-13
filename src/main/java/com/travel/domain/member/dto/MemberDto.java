@@ -1,6 +1,7 @@
 package com.travel.domain.member.dto;
 
 import com.travel.domain.member.entity.Member;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -15,19 +16,8 @@ public class MemberDto {
 
     private String email;
 
-    public MemberDto(Member member){
-        this.id = member.getId();
-        this.nickName = member.getNickName();
-        this.profileImage = member.getProfileImage();
-        this.email = member.getEmail();
-    }
-
-    public static MemberDto of(Member member){
+    public static MemberDto of(Member member) {
         return new MemberDto(
-                member.getId(),
-                member.getNickName(),
-                member.getProfileImage(),
-                member.getEmail()
-        );
+                member.getId(), member.getNickName(), member.getProfileImage(), member.getEmail());
     }
 }
