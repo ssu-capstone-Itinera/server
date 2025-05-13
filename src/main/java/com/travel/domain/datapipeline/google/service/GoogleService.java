@@ -45,22 +45,47 @@ public class GoogleService {
     private String addressSearchUrl;
 
 
+    public PlaceListDto searchPlace(GoogleRequest googleRequest) {
+        String type = googleRequest.getKeyword().getType();
+        String keyword = URLEncoder.encode(googleRequest.getKeyword().getKeyword(), StandardCharsets.UTF_8);
+
         try {
-            Map<String, Object> apiResponse = WebClient.create(nearBySearchUrl)
+            URI uri = UriComponentsBuilder.fromUriString(nearBySearchUrl)
+                    .queryParam("location", googleRequest.getLat() + "," + googleRequest.getLng())
+                    .queryParam("radius", googleRequest.getRadius())
+                    .queryParam("keyword", keyword)
+                    .queryParam("type", type)
+                    .queryParam("language", "ko")
+                    .queryParam("key", googleApiKey)
+                    .build(false)
+                    .encode(StandardCharsets.UTF_8)
+                    .toUri();
+
+            if ("restaurant".equals(googleRequest.getPlaceType()) && googleRequest.getPriceLevel() != null) {
+                uri = UriComponentsBuilder.fromUri(uri)
+                        .queryParam("priceLevel", googleRequest.getPriceLevel())
+                        .build(false)
+                        .toUri();
+            }
+
+            log.info("Google API 요청 URI: {}", uri);
+
+            Map<String, Object> apiResponse = WebClient.create()
                     .get()
-                    .uri(uriBuilder -> uriBuilder
-                            .queryParam("location", googleRequest.getLat() + "," + googleRequest.getLng())
-                            .queryParam("radius", 5000)
-                            .queryParam("keyword", googleRequest.getKeyword().getValue())
-                            .queryParam("type", type)
-                            .queryParam("language", "ko")
-                            .queryParam("key", googleApiKey)
-                            .build())
+                    .uri(uri)
                     .retrieve()
                     .bodyToMono(Map.class)
                     .block();
 
-            log.info("Google API 응답 받음: {}", apiResponse);
+            log.info("Google API 응답: {}", apiResponse);
+
+            return getPlaceListDto(googleRequest, apiResponse);
+
+        } catch (Exception e) {
+            log.error("Google Places API 호출 실패", e);
+            throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
+        }
+    }
 
 
             // Map에서 TourAttractionResponse로 변환
