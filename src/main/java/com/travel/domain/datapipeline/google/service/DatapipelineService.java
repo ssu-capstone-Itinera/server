@@ -47,11 +47,8 @@ public class DatapipelineService {
     /*
    정적 키워드로 장소 '세부정보' 리스트 반환 함수
     */
-    public List<PlaceDetailDto> searchPlaceDetail(GoogleRequest googleRequest) {
-        TourAttractionListDto tourAttractionListDto =
-                googleService.searchTourAttraction(googleRequest);
-
-        return googleService.getDetailedTourAttractions(tourAttractionListDto);
+    public List<PlaceDetailDto> searchPlaceDetail(PlaceDetailRequest request) {
+        return googleService.getPlaceDetailsByPlaceIds(request.getPlaceIds());
     }
 
 
