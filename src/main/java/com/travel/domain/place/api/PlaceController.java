@@ -29,7 +29,7 @@ public class PlaceController {
 
     @Operation(summary = "장소 정보 상세 조회")
     @GetMapping("{placeGoogleId}")
-    public ResponseEntity<PlaceDetailResponse> getPlaceDetail(@RequestParam String placeGoogleId){
+    public ResponseEntity<PlaceDetailResponse> getPlaceDetail(@PathVariable String placeGoogleId){
 
         return ResponseEntity.ok(placeService.getPlaceDetail(placeGoogleId));
     }
