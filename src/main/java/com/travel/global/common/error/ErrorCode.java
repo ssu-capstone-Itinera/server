@@ -23,7 +23,12 @@ public enum ErrorCode {
     TAG_LIST_SIZE_MISMATCH(HttpStatus.INTERNAL_SERVER_ERROR, "요청 장소 수와 태그 리스트 수가 일치하지 않습니다."),
 
     FOLLOW_MYSELF_FAILED(HttpStatus.BAD_REQUEST, "본인 계정을 팔로우 할 수 없습니다."),
-    ALREADY_FOLLOWED(HttpStatus.BAD_REQUEST, "이미 팔로우한 계정입니다.");
+    ALREADY_FOLLOWED(HttpStatus.BAD_REQUEST, "이미 팔로우한 계정입니다."),
+    PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "장소 정보를 찾을 수 없습니다."),
+    RESTAURANTDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "식당 정보를 찾을 수 없습니다."),
+    CAFEDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "카 정보를 찾을 수 없습니다."),
+    TOURATTRACTIONDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "관광지 정보를 찾을 수 없습니다.");
+
 
     private final HttpStatus status;
     private final String message;
