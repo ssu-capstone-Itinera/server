@@ -82,13 +82,12 @@ public class DatapipelineService {
     private static List<SaveTourAttractionDto> getSaveTourAttractionList(
             GoogleRequest googleRequest,
             List<PlaceDetailDto> placeDetailDtos,
-            List<TourAttractionLLMDto> tourAttractionLLMDtos
-    ) {
+            List<PlaceLLMDto> placeLLMDtos) {
         return IntStream.range(0, placeDetailDtos.size())
                 .mapToObj(i -> {
                     PlaceDetailDto detailDto = placeDetailDtos.get(i);
-                    TourAttractionLLMDto llmDto = i < tourAttractionLLMDtos.size()
-                            ? tourAttractionLLMDtos.get(i)
+                    PlaceLLMDto llmDto = i < placeLLMDtos.size()
+                            ? placeLLMDtos.get(i)
                             : null;
 
                     // Place (MySQL용 엔티티)
@@ -101,7 +100,7 @@ public class DatapipelineService {
                             .phoneNumber(detailDto.getPhoneNumber())
                             .webSite(detailDto.getWebsite())
                             .openingHours(detailDto.getOpeningHours())
-                            .priceLevel(detailDto.getPriceLevel())
+                            .priceLevel(detailDto.getPriceLevel().toString())
                             .build();
 
                     // PlaceDocument (Elasticsearch 문서)
