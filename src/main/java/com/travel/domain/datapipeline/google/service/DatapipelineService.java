@@ -67,19 +67,15 @@ public class DatapipelineService {
     }
 
     public List<SaveTourAttractionDto> saveTourAttraction(GoogleRequest googleRequest){
-        TourAttractionListDto tourAttractionListDto =
-                googleService.searchTourAttraction(googleRequest);
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
+        List<String> placeIds = placeListDto.getResults().stream()
+                .map(PlaceDto::getPlaceId)
+                .filter(Objects::nonNull)
+                .toList();
+        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetailsByPlaceIds(placeIds);
 
-        List<PlaceDetailDto> placeDetailDtos = googleService.getDetailedTourAttractions(tourAttractionListDto);
-
-
-        List<TourAttractionLLMDto> tourAttractionLLMDtos = llmService.generateTagsWithGemini(placeDetailDtos);
-
-
-        List<SaveTourAttractionDto> saveTourAttractionDtoList = getSaveTourAttractionList(googleRequest, placeDetailDtos, tourAttractionLLMDtos);
-
-        
-        return saveTourAttractionDtoList;
+        List<PlaceLLMDto> placeLLMDtos = llmService.generateTagsWithGemini(placeDetailDtos);
+        return getSaveTourAttractionList(googleRequest, placeDetailDtos, placeLLMDtos);
     }
 
     //
