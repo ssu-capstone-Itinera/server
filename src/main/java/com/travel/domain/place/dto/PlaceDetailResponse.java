@@ -8,10 +8,12 @@ import com.travel.domain.placetype.entity.tourattraction.ApiTag;
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.util.List;
 
 
+@Getter
 @Builder
 
 public class PlaceDetailResponse {
