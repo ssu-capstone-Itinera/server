@@ -213,10 +213,10 @@ public class GoogleService {
         return placeList;
     }
 
-    public List<PlaceDetailDto> getDetailedTourAttractions(TourAttractionListDto tourAttractionListDto) {
-        return tourAttractionListDto.getResults().stream()
-                .map(PlaceDto::getPlaceId)
-                .map(this::getDetailByPlaceId)
+
+    public List<PlaceDetailDto> getPlaceDetailsByPlaceIds(List<String> placeIds) {
+        return placeIds.stream()
+                .map(this::getPlaceDetailByPlaceId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
