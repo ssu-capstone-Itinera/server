@@ -87,20 +87,71 @@ public class GoogleService {
         }
     }
 
+    public PlaceListDto searchMyPlaceByKeyword(GoogleRequest request) {
+        try {
+            String query = request.getMyPlaceQuery();
+            URI uri = UriComponentsBuilder.fromUriString(textSearchUrl)
+                    .queryParam("query", query)
+                    .queryParam("language", "ko")
+                    .queryParam("key", googleApiKey)
+                    .build(false)
+                    .encode(StandardCharsets.UTF_8)
+                    .toUri();
 
-            // Map에서 TourAttractionResponse로 변환
-            TourAttractionListDto response = getTourAttractionListDto(googleRequest, apiResponse);
+            log.info("Google TextSearch API URI: {}", uri);
 
-            return response;
+            Map<String, Object> apiResponse = WebClient.create()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+
+            log.info("Google TextSearch 응답: {}", apiResponse);
+
+            return getPlaceListDto(request, apiResponse);
 
         } catch (Exception e) {
-            log.error("Google Places API 호출 중 오류 발생: ", e);
+            log.error("TextSearch API 호출 실패", e);
+            throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
+        }
+    }
+
+
+    public PlaceListDto searchMyPlaceByAddress(GoogleRequest request) {
+        try {
+            String address = request.getMyPlaceAddress();
+            URI uri = UriComponentsBuilder.fromUriString(addressSearchUrl)
+                    .queryParam("address", address)
+                    .queryParam("language", "ko")
+                    .queryParam("key", googleApiKey)
+                    .build(false)
+                    .encode(StandardCharsets.UTF_8)
+                    .toUri();
+
+            log.info("Google Geocode API URI: {}", uri);
+
+            Map<String, Object> apiResponse = WebClient.create()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+
+            log.info("Google Geocode 응답: {}", apiResponse);
+
+            return getPlaceListDto(request, apiResponse);
+
+        } catch (Exception e) {
+            log.error("Geocode API 호출 실패", e);
             throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
         }
     }
 
     private TourAttractionListDto getTourAttractionListDto(GoogleRequest googleRequest, Map<String, Object> apiResponse) {
-        TourAttractionListDto response = new TourAttractionListDto();
+
+
+
 
         if (apiResponse != null) {
             response.setNextPageToken((String) apiResponse.get("next_page_token"));
