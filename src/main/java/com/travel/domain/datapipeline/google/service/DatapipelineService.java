@@ -55,13 +55,15 @@ public class DatapipelineService {
     /*
     정적 키워드로 장소 세부 정보 및 llm 태깅 정보 포함하는 함수
      */
-    public List<TourAttractionLLMDto> searchTourAttractionWithLLM(GoogleRequest googleRequest) {
-        TourAttractionListDto tourAttractionListDto =
-                googleService.searchTourAttraction(googleRequest);
+    public List<PlaceLLMDto> searchTourAttractionWithLLM(GoogleRequest googleRequest) {
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
+        List<String> placeIds = placeListDto.getResults().stream()
+                .map(PlaceDto::getPlaceId)
+                .filter(Objects::nonNull)
+                .toList();
+        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetailsByPlaceIds(placeIds);
 
-       List<PlaceDetailDto> placeDetailDtos = googleService.getDetailedTourAttractions(tourAttractionListDto);
-
-       return llmService.generateTagsWithGemini(placeDetailDtos);
+        return llmService.generateTagsWithGemini(placeDetailDtos);
     }
 
     public List<SaveTourAttractionDto> saveTourAttraction(GoogleRequest googleRequest){
