@@ -60,9 +60,9 @@ public class DatapipelineController {
 
     @Operation(summary = "장소 조회 후 태깅 (tourAttraction test) ")
     @PostMapping("/llm/tagging")
-    public ResponseEntity<List<TourAttractionLLMDto>> getLLMTagging(
+    public ResponseEntity<List<PlaceLLMDto>> getLLMTagging(
             @RequestBody GoogleRequest googleRequest) {
-        List<TourAttractionLLMDto> response = datapipelineService.searchTourAttractionWithLLM(googleRequest);
+        List<PlaceLLMDto> response = datapipelineService.searchTourAttractionWithLLM(googleRequest);
 
         return ResponseEntity.ok(response);
     }
