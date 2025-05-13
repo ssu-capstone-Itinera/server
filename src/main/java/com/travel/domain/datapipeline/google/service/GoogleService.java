@@ -221,7 +221,7 @@ public class GoogleService {
                 .collect(Collectors.toList());
     }
 
-    private PlaceDetailDto getDetailByPlaceId(String placeId) {
+    public PlaceDetailDto getPlaceDetailByPlaceId(String placeId) {
         try {
             Map<String, Object> response = WebClient.create(placeUrl)
                     .get()
@@ -229,13 +229,13 @@ public class GoogleService {
                             .queryParam("place_id", placeId)
                             .queryParam("key", googleApiKey)
                             .queryParam("language", "ko")
-                            .queryParam("fields", "name,formatted_address,photos,opening_hours,website,reviews,rating,price_level,formatted_phone_number")
+                            .queryParam("fields", "name,formatted_address,photos,opening_hours,website,reviews,rating,price_level,formatted_phone_number,geometry,types")
                             .build())
                     .retrieve()
                     .bodyToMono(Map.class)
                     .block();
 
-            log.info("place detail Google API 응답 받음: {}", response);
+            log.info("Place Detail API 응답: {}", response);
 
             Map<String, Object> result = (Map<String, Object>) response.get("result");
 
@@ -244,14 +244,12 @@ public class GoogleService {
             return getPlaceDetailDto(placeId, result);
 
         } catch (Exception e) {
-            log.error("WebClient call failed for placeId={}", placeId, e);
-
+            log.error("Place Detail API 호출 실패: placeId = {}", placeId, e);
             return null;
         }
     }
 
     private static PlaceDetailDto getPlaceDetailDto(String placeId, Map<String, Object> result) {
-        // 장소 사진 처리
         List<String> photos = new ArrayList<>();
         List<Map<String, Object>> photoRefs = (List<Map<String, Object>>) result.get("photos");
         if (photoRefs != null) {
@@ -260,7 +258,27 @@ public class GoogleService {
             }
         }
 
-        // 오픈 시간 처리
+        //리뷰 처리
+        List<ReviewDto> reviews = new ArrayList<>();
+        List<Map<String, Object>> reviewList = (List<Map<String, Object>>) result.get("reviews");
+        if (reviewList != null) {
+            int reviewCount = Math.min(reviewList.size(), 20);
+            for (int i = 0; i < reviewCount; i++) {
+                Map<String, Object> review = reviewList.get(i);
+                ReviewDto dto = ReviewDto.builder()
+                        .authorName((String) review.get("author_name"))
+                        .authorUrl((String) review.get("author_url"))
+                        .profilePhotoUrl((String) review.get("profile_photo_url"))
+                        .rating(review.get("rating") != null ? Double.valueOf(review.get("rating").toString()) : null)
+                        .text((String) review.get("text"))
+                        .relativeTimeDescription((String) review.get("relative_time_description"))
+                        .language((String) review.get("language"))
+                        .build();
+                reviews.add(dto);
+            }
+        }
+
+        //오픈시간 처리
         List<String> openingHours = new ArrayList<>();
         Map<String, Object> openingHoursData = (Map<String, Object>) result.get("opening_hours");
         if (openingHoursData != null) {
@@ -270,28 +288,36 @@ public class GoogleService {
             }
         }
 
-        // 리뷰 처리
-        List<String> reviews = new ArrayList<>();
-        List<Map<String, Object>> reviewList = (List<Map<String, Object>>) result.get("reviews");
-        if (reviewList != null) {
-            int reviewCount = Math.min(reviewList.size(), 20);  // 최대 20개 리뷰
-            for (int i = 0; i < reviewCount; i++) {
-                Map<String, Object> review = reviewList.get(i);
-                reviews.add((String) review.get("text"));
-            }
-        }
+        //좌표 처리
+        Map<String, Object> geometry = (Map<String, Object>) result.get("geometry");
+        Map<String, Object> location = geometry != null ? (Map<String, Object>) geometry.get("location") : null;
+        Double lat = location != null ? Double.valueOf(location.get("lat").toString()) : null;
+        Double lng = location != null ? Double.valueOf(location.get("lng").toString()) : null;
 
+        //pricelevel처리
+        Integer priceLevel = result.get("price_level") != null
+                ? Integer.valueOf(result.get("price_level").toString())
+                : null;
+
+        //types처리
+        List<String> types = (List<String>) result.get("types");
+
+
+        //빌드
         return PlaceDetailDto.builder()
                 .placeId(placeId)
                 .name((String) result.get("name"))
                 .address((String) result.get("formatted_address"))
+                .lat(lat)
+                .lng(lng)
                 .photos(photos)
-                .priceLevel(result.containsKey("price_level") ? (String) result.get("price_level") : "가격정보 없음")
-                .rating((Double) result.get("rating"))
+                .rating(result.get("rating") != null ? Double.valueOf(result.get("rating").toString()) : null)
                 .openingHours(openingHours)
                 .website((String) result.get("website"))
                 .phoneNumber((String) result.get("formatted_phone_number"))
                 .reviews(reviews)
+                .priceLevel(priceLevel)
+                .types(types)
                 .build();
     }
 }
