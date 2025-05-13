@@ -148,30 +148,26 @@ public class GoogleService {
         }
     }
 
-    private TourAttractionListDto getTourAttractionListDto(GoogleRequest googleRequest, Map<String, Object> apiResponse) {
 
 
 
+    private PlaceListDto getPlaceListDto(GoogleRequest googleRequest, Map<String, Object> apiResponse) {
+        PlaceListDto response = new PlaceListDto();
 
         if (apiResponse != null) {
             response.setNextPageToken((String) apiResponse.get("next_page_token"));
 
             List<Map<String, Object>> results = (List<Map<String, Object>>) apiResponse.get("results");
 
-            //TourAttractionListDto의 placeList 생성
             List<PlaceDto> placeList = getPlaceDtos(results);
 
             response.setResults(placeList);
-
-
-            getDetailedTourAttractions(response);
         }
         return response;
     }
 
     private static List<PlaceDto> getPlaceDtos(List<Map<String, Object>> results) {
         List<PlaceDto> placeList = new ArrayList<>();
-
 
         if (results != null) {
             for (Map<String, Object> result : results) {
@@ -182,12 +178,13 @@ public class GoogleService {
                 place.setIcon((String) result.get("icon"));
                 place.setBusinessStatus((String) result.get("business_status"));
 
-                // 평점 처리
-                if (result.get("rating") != null) {
-                    place.setRating(Double.valueOf(result.get("rating").toString()));
+                // 평점
+                Object rating = result.get("rating");
+                if (rating != null) {
+                    place.setRating(Double.valueOf(rating.toString()));
                 }
 
-                // 위치 정보 처리
+                // 위치 정보
                 Map<String, Object> geometry = (Map<String, Object>) result.get("geometry");
                 if (geometry != null) {
                     Map<String, Object> location = (Map<String, Object>) geometry.get("location");
@@ -197,13 +194,13 @@ public class GoogleService {
                     }
                 }
 
-                // 영업 시간 처리
+                // 현재 영업 여부
                 Map<String, Object> openingHours = (Map<String, Object>) result.get("opening_hours");
                 if (openingHours != null) {
                     place.setOpenNow((Boolean) openingHours.get("open_now"));
                 }
 
-                // 사진 참조 처리
+                // 대표 사진 참조
                 List<Map<String, Object>> photos = (List<Map<String, Object>>) result.get("photos");
                 if (photos != null && !photos.isEmpty()) {
                     place.setPhotoReference((String) photos.get(0).get("photo_reference"));
@@ -212,6 +209,7 @@ public class GoogleService {
                 placeList.add(place);
             }
         }
+
         return placeList;
     }
 
