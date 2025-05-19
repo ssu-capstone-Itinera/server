@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import com.travel.domain.datapipeline.google.dto.response.SaveTourAttractionDto;
-import com.travel.domain.place.entity.PlaceDocument;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class DatapipelineController {
     private final DatapipelineService datapipelineService;
 
     @Operation(summary = "장소 조회 (tourAttraction test) ")
-    @PostMapping("/search")
+    @PostMapping("/search/tourattraction")
     public ResponseEntity<TourAttractionListDto> searchAttractions(
             @RequestBody GoogleRequest googleRequest) {
         TourAttractionListDto response = new TourAttractionListDto();
@@ -35,6 +34,17 @@ public class DatapipelineController {
         }
         return ResponseEntity.ok(response);
     }
+
+//    @Operation(summary = "장소 조회 (tourAttraction test) ")
+//    @PostMapping("/search/cafe")
+//    public ResponseEntity<CafeListDto> searchCafes(
+//            @RequestBody GoogleRequest googleRequest) {
+//        CafeListDto response = new TourAttractionListDto();
+//        if (googleRequest.getPlaceType().equals("tourist_attraction")) {
+//            response = datapipelineService.searchPlace(googleRequest);
+//        }
+//        return ResponseEntity.ok(response);
+//    }
 
     @Operation(summary = "장소 조회 디테일(tourAttraction test) ")
     @PostMapping("/search/detail")
