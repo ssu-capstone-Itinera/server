@@ -5,7 +5,6 @@ import com.travel.domain.follow.dto.FollowResponse;
 import com.travel.domain.follow.entity.Follow;
 import com.travel.domain.member.dao.MemberRepository;
 import com.travel.domain.member.entity.Member;
-import com.travel.domain.member.service.MemberService;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +18,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FollowService {
     private final FollowRepository followRepository;
-    private final MemberService memberService;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public void follow(Long memberId, Long followMemberId) {
-        final Member member = memberService.getMember(memberId);
-        final Member followMember = memberService.getMember(followMemberId);
+        final Member member = memberRepository.findByIdOrElseThrow(memberId);
+        final Member followMember = memberRepository.findByIdOrElseThrow(followMemberId);
 
         if (member.getId().equals(followMember.getId())) {
             throw new CustomException(ErrorCode.FOLLOW_MYSELF_FAILED);
@@ -43,8 +42,8 @@ public class FollowService {
             throw new CustomException(ErrorCode.FOLLOW_MYSELF_FAILED);
         }
 
-        final Member member = memberService.getMember(memberId);
-        final Member followMember = memberService.getMember(followMemberId);
+        final Member member = memberRepository.findByIdOrElseThrow(memberId);
+        final Member followMember = memberRepository.findByIdOrElseThrow(followMemberId);
 
         followRepository.deleteByFollowerAndFollowing(member, followMember);
     }
@@ -54,14 +53,14 @@ public class FollowService {
         if (memberId.equals(followerID)) {
             throw new CustomException(ErrorCode.FOLLOW_MYSELF_FAILED);
         }
-        final Member member = memberService.getMember(memberId);
-        final Member followMember = memberService.getMember(followerID);
+        final Member member = memberRepository.findByIdOrElseThrow(memberId);
+        final Member followMember = memberRepository.findByIdOrElseThrow(followerID);
         followRepository.deleteByFollowerAndFollowing(followMember, member);
     }
 
     @Transactional(readOnly = true)
     public List<FollowResponse> getFollowing(Long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberRepository.findByIdOrElseThrow(memberId);
         return followRepository.findFollowingByFollower(member)
                 .stream()
                 .map(follow -> FollowResponse.builder()
@@ -75,7 +74,7 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public List<FollowResponse> getFollower(Long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberRepository.findByIdOrElseThrow(memberId);
         return followRepository.findFollowersByFollowing(member)
                 .stream()
                 .map(follow -> FollowResponse.builder()
@@ -89,19 +88,19 @@ public class FollowService {
 
     @Transactional(readOnly = true)
     public List<Follow> getFollowWithFollowing(Long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberRepository.findByIdOrElseThrow(memberId);
         return followRepository.findFollowingByFollower(member);
     }
 
     @Transactional(readOnly = true)
     public int getFollowingCounts(Long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberRepository.findByIdOrElseThrow(memberId);
         return followRepository.findFollowersByFollowing(member).size();
     }
 
     @Transactional(readOnly = true)
     public int getFollowerCounts(Long memberId) {
-        Member member = memberService.getMember(memberId);
+        Member member = memberRepository.findByIdOrElseThrow(memberId);
         return followRepository.findFollowingByFollower(member).size();
     }
 }
