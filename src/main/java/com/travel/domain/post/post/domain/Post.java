@@ -10,13 +10,11 @@ import com.travel.domain.post.comment.domain.PostComment;
 import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.entity.BaseTimeEntity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "post")
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
