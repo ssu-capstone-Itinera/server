@@ -43,8 +43,12 @@ public class MemberService {
                 .followerCounts(followService.getFollowerCounts(member.getId()))
                 .follwingCounts(followService.getFollowingCounts(member.getId()))
                 .tripList(tripService.getTripList(member))
-                .postResponseList(postService.getPostList(member))
+                .userPostListResponseList(postService.getUserPostList(member))
                 .postLikeList(postLikeService.getPostLikeList(member))
                 .build();
+    }
+
+    public Member getMember(Long memberId){
+        return memberRepository.findByIdOrElseThrow(memberId);
     }
 }
