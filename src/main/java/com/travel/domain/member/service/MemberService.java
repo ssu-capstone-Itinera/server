@@ -2,7 +2,6 @@ package com.travel.domain.member.service;
 
 import com.travel.domain.follow.service.FollowService;
 import com.travel.domain.member.dto.response.ProfileResponse;
-import com.travel.domain.post.post.service.PostLikeService;
 import com.travel.domain.post.post.service.PostService;
 import com.travel.domain.trip.service.TripService;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final FollowService followService;
     private final PostService postService;
-    private final PostLikeService postLikeService;
     private final TripService tripService;
 
     @Transactional(readOnly = true)
@@ -44,7 +42,7 @@ public class MemberService {
                 .follwingCounts(followService.getFollowingCounts(member.getId()))
                 .tripList(tripService.getTripList(member))
                 .userPostListResponseList(postService.getUserPostList(member))
-                .postLikeList(postLikeService.getPostLikeList(member))
+                .postLikeList(postService.getUserPostLikeList(member))
                 .build();
     }
 

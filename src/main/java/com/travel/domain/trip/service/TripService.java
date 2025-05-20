@@ -21,4 +21,16 @@ public class TripService {
                 .map(TripResponse::of)
                 .collect(Collectors.toList());
     }
+
+    public TripResponse getTrip(Trip trip) {
+
+        return TripResponse.builder()
+                .tripId(trip.getId())
+                .title(trip.getTitle())
+                .regin(trip.getRegin())
+                .startDate(trip.getStartDate())
+                .startDate(trip.getEndDate())
+                .budget(trip.getBudget())
+                .build();
+    }
 }

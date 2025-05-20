@@ -37,6 +37,10 @@ public class Trip extends BaseTimeEntity {
     @Column(name = "title", length = 100)
     private String title;
 
+    @Column(name = "regin", length = 100)
+    private String regin;
+
+
     @Column(name = "start_date")
     private LocalDate startDate;
 

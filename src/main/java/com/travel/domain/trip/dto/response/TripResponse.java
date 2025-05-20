@@ -15,6 +15,7 @@ public class TripResponse {
     private Long tripId;
 
     private String title;
+    private String regin;
 
     private LocalDate startDate;
 
