@@ -14,7 +14,6 @@ import lombok.*;
 
 @Entity
 @Table(name = "post")
-@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -46,9 +45,22 @@ public class Post extends BaseTimeEntity {
     @OneToMany(mappedBy = "post")
     private List<PostLike> likes = new ArrayList<>();
 
-
-
-
+    @Builder
+    public Post(Member member, Trip trip, String title, String content){
+        this.member = member;
+        this.trip = trip;
+        this.title = title;
+        this.content = content;
+    }
+    /*
+    public Review(Member member, Book book, double rating, String content, Privacy privacy){
+        this.member = member;
+        this.book = book;
+        this.content = content;
+        this.privacy = privacy;
+        setRatingFromDouble(rating);
+    }
+     */
 
     public void likePost(PostLike postLike) {
         this.likes.add(postLike);
