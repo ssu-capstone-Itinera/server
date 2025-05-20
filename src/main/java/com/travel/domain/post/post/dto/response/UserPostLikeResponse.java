@@ -12,7 +12,6 @@ import lombok.Getter;
 public class UserPostLikeResponse {
     private Long postId;
 
-
     public static UserPostLikeResponse of(PostLike postLike) {
         return UserPostLikeResponse.builder()
                 .postId(postLike.getPost().getId())
