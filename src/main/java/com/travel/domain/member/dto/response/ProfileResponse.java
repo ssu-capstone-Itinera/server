@@ -1,7 +1,7 @@
 package com.travel.domain.member.dto.response;
 
 
-import com.travel.domain.post.post.dto.response.PostLikeResponse;
+import com.travel.domain.post.post.dto.response.UserPostLikeResponse;
 import com.travel.domain.post.post.dto.response.UserPostListResponse;
 import com.travel.domain.trip.dto.response.TripResponse;
 
@@ -23,6 +23,6 @@ public class ProfileResponse {
     private int followerCounts;
     private List<TripResponse> tripList;
     private List<UserPostListResponse> userPostListResponseList;
-    private List<PostLikeResponse> postLikeList;
+    private List<UserPostLikeResponse> postLikeList;
 
 }

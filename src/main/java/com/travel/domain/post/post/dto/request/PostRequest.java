@@ -6,7 +6,6 @@ import lombok.Getter;
 
 @Getter
 public class PostRequest {
-    private Member member;
     private Trip trip;
     private String title;
     private String content;

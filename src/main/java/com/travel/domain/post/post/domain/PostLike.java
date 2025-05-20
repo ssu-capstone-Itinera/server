@@ -28,6 +28,8 @@ public class PostLike extends BaseTimeEntity {
     @JoinColumn(name = "post_id")
     private Post post;
 
+
+
     @Builder
     public PostLike(Member member, Post post) {
         this.member = member;

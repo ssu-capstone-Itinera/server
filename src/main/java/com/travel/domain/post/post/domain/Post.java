@@ -40,4 +40,21 @@ public class Post extends BaseTimeEntity {
     @Column(name = "content", length = 1000)
     private String content;
 
+    @OneToMany(mappedBy = "post")
+    private List<PostComment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "post")
+    private List<PostLike> likes = new ArrayList<>();
+
+
+
+
+
+    public void likePost(PostLike postLike) {
+        this.likes.add(postLike);
+    }
+
+    public void unlikePost(PostLike postLike){
+        this.likes.remove(postLike);
+    }
 }
