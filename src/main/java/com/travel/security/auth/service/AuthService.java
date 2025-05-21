@@ -1,6 +1,17 @@
 package com.travel.security.auth.service;
 
 import java.util.Date;
+import java.util.Optional;
+
+import com.travel.global.common.error.CustomException;
+import com.travel.global.common.error.ErrorCode;
+import com.travel.security.auth.dto.request.LoginRequest;
+import com.travel.security.auth.dto.request.RefreshTokenRequest;
+import com.travel.security.auth.dto.request.SignupRequest;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.travel.domain.member.dao.MemberRepository;
@@ -26,10 +37,13 @@ public class AuthService {
     private final MemberRepository memberRepository;
     private final RefreshTokenRepository refreshTokenRepository;
 
+    private final AuthenticationProvider authenticationProvider;
+
     private final Oauth2Factory oauth2Factory;
+    private final CustomAuthService customAuthService;
 
     @Transactional
-    public AuthResponse signIn(RegisterRequest request) {
+    public AuthResponse register(RegisterRequest request) {
         Oauth2Service oAuth2Service = oauth2Factory.of(request.getProviderName());
         UserInfo userInfo = oAuth2Service.getUserInfo(request.getCode());
         Member member = findOrSignUp(userInfo);
@@ -68,7 +82,7 @@ public class AuthService {
                 .accessTokenExpiration(accessTokenExpiration)
                 .refreshTokenExpiration(refreshTokenExpiration)
                 .memberId(memberId)
-                .nickName(member.getNickName())
+                .nickName(member.getNickname())
                 .profileImage(member.getProfileImage())
                 .build();
     }
@@ -76,6 +90,12 @@ public class AuthService {
     private Member findOrSignUp(UserInfo userInfo) {
         return memberRepository
                 .findByProviderId(userInfo.getProviderId())
+                .orElseGet(() -> saveMember(userInfo));
+    }
+
+    private Member findOrSignUpWithEmail(UserInfo userInfo) {
+        return memberRepository
+                .findByEmail(userInfo.getEmail())
                 .orElseGet(() -> saveMember(userInfo));
     }
 
@@ -88,5 +108,39 @@ public class AuthService {
     public void withdraw(Long memberId) {
         memberRepository.deleteById(memberId);
         refreshTokenRepository.deleteByMemberId(memberId);
+    }
+
+    public AuthResponse signup(SignupRequest signupRequest) {
+        UserInfo userInfo = customAuthService.getUserInfo(signupRequest);
+        Member member = findOrSignUpWithEmail(userInfo);
+
+        return generateResponse(member);
+    }
+
+    @Transactional
+    public AuthResponse signin(LoginRequest loginRequest) {
+        Authentication authentication = authenticationProvider.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        loginRequest.getUsername(),
+                        loginRequest.getPassword()
+                )
+        );
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        Member member = memberRepository.findByNicknameOrElseThrow(userDetails.getUsername());
+
+        return generateResponse(member);
+    }
+
+    public AuthResponse refreshAccessToken(RefreshTokenRequest refreshTokenRequest) {
+        if (!jwtUtil.isTokenValid(refreshTokenRequest.getRefreshToken())) {
+            throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
+        }
+        String memberIdWithToken = jwtUtil.getMemberIdFromToken(refreshTokenRequest.getRefreshToken());
+        Long memberId = Long.parseLong(memberIdWithToken);
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+
+        return generateResponse(member);
     }
 }

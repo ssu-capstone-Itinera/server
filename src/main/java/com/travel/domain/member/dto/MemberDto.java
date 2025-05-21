@@ -18,6 +18,6 @@ public class MemberDto {
 
     public static MemberDto of(Member member) {
         return new MemberDto(
-                member.getId(), member.getNickName(), member.getProfileImage(), member.getEmail());
+                member.getId(), member.getNickname(), member.getProfileImage(), member.getEmail());
     }
 }

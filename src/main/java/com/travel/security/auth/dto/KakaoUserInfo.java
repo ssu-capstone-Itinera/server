@@ -22,7 +22,7 @@ public class KakaoUserInfo implements UserInfo {
     public Member toEntity() {
         return Member.builder()
                 .provider(Provider.KAKAO)
-                .nickName(getNickName())
+                .nickname(getNickName())
                 .profileImage(getProfileImage())
                 .providerId(getProviderId())
                 .email(getEmail())
@@ -35,6 +35,8 @@ public class KakaoUserInfo implements UserInfo {
         return id;
     }
 
+
+    @Override
     public String getEmail() {
         return kakao_account.get("email") == null ? null : kakao_account.get("email").toString();
     }
