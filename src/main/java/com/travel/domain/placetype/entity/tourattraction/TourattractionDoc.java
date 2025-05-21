@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.elasticsearch.annotations.*;
+import com.travel.domain.placetype.entity.ApiTag;
 
 import com.travel.domain.place.entity.PlaceDocument;
 

@@ -16,14 +16,14 @@ public class PlaceDetailDto {
     private String name;
     private String address;
     private String phoneNumber;
-    private List<String> photos;  // 사진 목록
-    private List<String> openingHours;  // 오픈 시간 목록
     private String website;
-
     private Double rating;
-
-    private String priceLevel;
-
-    private List<String> reviews;  // 리뷰 목록
+    private Double lat;
+    private Double lng;
+    private List<String> openingHours;
+    private Integer priceLevel;
+    private List<String> photos;
+    private List<ReviewDto> reviews;
+    private List<String> types;
 
 }

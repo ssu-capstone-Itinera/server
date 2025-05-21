@@ -1,13 +1,13 @@
 package com.travel.domain.datapipeline.google.dto;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.travel.domain.placetype.entity.tourattraction.ApiTag;
 import lombok.*;
 
 @Getter
 @Setter
-public class TourAttractionListDto {
-    private List<PlaceDto> results;
+public class PlaceListDto {
+    private List<PlaceDto> results = new ArrayList<>();
     private String nextPageToken;
 }
