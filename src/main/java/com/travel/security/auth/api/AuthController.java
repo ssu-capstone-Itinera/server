@@ -1,7 +1,13 @@
 package com.travel.security.auth.api;
 
+import com.travel.security.auth.dto.request.LoginRequest;
+import com.travel.security.auth.dto.request.RefreshTokenRequest;
+import com.travel.security.auth.dto.request.SignupRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,7 +29,27 @@ public class AuthController {
     @Operation(summary = "카카오 로그인")
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> loginByKakao(@RequestBody RegisterRequest registerRequest) {
-        return new ResponseEntity<>(authService.signIn(registerRequest), HttpStatus.OK);
+        return new ResponseEntity<>(authService.register(registerRequest), HttpStatus.OK);
+    }
+
+    @Operation(summary = "회원가입")
+    @PostMapping("/signup")
+    public ResponseEntity<AuthResponse> signup(@RequestBody SignupRequest signupRequest) {
+        return new ResponseEntity<>(authService.signup(signupRequest), HttpStatus.OK);
+    }
+
+    @Operation(summary = "로그인")
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+
+        return new ResponseEntity<>(authService.signin(loginRequest), HttpStatus.OK);
+    }
+
+    @Operation(summary = "로그인")
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refreshAccessToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+
+        return new ResponseEntity<>(authService.refreshAccessToken(refreshTokenRequest), HttpStatus.OK);
     }
 
     @Operation(summary = "회원 탈퇴")
