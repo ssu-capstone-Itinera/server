@@ -4,7 +4,7 @@ import com.travel.domain.categories.entity.Category;
 import com.travel.domain.placetype.dto.response.*;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
-import com.travel.domain.placetype.entity.tourattraction.ApiTag;
+import com.travel.domain.placetype.entity.ApiTag;
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
