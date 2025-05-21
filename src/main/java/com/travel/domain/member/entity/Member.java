@@ -1,16 +1,7 @@
 package com.travel.domain.member.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.travel.domain.post.comment.domain.PostComment;
-import com.travel.domain.post.comment.domain.PostCommentLike;
-import com.travel.domain.post.post.domain.Post;
-import com.travel.domain.post.post.domain.PostLike;
-import com.travel.domain.trip.entity.Trip;
 import jakarta.persistence.*;
 
-import com.travel.domain.itinerary.entity.Itinerary;
 import com.travel.global.common.entity.BaseTimeEntity;
 
 import lombok.*;
@@ -25,33 +16,37 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
 
-    @Column String nickName;
+    @Column String nickname;
 
     @Column private String email;
 
     @Column private String profileImage;
 
+    @Column
+    private String password;
+
     @Enumerated(EnumType.STRING)
     private MemberRole role;
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private Provider provider;
-
-
 
     @Column private String providerId;
 
     @Builder
     public Member(
-            String nickName,
+            String nickname,
             String email,
             String profileImage,
             MemberRole role,
+            String password,
             Provider provider,
             String providerId) {
-        this.nickName = nickName;
+        this.nickname = nickname;
         this.email = email;
         this.profileImage = profileImage;
+        this.password = password;
         this.role = role;
         this.provider = provider;
         this.providerId = providerId;

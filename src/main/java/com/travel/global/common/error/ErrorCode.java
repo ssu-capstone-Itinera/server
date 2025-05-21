@@ -31,7 +31,8 @@ public enum ErrorCode {
     PLACE_NOT_FOUND(HttpStatus.NOT_FOUND, "장소 정보를 찾을 수 없습니다."),
     RESTAURANTDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "식당 정보를 찾을 수 없습니다."),
     CAFEDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "카 정보를 찾을 수 없습니다."),
-    TOURATTRACTIONDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "관광지 정보를 찾을 수 없습니다.");
+    TOURATTRACTIONDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "관광지 정보를 찾을 수 없습니다."),
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 리프레시 토큰입니다.");
 
 
     private final HttpStatus status;

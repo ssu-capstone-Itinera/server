@@ -53,6 +53,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
             return;
         }
+        else if (requestPath.contains("/api/v1/auth/signup")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        else if (requestPath.contains("/api/v1/auth/login")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+        else if (requestPath.contains("/api/v1/auth/refresh")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         String accessToken = extractAccessTokenFromHeader(request);
         if (StringUtils.hasText(accessToken)) {

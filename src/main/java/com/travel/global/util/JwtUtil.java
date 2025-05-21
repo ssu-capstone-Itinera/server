@@ -145,4 +145,36 @@ public class JwtUtil {
     public Long getRefreshTokenExpirationTime() {
         return jwtProperties.getRefreshTokenExpiration();
     }
+
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parser()
+                    .setSigningKey(getRefreshTokenKey())
+                    .parseClaimsJws(token);
+            return true;
+        } catch (ExpiredJwtException e) {
+            // 토큰은 만료됐음
+            log.info("JWT token expired: {}", e.getMessage());
+        } catch (UnsupportedJwtException e) {
+            log.info("JWT token unsupported: {}", e.getMessage());
+        } catch (MalformedJwtException e) {
+            log.info("JWT token malformed: {}", e.getMessage());
+        } catch (SignatureException e) {
+            log.info("JWT signature does not match: {}", e.getMessage());
+        } catch (IllegalArgumentException e) {
+            log.info("JWT token is empty or null: {}", e.getMessage());
+        }
+        return false;
+    }
+
+
+    public String getMemberIdFromToken(String refreshToken) {
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getRefreshTokenKey())  // 서명 검증용 키
+                .build()
+                .parseClaimsJws(refreshToken)
+                .getBody();
+
+        return claims.getSubject();
+    }
 }

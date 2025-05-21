@@ -35,7 +35,7 @@ public class MemberService {
 
         return ProfileResponse.builder()
                 .memberId(member.getId())
-                .nickName(member.getNickName())
+                .nickName(member.getNickname())
                 .profileImage(member.getProfileImage())
                 .email(member.getEmail())
                 .followerCounts(followService.getFollowerCounts(member.getId()))
