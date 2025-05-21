@@ -1,6 +1,5 @@
 package com.travel.domain.datapipeline.google.api;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.travel.domain.datapipeline.google.dto.PlaceLLMDto;
@@ -28,7 +27,7 @@ public class DatapipelineController {
 
     @Operation(summary = "장소 조회")
     @PostMapping("/GoogleSearch")
-    public ResponseEntity<PlaceListDto> searchAttractions(
+    public ResponseEntity<PlaceListDto> searchGooglePlace(
             @RequestBody GoogleRequest googleRequest) {
         PlaceListDto response = new PlaceListDto();
         googleRequest.setLat(37.56);    //임시값.
@@ -41,12 +40,24 @@ public class DatapipelineController {
                 googleRequest.setKeyword(keyword);
                 response.getResults().addAll(datapipelineService.searchPlace(googleRequest).getResults());
             }
-        }else if(googleRequest.getPlaceType().equals("myPlace_keyword")){
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "직접 장소 검색")
+    @PostMapping("/MyplaceSearch")
+    public ResponseEntity<PlaceListDto> searchMyplace(
+            @RequestBody GoogleRequest googleRequest){
+        PlaceListDto response = new PlaceListDto();
+        googleRequest.setLat(37.56);    //임시값.
+        googleRequest.setLng(127.00);   //임시값
+        googleRequest.setRadius(5000);  //임시값
+        if(googleRequest.getPlaceType().equals("myPlace_keyword")){
             response.getResults().addAll(datapipelineService.searchPlaceByKeyword(googleRequest).getResults());
         }else if(googleRequest.getPlaceType().equals("myPlace_address")){
             response.getResults().addAll(datapipelineService.searchPlaceByAddress(googleRequest).getResults());
         }
-
         return ResponseEntity.ok(response);
     }
 
