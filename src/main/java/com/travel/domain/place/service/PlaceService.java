@@ -3,7 +3,9 @@ package com.travel.domain.place.service;
 
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.place.dao.PlaceRepository;
-import com.travel.domain.place.dto.*;
+import com.travel.domain.place.dto.PlaceDetailResponse;
+import com.travel.domain.place.dto.PlaceResponse;
+import com.travel.domain.place.dto.RecommendationRequest;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.placetype.dto.response.CafeResponse;
 import com.travel.domain.placetype.dto.response.RestaurantResponse;
@@ -29,7 +31,6 @@ import java.util.List;
 public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlacetypeService placetypeService;
-    private final PlaceGoogleService placeGoogleService;
 
 
     @Transactional
@@ -45,6 +46,7 @@ public class PlaceService {
                 .build();
     }
 
+
             //place.setSubjectiveTags(new ArrayList<>(newTags));
 
     public MyPlaceResponse searchMyPlace(MyPlaceRequest myPlaceRequest){
@@ -59,6 +61,7 @@ public class PlaceService {
         //saveMyPlaceToUserDatabase(myPalceSelectRequset.getMyPlace());
 
     }
+
     /*
     tag 기반 -> elastic search에서 정보 가져오기
     코드 로직 추가 예정
