@@ -13,6 +13,8 @@ public enum ErrorCode {
     KAKAO_USER_INFO_FAILED(HttpStatus.BAD_REQUEST, "카카오 유저 정보 조회를 실패하였습니다."),
 
     GOOGLE_API_CALL_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "구글 API 호출에 실패하였습니다."),
+    GOOGLE_API_NO_RESULT(HttpStatus.INTERNAL_SERVER_ERROR, "구글 API 결과가 없습니다"),
+    FALLBACK_SEARCH_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "구글 API 결과가 없거나 DB 업데이트에 실패했습니다."),
 
     MEMBER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
     TRIP_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 여행 일정입니다."),
@@ -32,7 +34,8 @@ public enum ErrorCode {
     RESTAURANTDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "식당 정보를 찾을 수 없습니다."),
     CAFEDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "카 정보를 찾을 수 없습니다."),
     TOURATTRACTIONDOC_NOT_FOUND(HttpStatus.NOT_FOUND, "관광지 정보를 찾을 수 없습니다."),
-    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 리프레시 토큰입니다.");
+    INVALID_REFRESH_TOKEN(HttpStatus.UNAUTHORIZED, "유효하지 않은 리프레시 토큰입니다."),
+    INVALID_MYPLACE_SEARCH_TYPE(HttpStatus.BAD_REQUEST,"잘못된 MyPlace 타입입니다." ) ;
 
 
     private final HttpStatus status;

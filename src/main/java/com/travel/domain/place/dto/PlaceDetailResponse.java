@@ -1,12 +1,10 @@
 package com.travel.domain.place.dto;
 
 import com.travel.domain.categories.entity.Category;
-import com.travel.domain.placetype.dto.response.*;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
-import com.travel.domain.placetype.entity.tourattraction.ApiTag;
+import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -39,7 +37,7 @@ public class PlaceDetailResponse {
 
     private RestaurantType restaurantType;
 
-    private List<ApiTag> apiTags;
+    private List<TourattractionTag> tourattractionTags;
 
     private List<SubjectiveTag> subjectiveTags;
 

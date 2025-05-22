@@ -1,9 +1,6 @@
 package com.travel.domain.placetype.dto.response;
 
-import com.travel.domain.categories.entity.Category;
-import com.travel.domain.place.dto.PlaceResponse;
-import com.travel.domain.placetype.entity.tourattraction.ApiTag;
-import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
+import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -19,6 +16,6 @@ public class TourattractionResponse {
     private String address;
     private Double rating;
 
-    private List<ApiTag> apiTags;
+    private List<TourattractionTag> tourattractionTags;
 
 }

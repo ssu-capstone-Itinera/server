@@ -2,10 +2,10 @@ package com.travel.domain.datapipeline.google.api;
 
 import java.util.List;
 
-import com.travel.domain.datapipeline.google.dto.PlaceLLMDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import com.travel.domain.datapipeline.google.dto.request.PlaceDetailRequest;
 import com.travel.domain.datapipeline.google.dto.response.SaveTourAttractionDto;
-import com.travel.domain.placetype.entity.ApiTag;
+import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +36,7 @@ public class DatapipelineController {
         if (googleRequest.getPlaceType().equals("tourist_attraction")
                 ||googleRequest.getPlaceType().equals("restaurant")
                 ||googleRequest.getPlaceType().equals("cafe")) {
-            for(ApiTag keyword : googleRequest.getKeywords()){
+            for(TourattractionTag keyword : googleRequest.getKeywords()){
                 googleRequest.setKeyword(keyword);
                 response.getResults().addAll(datapipelineService.searchPlace(googleRequest).getResults());
             }
@@ -64,16 +64,16 @@ public class DatapipelineController {
     @Operation(summary = "장소 상세 조회")
     @PostMapping("/GoogleSearch/detail")
     public ResponseEntity<List<PlaceDetailDto>> searchDetailPlace(
-            @RequestBody PlaceDetailRequest request) {
+            @RequestBody GoogleRequest request) {
         List<PlaceDetailDto> response = datapipelineService.searchPlaceDetail(request);
         return ResponseEntity.ok(response);
     }
 
     @Operation(summary = "장소 조회 후 태깅 (tourAttraction test) ")
     @PostMapping("/llm/tagging")
-    public ResponseEntity<List<PlaceLLMDto>> getLLMTagging(
+    public ResponseEntity<List<TourAttractionLLMDto>> getLLMTagging(
             @RequestBody GoogleRequest googleRequest) {
-        List<PlaceLLMDto> response = datapipelineService.searchTourAttractionWithLLM(googleRequest);
+        List<TourAttractionLLMDto> response = datapipelineService.searchTourAttractionWithLLM(googleRequest);
 
         return ResponseEntity.ok(response);
     }

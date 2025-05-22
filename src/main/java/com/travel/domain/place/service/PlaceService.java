@@ -3,9 +3,7 @@ package com.travel.domain.place.service;
 
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.place.dao.PlaceRepository;
-import com.travel.domain.place.dto.PlaceDetailResponse;
-import com.travel.domain.place.dto.PlaceResponse;
-import com.travel.domain.place.dto.RecommendationRequest;
+import com.travel.domain.place.dto.*;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.placetype.dto.response.CafeResponse;
 import com.travel.domain.placetype.dto.response.RestaurantResponse;
@@ -14,7 +12,7 @@ import com.travel.domain.placetype.entity.cafe.CafeDoc;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantDoc;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
-import com.travel.domain.placetype.entity.tourattraction.ApiTag;
+import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
 import com.travel.domain.placetype.entity.tourattraction.TourattractionDoc;
 import com.travel.domain.placetype.service.PlacetypeService;
@@ -24,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,13 +30,14 @@ import java.util.List;
 public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlacetypeService placetypeService;
+    private final PlaceGoogleService placeGoogleService;
 
 
     @Transactional
     public PlaceResponse searchRecommendation(RecommendationRequest recommendationRequest) {
         List<CafeResponse> cafeResponseList = getCafeList(recommendationRequest.getCafeTagList());
         List<RestaurantResponse> restaurantResponseList = getRestaurantList(recommendationRequest.getRestaurantTypeList());
-        List<TourattractionResponse> tourattractionResponseList = getTourattractionList(recommendationRequest.getApiTagList(), recommendationRequest.getSubjectiveTagList());
+        List<TourattractionResponse> tourattractionResponseList = getTourattractionList(recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList());
 
         return PlaceResponse.builder()
                 .cafeResponseList(cafeResponseList)
@@ -58,8 +58,10 @@ public class PlaceService {
     }
     public MyPlaceResponse selectMyPlace(MyPlaceSelectRequest myPlaceSelectRequest) {
         myPlaceSelectRequest.getMyPlace().setName(myPlaceSelectRequest.getCustomName());
-        //saveMyPlaceToUserDatabase(myPalceSelectRequset.getMyPlace());
 
+        List<Place> myPlace = new ArrayList<>();
+        myPlace.add(myPlaceSelectRequest.getMyPlace());
+        return new MyPlaceResponse(myPlace);
     }
 
     /*
@@ -70,7 +72,7 @@ public class PlaceService {
         return null;
     }
 
-    private List<TourattractionResponse> getTourattractionList(List<ApiTag> apiTagList, List<SubjectiveTag> subjectiveTagList) {
+    private List<TourattractionResponse> getTourattractionList(List<TourattractionTag> tourattractionTagList, List<SubjectiveTag> subjectiveTagList) {
         return null;
     }
 
@@ -124,7 +126,7 @@ public class PlaceService {
                 .openingHours(place.getOpeningHours())
                 .priceLevel(place.getPriceLevel())
                 .reviews(place.getReviews())
-                .apiTags(tourattractionDoc.getApiTags())
+                .tourattractionTags(tourattractionDoc.getApiTags())
                 .subjectiveTags(tourattractionDoc.getSubjectiveTags())
                 .build();
 

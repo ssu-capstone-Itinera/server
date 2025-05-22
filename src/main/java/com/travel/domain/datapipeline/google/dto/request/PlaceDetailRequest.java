@@ -10,3 +10,4 @@ import java.util.List;
 public class PlaceDetailRequest {
     private List<String> placeIds;
 }
+ 

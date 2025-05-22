@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ApiTag {
+public enum TourattractionTag {
     자연("자연"),
     해변("해변"),
     산("산"),
