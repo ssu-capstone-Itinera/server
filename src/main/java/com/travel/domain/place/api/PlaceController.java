@@ -1,7 +1,9 @@
 package com.travel.domain.place.api;
 
 import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
-import com.travel.domain.place.dto.*;
+import com.travel.domain.place.dto.PlaceDetailResponse;
+import com.travel.domain.place.dto.PlaceResponse;
+import com.travel.domain.place.dto.RecommendationRequest;
 import com.travel.domain.place.service.PlaceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,23 +33,5 @@ public class PlaceController {
 
         return ResponseEntity.ok(placeService.getPlaceDetail(placeGoogleId));
     }
-
-    @Operation(summary = "직접 장소 검색")
-    @PostMapping("/myPlaceSearch")
-    public ResponseEntity<MyPlaceResponse> searchMyPlace(
-            @RequestBody MyPlaceRequest myPlaceRequest){
-        return ResponseEntity.ok(placeService.searchMyPlace(myPlaceRequest));
-    }
-
-    @Operation(summary = "직접 장소 선택")
-    @PostMapping("/myPlaceSelect")
-    public ResponseEntity<MyPlaceResponse> selectMyPlace(
-            @RequestBody MyPlaceSelectRequest myPlaceSelectRequest){
-        return ResponseEntity.ok(placeService.selectMyPlace(myPlaceSelectRequest));
-    }
-
-
-
-
 
 }
