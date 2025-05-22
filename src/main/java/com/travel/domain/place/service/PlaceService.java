@@ -22,7 +22,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -47,8 +46,6 @@ public class PlaceService {
     }
 
             //place.setSubjectiveTags(new ArrayList<>(newTags));
-        }
-    }
 
     public MyPlaceResponse searchMyPlace(MyPlaceRequest myPlaceRequest){
         if(myPlaceRequest.getSearchType().equals("myPlace_keyword")){
@@ -61,6 +58,7 @@ public class PlaceService {
         myPlaceSelectRequest.getMyPlace().setName(myPlaceSelectRequest.getCustomName());
         //saveMyPlaceToUserDatabase(myPalceSelectRequset.getMyPlace());
 
+    }
     /*
     tag 기반 -> elastic search에서 정보 가져오기
     코드 로직 추가 예정
