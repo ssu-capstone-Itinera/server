@@ -3,9 +3,7 @@ package com.travel.domain.place.service;
 
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.place.dao.PlaceRepository;
-import com.travel.domain.place.dto.PlaceDetailResponse;
-import com.travel.domain.place.dto.PlaceResponse;
-import com.travel.domain.place.dto.RecommendationRequest;
+import com.travel.domain.place.dto.*;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.placetype.dto.response.CafeResponse;
 import com.travel.domain.placetype.dto.response.RestaurantResponse;
@@ -24,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -31,6 +30,7 @@ import java.util.List;
 public class PlaceService {
     private final PlaceRepository placeRepository;
     private final PlacetypeService placetypeService;
+    private final PlaceGoogleService placeGoogleService;
 
 
     @Transactional
@@ -45,6 +45,21 @@ public class PlaceService {
                 .tourattractionResponseList(tourattractionResponseList)
                 .build();
     }
+
+            //place.setSubjectiveTags(new ArrayList<>(newTags));
+        }
+    }
+
+    public MyPlaceResponse searchMyPlace(MyPlaceRequest myPlaceRequest){
+        if(myPlaceRequest.getSearchType().equals("myPlace_keyword")){
+            return placeGoogleService.getPlaceByKeyword(myPlaceRequest);
+        }else if(myPlaceRequest.getSearchType().equals("myPlace_address")){
+            return placeGoogleService.getPlaceByAddress(myPlaceRequest);
+        }else throw new CustomException(ErrorCode.INVALID_MYPLACE_SEARCH_TYPE);
+    }
+    public MyPlaceResponse selectMyPlace(MyPlaceSelectRequest myPlaceSelectRequest) {
+        myPlaceSelectRequest.getMyPlace().setName(myPlaceSelectRequest.getCustomName());
+        //saveMyPlaceToUserDatabase(myPalceSelectRequset.getMyPlace());
 
     /*
     tag 기반 -> elastic search에서 정보 가져오기
