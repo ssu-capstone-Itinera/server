@@ -46,6 +46,22 @@ public class PlaceService {
                 .build();
     }
 
+
+            //place.setSubjectiveTags(new ArrayList<>(newTags));
+
+    public MyPlaceResponse searchMyPlace(MyPlaceRequest myPlaceRequest){
+        if(myPlaceRequest.getSearchType().equals("myPlace_keyword")){
+            return placeGoogleService.getPlaceByKeyword(myPlaceRequest);
+        }else if(myPlaceRequest.getSearchType().equals("myPlace_address")){
+            return placeGoogleService.getPlaceByAddress(myPlaceRequest);
+        }else throw new CustomException(ErrorCode.INVALID_MYPLACE_SEARCH_TYPE);
+    }
+    public MyPlaceResponse selectMyPlace(MyPlaceSelectRequest myPlaceSelectRequest) {
+        myPlaceSelectRequest.getMyPlace().setName(myPlaceSelectRequest.getCustomName());
+        //saveMyPlaceToUserDatabase(myPalceSelectRequset.getMyPlace());
+
+    }
+
     /*
     tag 기반 -> elastic search에서 정보 가져오기
     코드 로직 추가 예정
