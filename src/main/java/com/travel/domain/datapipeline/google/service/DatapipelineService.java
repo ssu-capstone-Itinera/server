@@ -1,15 +1,11 @@
 package com.travel.domain.datapipeline.google.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.travel.domain.categories.entity.Category;
-import com.travel.domain.datapipeline.google.dto.PlaceDto;
-import com.travel.domain.datapipeline.google.dto.PlaceLLMDto;
-import com.travel.domain.datapipeline.google.dto.request.PlaceDetailRequest;
+import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import com.travel.domain.datapipeline.google.dto.response.SaveTourAttractionDto;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.place.entity.PlaceDocument;
@@ -34,60 +30,64 @@ public class DatapipelineService {
      */
     @Transactional
     public PlaceListDto searchPlace(GoogleRequest googleRequest) {
-        return googleService.searchPlace(googleRequest);
-    }
-    public PlaceListDto searchPlaceByKeyword(GoogleRequest request) {
-        return googleService.searchMyPlaceByKeyword(request);
-    }
+        PlaceListDto placeListDto =
+                googleService.searchTourAttraction(googleRequest);
 
-    public PlaceListDto searchPlaceByAddress(GoogleRequest request) {
-        return googleService.searchMyPlaceByAddress(request);
+        return placeListDto;
     }
 
     /*
    정적 키워드로 장소 '세부정보' 리스트 반환 함수
     */
-    public List<PlaceDetailDto> searchPlaceDetail(PlaceDetailRequest request) {
-        return googleService.getPlaceDetailsByPlaceIds(request.getPlaceIds());
+    public List<PlaceDetailDto> searchPlaceDetail(GoogleRequest googleRequest) {
+        PlaceListDto placeListDto =
+                googleService.searchTourAttraction(googleRequest);
+
+        return googleService.getDetailedTourAttractions(placeListDto);
     }
+
 
 
     /*
     정적 키워드로 장소 세부 정보 및 llm 태깅 정보 포함하는 함수
      */
-    public List<PlaceLLMDto> searchTourAttractionWithLLM(GoogleRequest googleRequest) {
-        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
-        List<String> placeIds = placeListDto.getResults().stream()
-                .map(PlaceDto::getPlaceId)
-                .filter(Objects::nonNull)
-                .toList();
-        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetailsByPlaceIds(placeIds);
+    public List<TourAttractionLLMDto> searchTourAttractionWithLLM(GoogleRequest googleRequest) {
+        PlaceListDto placeListDto =
+                googleService.searchTourAttraction(googleRequest);
+
+        List<PlaceDetailDto> placeDetailDtos = googleService.getDetailedTourAttractions(placeListDto);
 
         return llmService.generateTagsWithGemini(placeDetailDtos);
     }
 
     public List<SaveTourAttractionDto> saveTourAttraction(GoogleRequest googleRequest){
-        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
-        List<String> placeIds = placeListDto.getResults().stream()
-                .map(PlaceDto::getPlaceId)
-                .filter(Objects::nonNull)
-                .toList();
-        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetailsByPlaceIds(placeIds);
+        PlaceListDto placeListDto =
+                googleService.searchTourAttraction(googleRequest);
 
-        List<PlaceLLMDto> placeLLMDtos = llmService.generateTagsWithGemini(placeDetailDtos);
-        return getSaveTourAttractionList(googleRequest, placeDetailDtos, placeLLMDtos);
+        List<PlaceDetailDto> placeDetailDtos = googleService.getDetailedTourAttractions(placeListDto);
+
+
+        List<TourAttractionLLMDto> tourAttractionLLMDtos = llmService.generateTagsWithGemini(placeDetailDtos);
+
+
+        List<SaveTourAttractionDto> saveTourAttractionDtoList = getSaveTourAttractionList(googleRequest, placeDetailDtos, tourAttractionLLMDtos);
+
+
+        return saveTourAttractionDtoList;
     }
+
 
     //
     private static List<SaveTourAttractionDto> getSaveTourAttractionList(
             GoogleRequest googleRequest,
             List<PlaceDetailDto> placeDetailDtos,
-            List<PlaceLLMDto> placeLLMDtos) {
+            List<TourAttractionLLMDto> tourAttractionLLMDtos
+    ) {
         return IntStream.range(0, placeDetailDtos.size())
                 .mapToObj(i -> {
                     PlaceDetailDto detailDto = placeDetailDtos.get(i);
-                    PlaceLLMDto llmDto = i < placeLLMDtos.size()
-                            ? placeLLMDtos.get(i)
+                    TourAttractionLLMDto llmDto = i < tourAttractionLLMDtos.size()
+                            ? tourAttractionLLMDtos.get(i)
                             : null;
 
                     // Place (MySQL용 엔티티)
@@ -100,7 +100,7 @@ public class DatapipelineService {
                             .phoneNumber(detailDto.getPhoneNumber())
                             .webSite(detailDto.getWebsite())
                             .openingHours(detailDto.getOpeningHours())
-                            .priceLevel(detailDto.getPriceLevel().toString())
+                            .priceLevel(detailDto.getPriceLevel())
                             .build();
 
                     // PlaceDocument (Elasticsearch 문서)
@@ -114,4 +114,13 @@ public class DatapipelineService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public PlaceListDto searchPlaceByKeyword(GoogleRequest request) {
+        return googleService.searchMyPlaceByKeyword(request);
+    }
+
+    public PlaceListDto searchPlaceByAddress(GoogleRequest request) {
+        return googleService.searchMyPlaceByAddress(request);
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.travel.domain.datapipeline.google.dto;
 
 
-import com.travel.domain.placetype.entity.tourattraction.ApiTag;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -21,9 +20,9 @@ public class PlaceDetailDto {
     private Double lat;
     private Double lng;
     private List<String> openingHours;
-    private Integer priceLevel;
+    private String priceLevel;
     private List<String> photos;
-    private List<ReviewDto> reviews;
+    private List<String> reviews;
     private List<String> types;
 
 }

@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Builder
-public class PlaceLLMDto {
+public class TourAttractionLLMDto {
     private List<PlaceDetailDto> placeDetailDtoList;
     private List<SubjectiveTag> subjectiveTags;
 }

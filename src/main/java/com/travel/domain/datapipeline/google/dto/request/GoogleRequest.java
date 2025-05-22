@@ -3,6 +3,7 @@ package com.travel.domain.datapipeline.google.dto.request;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.travel.domain.placetype.entity.ApiTag;
 
+import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,11 +29,11 @@ public class GoogleRequest {
     private Integer radius;
 
     @Schema(description = "main keyword(domain.placetype.entity.ApiTag)", nullable = true)
-    private List<ApiTag> keywords;
+    private List<TourattractionTag> keywords;
 
     @Schema(hidden = true)
     @JsonIgnore
-    private ApiTag keyword;
+    private TourattractionTag keyword;
 
     @Schema(description = "tourist_attraction / restaurant / cafe", nullable = true)
     private String placeType;
