@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @Builder
 @AllArgsConstructor
-public class SaveTourAttractionDto {
+public class SavePlaceDto {
     private Place place;
     private PlaceDocument placeDocument;
 

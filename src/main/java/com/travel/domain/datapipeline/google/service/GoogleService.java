@@ -40,7 +40,7 @@ public class GoogleService {
                     .uri(uriBuilder -> uriBuilder
                             .queryParam("location", googleRequest.getLat() + "," + googleRequest.getLng())
                             .queryParam("radius", 5000)
-                            .queryParam("keyword", googleRequest.getKeyword().getValue())
+                            .queryParam("keyword", googleRequest.getTourattractionTag().getValue())
                             .queryParam("type", type)
                             .queryParam("language", "ko")
                             .queryParam("key", googleApiKey)
@@ -53,7 +53,7 @@ public class GoogleService {
 
 
             // Map에서 TourAttractionResponse로 변환
-            PlaceListDto response = getTourAttractionListDto(googleRequest, apiResponse);
+            PlaceListDto response = getPlaceListDto(googleRequest, apiResponse);
 
             return response;
 
@@ -63,7 +63,7 @@ public class GoogleService {
         }
     }
 
-    private PlaceListDto getTourAttractionListDto(GoogleRequest googleRequest, Map<String, Object> apiResponse) {
+    private PlaceListDto getPlaceListDto(GoogleRequest googleRequest, Map<String, Object> apiResponse) {
         PlaceListDto response = new PlaceListDto();
 
         if (apiResponse != null) {
@@ -77,7 +77,7 @@ public class GoogleService {
             response.setResults(placeList);
 
 
-            getDetailedTourAttractions(response);
+            getPlaceDetail(response);
         }
         return response;
     }
@@ -128,7 +128,7 @@ public class GoogleService {
         return placeList;
     }
 
-    public List<PlaceDetailDto> getDetailedTourAttractions(PlaceListDto placeListDto) {
+    public List<PlaceDetailDto> getPlaceDetail(PlaceListDto placeListDto) {
         return placeListDto.getResults().stream()
                 .map(PlaceDto::getPlaceId)
                 .map(this::getDetailByPlaceId)
