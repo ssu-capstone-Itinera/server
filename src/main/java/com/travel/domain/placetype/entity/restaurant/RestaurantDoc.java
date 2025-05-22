@@ -3,6 +3,7 @@ package com.travel.domain.placetype.entity.restaurant;
 import java.util.Map;
 
 import jakarta.persistence.Id;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.elasticsearch.annotations.*;
 
 import com.travel.domain.place.entity.PlaceDocument;
@@ -14,6 +15,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
 @Document(indexName = "restaurant")

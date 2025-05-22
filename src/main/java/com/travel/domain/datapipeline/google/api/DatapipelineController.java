@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
-import com.travel.domain.datapipeline.google.dto.response.SaveTourAttractionDto;
+import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,9 +46,9 @@ public class DatapipelineController {
 //        return ResponseEntity.ok(response);
 //    }
 
-    @Operation(summary = "장소 조회 디테일(tourAttraction test) ")
+    @Operation(summary = "장소 조회 디테일(test) ")
     @PostMapping("/search/detail")
-    public ResponseEntity<List<PlaceDetailDto>> searchDetailAttraction(
+    public ResponseEntity<List<PlaceDetailDto>> searchPlaceDetail(
             @RequestBody GoogleRequest googleRequest) {
         List<PlaceDetailDto> response = new ArrayList<>();
         if (googleRequest.getPlaceType().equals("tourist_attraction")) {
@@ -67,12 +67,31 @@ public class DatapipelineController {
     }
 
     @Operation(summary = "장소 조회 후 태깅, document 저장 (tourAttraction test) ")
-    @PostMapping("/tourattraction/save")
-    public ResponseEntity<List<SaveTourAttractionDto>> saveTourAttraction(
+    @PostMapping("/save/tourattraction")
+    public ResponseEntity<List<SavePlaceDto>> saveTourAttraction(
             @RequestBody GoogleRequest googleRequest) {
-        List<SaveTourAttractionDto> response = datapipelineService.saveTourAttraction(googleRequest);
+        List<SavePlaceDto> response = datapipelineService.saveTourAttraction(googleRequest);
 
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "장소 조회 후 태깅, document 저장 (cafe test) ")
+    @PostMapping("/save/cafe")
+    public ResponseEntity<List<SavePlaceDto>> saveCafe(
+            @RequestBody GoogleRequest googleRequest) {
+        List<SavePlaceDto> response = datapipelineService.saveCafe(googleRequest);
+
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "장소 조회 후 태깅, document 저장 (restaurant test) ")
+    @PostMapping("/save/restaurant")
+    public ResponseEntity<List<SavePlaceDto>> saveRestaurant(
+            @RequestBody GoogleRequest googleRequest) {
+        List<SavePlaceDto> response = datapipelineService.saveRestaurant(googleRequest);
+
+        return ResponseEntity.ok(response);
+    }
+
 
 }

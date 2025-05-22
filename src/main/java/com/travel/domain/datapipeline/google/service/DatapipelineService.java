@@ -6,9 +6,11 @@ import java.util.stream.IntStream;
 
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
-import com.travel.domain.datapipeline.google.dto.response.SaveTourAttractionDto;
+import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.place.entity.PlaceDocument;
+import com.travel.domain.placetype.entity.cafe.CafeDoc;
+import com.travel.domain.placetype.entity.restaurant.RestaurantDoc;
 import com.travel.domain.placetype.entity.tourattraction.TourattractionDoc;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +45,7 @@ public class DatapipelineService {
         PlaceListDto placeListDto =
                 googleService.searchTourAttraction(googleRequest);
 
-        return googleService.getDetailedTourAttractions(placeListDto);
+        return googleService.getPlaceDetail(placeListDto);
     }
 
 
@@ -55,30 +57,27 @@ public class DatapipelineService {
         PlaceListDto placeListDto =
                 googleService.searchTourAttraction(googleRequest);
 
-        List<PlaceDetailDto> placeDetailDtos = googleService.getDetailedTourAttractions(placeListDto);
+        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
 
         return llmService.generateTagsWithGemini(placeDetailDtos);
     }
 
-    public List<SaveTourAttractionDto> saveTourAttraction(GoogleRequest googleRequest){
+    public List<SavePlaceDto> saveTourAttraction(GoogleRequest googleRequest){
         PlaceListDto placeListDto =
                 googleService.searchTourAttraction(googleRequest);
 
-        List<PlaceDetailDto> placeDetailDtos = googleService.getDetailedTourAttractions(placeListDto);
+        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
 
 
         List<TourAttractionLLMDto> tourAttractionLLMDtos = llmService.generateTagsWithGemini(placeDetailDtos);
 
 
-        List<SaveTourAttractionDto> saveTourAttractionDtoList = getSaveTourAttractionList(googleRequest, placeDetailDtos, tourAttractionLLMDtos);
-
-
-        return saveTourAttractionDtoList;
+        return getSaveTourAttractionList(googleRequest, placeDetailDtos, tourAttractionLLMDtos);
     }
 
 
-    //
-    private static List<SaveTourAttractionDto> getSaveTourAttractionList(
+
+    private static List<SavePlaceDto> getSaveTourAttractionList(
             GoogleRequest googleRequest,
             List<PlaceDetailDto> placeDetailDtos,
             List<TourAttractionLLMDto> tourAttractionLLMDtos
@@ -106,11 +105,89 @@ public class DatapipelineService {
                     // PlaceDocument (Elasticsearch 문서)
                     PlaceDocument document = TourattractionDoc.builder()
                             .placeGoogleId(detailDto.getPlaceId())
-                            .apiTags(List.of(googleRequest.getKeyword()))
+                            .apiTags(List.of(googleRequest.getTourattractionTag()))
                             .subjectiveTags(llmDto != null ? llmDto.getSubjectiveTags() : null)
                             .build();
 
-                    return new SaveTourAttractionDto(place, document);
+                    return new SavePlaceDto(place, document);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<SavePlaceDto> saveCafe(GoogleRequest googleRequest) {
+        PlaceListDto placeListDto =
+                googleService.searchTourAttraction(googleRequest);
+
+        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
+
+        return getSaveCafeList(googleRequest, placeDetailDtos);
+    }
+
+    //키워드로 cafe 검색 후 -> detail로 상세 세부 tag 가져오는 코드 추가해야함
+    private List<SavePlaceDto> getSaveCafeList(GoogleRequest googleRequest, List<PlaceDetailDto> placeDetailDtos) {
+
+        return IntStream.range(0, placeDetailDtos.size())
+                .mapToObj(i -> {
+                    PlaceDetailDto detailDto = placeDetailDtos.get(i);
+
+                    // Place (MySQL용 엔티티)
+                    Place place = Place.builder()
+                            .category(Category.CAFE)
+                            .placeGoogleId(detailDto.getPlaceId())
+                            .name(detailDto.getName())
+                            .address(detailDto.getAddress())
+                            .rating(detailDto.getRating())
+                            .phoneNumber(detailDto.getPhoneNumber())
+                            .webSite(detailDto.getWebsite())
+                            .openingHours(detailDto.getOpeningHours())
+                            .priceLevel(detailDto.getPriceLevel())
+                            .build();
+
+
+
+                    PlaceDocument document = CafeDoc.builder()
+                            .cafeTags(List.of(googleRequest.getCafeTag()))
+                            .build();
+
+                    return new SavePlaceDto(place, document);
+                })
+                .collect(Collectors.toList());
+    }
+
+    public List<SavePlaceDto> saveRestaurant(GoogleRequest googleRequest) {
+        PlaceListDto placeListDto =
+                googleService.searchTourAttraction(googleRequest);
+
+        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
+
+        return getSaveRestaurantList(googleRequest, placeDetailDtos);
+    }
+
+    private List<SavePlaceDto> getSaveRestaurantList(GoogleRequest googleRequest, List<PlaceDetailDto> placeDetailDtos) {
+        return IntStream.range(0, placeDetailDtos.size())
+                .mapToObj(i -> {
+                    PlaceDetailDto detailDto = placeDetailDtos.get(i);
+
+                    // Place (MySQL용 엔티티)
+                    Place place = Place.builder()
+                            .category(Category.CAFE)
+                            .placeGoogleId(detailDto.getPlaceId())
+                            .name(detailDto.getName())
+                            .address(detailDto.getAddress())
+                            .rating(detailDto.getRating())
+                            .phoneNumber(detailDto.getPhoneNumber())
+                            .webSite(detailDto.getWebsite())
+                            .openingHours(detailDto.getOpeningHours())
+                            .priceLevel(detailDto.getPriceLevel())
+                            .build();
+
+
+
+                    PlaceDocument document = RestaurantDoc.builder()
+                            .restaurantType(googleRequest.getRestaurantType())
+                            .build();
+
+                    return new SavePlaceDto(place, document);
                 })
                 .collect(Collectors.toList());
     }
