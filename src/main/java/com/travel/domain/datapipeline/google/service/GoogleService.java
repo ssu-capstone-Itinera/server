@@ -11,10 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -34,12 +31,6 @@ public class GoogleService {
 
     @Value("${google.api.place-url}")
     private String placeUrl;
-
-    @Value("${google.api.textsearch-url}")
-    private String textSearchUrl;
-
-    @Value("${google.api.addresssearch-url}")
-    private String addressSearchUrl;
 
     public PlaceListDto searchTourAttraction(GoogleRequest googleRequest) {
         String type = "tourist_attraction";
@@ -218,80 +209,4 @@ public class GoogleService {
                 .reviews(reviews)
                 .build();
     }
-
-    public PlaceListDto searchMyPlaceByKeyword(GoogleRequest request) {
-        try {
-            String query = request.getMyPlaceQuery();
-            URI uri = UriComponentsBuilder.fromUriString(textSearchUrl)
-                    .queryParam("query", query)
-                    .queryParam("language", "ko")
-                    .queryParam("key", googleApiKey)
-                    .build(false)
-                    .encode(StandardCharsets.UTF_8)
-                    .toUri();
-
-            log.info("Google TextSearch API URI: {}", uri);
-
-            Map<String, Object> apiResponse = WebClient.create()
-                    .get()
-                    .uri(uri)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block();
-
-            log.info("Google TextSearch 응답: {}", apiResponse);
-
-            return getPlaceListDto(request, apiResponse);
-
-        } catch (Exception e) {
-            log.error("TextSearch API 호출 실패", e);
-            throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
-        }
-    }
-
-    private PlaceListDto getPlaceListDto(GoogleRequest googleRequest, Map<String, Object> apiResponse) {
-        PlaceListDto response = new PlaceListDto();
-
-        if (apiResponse != null) {
-            response.setNextPageToken((String) apiResponse.get("next_page_token"));
-
-            List<Map<String, Object>> results = (List<Map<String, Object>>) apiResponse.get("results");
-
-            List<PlaceDto> placeList = getPlaceDtos(results);
-
-            response.setResults(placeList);
-        }
-        return response;
-    }
-
-    public PlaceListDto searchMyPlaceByAddress(GoogleRequest request) {
-        try {
-            String address = request.getMyPlaceAddress();
-            URI uri = UriComponentsBuilder.fromUriString(addressSearchUrl)
-                    .queryParam("address", address)
-                    .queryParam("language", "ko")
-                    .queryParam("key", googleApiKey)
-                    .build(false)
-                    .encode(StandardCharsets.UTF_8)
-                    .toUri();
-
-            log.info("Google Geocode API URI: {}", uri);
-
-            Map<String, Object> apiResponse = WebClient.create()
-                    .get()
-                    .uri(uri)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block();
-
-            log.info("Google Geocode 응답: {}", apiResponse);
-
-            return getPlaceListDto(request, apiResponse);
-
-        } catch (Exception e) {
-            log.error("Geocode API 호출 실패", e);
-            throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
-        }
-    }
-
 }

@@ -114,13 +114,4 @@ public class DatapipelineService {
                 })
                 .collect(Collectors.toList());
     }
-
-    public PlaceListDto searchPlaceByKeyword(GoogleRequest request) {
-        return googleService.searchMyPlaceByKeyword(request);
-    }
-
-    public PlaceListDto searchPlaceByAddress(GoogleRequest request) {
-        return googleService.searchMyPlaceByAddress(request);
-    }
-
 }
