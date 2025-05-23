@@ -25,8 +25,11 @@ public class RestaurantDoc extends PlaceDocument {
     @Field(type = FieldType.Keyword)
     private RestaurantType restaurantType;
 
-    @Field(type = FieldType.Keyword)
-    private RestaurantPriceRange restaurantPriceRange;
+    @Field(type = FieldType.Text)
+    private String address;
+
+//    @Field(type = FieldType.Keyword)
+//    private RestaurantPriceRange restaurantPriceRange;
 
     @Field(type = FieldType.Object)
     private Map<String, Object> searchFilters;
