@@ -240,6 +240,14 @@ public class PlaceGoogleService {
         }
     }
 
+    public PlaceDetailResponse getCafeDetailByPlaceId (String placeId) {
+        PlaceDetailResponse cafeDetailResponse = getDetailByPlaceId(placeId);
+        cafeDetailResponse.setCategory(Category.CAFE);
+        List<CafeTag> cafeTags = getCafeTagsByPlaceId(placeId);
+        cafeDetailResponse.setCafeTags(cafeTags);
+        return cafeDetailResponse;
+    }
+
 
 
 }
