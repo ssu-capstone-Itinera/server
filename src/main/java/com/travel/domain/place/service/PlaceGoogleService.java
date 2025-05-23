@@ -188,6 +188,58 @@ public class PlaceGoogleService {
             return null;
         }
     }
+    private void setPlaceDetail(PlaceDetailResponse placeDetailResponse, Map<String, Object> apiResponse) {
+        if (apiResponse == null || apiResponse.isEmpty()) return;
+
+        Map<String, Object> result = (Map<String, Object>) apiResponse.get("result");
+        if (result == null || result.isEmpty()) return;
+
+        placeDetailResponse.setPlaceGoogleId((String) result.get("place_id"));
+        placeDetailResponse.setName((String) result.get("name"));
+        placeDetailResponse.setAddress((String) result.get("formatted_address"));
+        placeDetailResponse.setLocation((String) result.get("vicinity")); // 또는 "location" 값이 따로 있으면 수정
+
+        Map<String, Object> geometry = (Map<String, Object>) result.get("geometry");
+        if (geometry != null) {
+            Map<String, Object> location = (Map<String, Object>) geometry.get("location");
+            if (location != null) {
+                placeDetailResponse.setLat(location.get("lat") != null ? ((Number) location.get("lat")).doubleValue() : 0.0);
+                placeDetailResponse.setLng(location.get("lng") != null ? ((Number) location.get("lng")).doubleValue() : 0.0);
+            }
+        }
+
+        if (result.get("rating") != null) {
+            placeDetailResponse.setRating(((Number) result.get("rating")).doubleValue());
+        }
+
+        placeDetailResponse.setPhoneNumber((String) result.get("formatted_phone_number"));
+        placeDetailResponse.setWebSite((String) result.get("website"));
+        placeDetailResponse.setPriceLevel(result.get("price_level") != null
+                ? String.valueOf(result.get("price_level")) : null);
+
+        Map<String, Object> openingHours = (Map<String, Object>) result.get("opening_hours");
+        if (openingHours != null) {
+            placeDetailResponse.setOpeningHours((List<String>) openingHours.get("weekday_text"));
+        }
+
+        Map<String, Object> editorialSummary = (Map<String, Object>) result.get("editorial_summary");
+        if (editorialSummary != null) {
+            placeDetailResponse.setDescription((String) editorialSummary.get("overview"));
+        }
+
+        List<Map<String, Object>> rawReviews = (List<Map<String, Object>>) result.get("reviews");
+        if (rawReviews != null) {
+            List<String> reviewTexts = new ArrayList<>();
+            for (Map<String, Object> r : rawReviews) {
+                String text = (String) r.get("text");
+                if (text != null && !text.isBlank()) {
+                    reviewTexts.add(text);
+                }
+            }
+            placeDetailResponse.setReviews(reviewTexts);
+        }
+    }
+
 
 
 }
