@@ -1,7 +1,9 @@
 package com.travel.domain.place.service;
 
+import com.travel.domain.categories.entity.Category;
 import com.travel.domain.place.dto.*;
 import com.travel.domain.place.entity.Place;
+import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -160,6 +162,32 @@ public class PlaceGoogleService {
         }
     }
 
+    private PlaceDetailResponse getDetailByPlaceId(String placeId) {
+        PlaceDetailResponse placeDetailResponse = new PlaceDetailResponse();
+        try {
+            URI uri = UriComponentsBuilder.fromUriString(placeUrl)
+                    .queryParam("place_id", placeId)
+                    .queryParam("language", "ko")
+                    .queryParam("key", googleApiKey)
+                    .build(false)
+                    .encode(StandardCharsets.UTF_8)
+                    .toUri();
+
+            log.info("Detail API URI: {}", uri);
+
+            Map<String, Object> apiResponse = WebClient.create()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+            setPlaceDetail(placeDetailResponse, apiResponse);
+            return placeDetailResponse;
+        } catch (Exception e) {
+            log.error("Google Detail API 호출 실패: {}", placeId, e);
+            return null;
+        }
+    }
 
 
 }
