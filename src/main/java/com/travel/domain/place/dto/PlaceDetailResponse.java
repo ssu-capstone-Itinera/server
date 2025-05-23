@@ -5,15 +5,16 @@ import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
 import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.util.List;
 
 
 @Getter
+@Setter
 @Builder
-
+@NoArgsConstructor
+@AllArgsConstructor
 public class PlaceDetailResponse {
     private Long id;
     private Category category;
