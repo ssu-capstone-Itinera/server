@@ -32,7 +32,7 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostDetail(memberId, postId));
     }
 
-    @Operation(summary = "게시글 좋아요 api")
+    @Operation(summary = "게시글 좋아요 api - api 요청 보낼 때마다 좋아요,취소 반복")
     @PostMapping("/like/{postId}")
     public ResponseEntity<PostLikeResponse> likePost(@AuthenticationPrincipal Long memberId, @PathVariable Long postId) {
 
