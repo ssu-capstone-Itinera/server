@@ -125,6 +125,41 @@ public class PlaceGoogleService {
         return new MyPlaceResponse(placeList);
     }
 
+    public PlaceCoordinate getCoordinateByAddress(String mainPlace) {
+        try {
+            URI uri = UriComponentsBuilder.fromUriString(addressSearchUrl)
+                    .queryParam("address", mainPlace)
+                    .queryParam("language", "ko")
+                    .queryParam("key", googleApiKey)
+                    .build(false)
+                    .encode(StandardCharsets.UTF_8)
+                    .toUri();
+            log.info("mainPlace 주소 변환 오류:  {}", uri);
+
+            Map<String, Object> apiResponse = WebClient.create()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+            log.info("mainPlace 응답: {}", apiResponse);
+
+            List<Map<String, Object>> results = (List<Map<String, Object>>) apiResponse.get("results");
+            if (results == null || results.isEmpty()) {
+                throw new CustomException(ErrorCode.GOOGLE_API_NO_RESULT);
+            }
+            Map<String, Object> geometry = (Map<String, Object>) results.get(0).get("geometry");
+            Map<String, Object> location = (Map<String, Object>) geometry.get("Location");
+
+            Double lat = (Double) location.get("lat");
+            Double lng = (Double) location.get("lng");
+            return new PlaceCoordinate(lat, lng);
+        } catch (Exception e) {
+            log.error("mainPlace 주소 검색 중 geocode API 호출 실패", e);
+            throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
+        }
+    }
+
 
 
 }

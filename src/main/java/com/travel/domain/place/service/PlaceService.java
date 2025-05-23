@@ -35,6 +35,9 @@ public class PlaceService {
 
     @Transactional
     public PlaceResponse searchRecommendation(RecommendationRequest recommendationRequest) {
+        //setMainPlaceValues로 lng, lat 값 가져올 수 있음.
+
+
         List<CafeResponse> cafeResponseList = getCafeList(recommendationRequest.getCafeTagList());
         List<RestaurantResponse> restaurantResponseList = getRestaurantList(recommendationRequest.getRestaurantTypeList());
         List<TourattractionResponse> tourattractionResponseList = getTourattractionList(recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList());
@@ -44,6 +47,11 @@ public class PlaceService {
                 .restaurantResponseList(restaurantResponseList)
                 .tourattractionResponseList(tourattractionResponseList)
                 .build();
+    }
+
+
+    private PlaceCoordinate setMainPlaceValues(RecommendationRequest recommendationRequest){
+        return placeGoogleService.getCoordinateByAddress(recommendationRequest.getMainTourPlace());
     }
 
 
