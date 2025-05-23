@@ -18,6 +18,7 @@ public class WebConfig implements WebMvcConfigurer {
                                 "http://localhost:8080",
                                 "http://localhost:5173",
                                 "http://3.36.60.210",
+                                "http://3.36.60.210:5173",
                                 "http://3.36.60.210:8080",
                                 "http://3.36.60.210:80")
                         .allowedHeaders("*")

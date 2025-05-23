@@ -3,6 +3,7 @@ package com.travel.global.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -86,9 +87,14 @@ public class WebSecurityConfig {
 
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
+        configuration.setAllowedOrigins(List.of(
+                "http://3.36.60.210",
+                "http://3.36.60.210:8080",
+                "http://localhost:5173", // Vite 개발 서버
+                "http://3.36.60.210:5173" // 배포용 Vite 서버라면 이것도 허용
+        ));
 
-        configuration.addAllowedOrigin("http://3.36.60.210");
-        configuration.addAllowedOrigin("http://3.36.60.210:8080");
+
 
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Collections.singletonList("*"));
