@@ -17,7 +17,9 @@ public class RecommendationRequest {
     뭐가 필요할까
     날짜... 지역 키워드, 테그 명칭들(관광지, 카페, )
      */
+    private String mainTourPlace;
 
+    private int radius;
     private List<TourattractionTag> tourattractionTagList;
     private List<SubjectiveTag> subjectiveTagList;
     private List<RestaurantType> restaurantTypeList;
