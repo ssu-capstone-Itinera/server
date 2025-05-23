@@ -248,6 +248,60 @@ public class PlaceGoogleService {
         return cafeDetailResponse;
     }
 
+    private List<CafeTag> getCafeTagsByPlaceId(String placeId) {
+        List<CafeTag> cafeTags = new ArrayList<>();
+
+        String fields = String.join(",",
+                "dineIn", "curbsidePickup", "reservable",
+                "servesBreakfast", "servesLunch", "servesDinner",
+                "servesBeer", "servesWine", "servesBrunch", "servesVegetarianFood",
+                "menuForChildren", "servesCocktails", "servesDessert",
+                "goodForChildren", "allowsDogs", "goodForGroups",
+                "parkingOptions"
+        );
+
+        URI uri = UriComponentsBuilder.fromUriString("https://places.googleapis.com/v1/places/" + placeId)
+                .queryParam("fields", fields)
+                .queryParam("key", googleApiKey)
+                .build(false)
+                .encode(StandardCharsets.UTF_8)
+                .toUri();
+
+        try {
+            Map<String, Object> apiResponse = WebClient.create()
+                    .get()
+                    .uri(uri)
+                    .retrieve()
+                    .bodyToMono(Map.class)
+                    .block();
+
+            if (apiResponse == null || apiResponse.isEmpty()) return cafeTags;
+
+            for (CafeTag tag : CafeTag.values()) {
+                if (!tag.getValue().equals("parkingOptions")) {
+                    if (Boolean.TRUE.equals(apiResponse.get(tag.getValue()))) {
+                        cafeTags.add(tag);
+                    }
+                }
+            }
+
+            Map<String, Object> parkingOptions = (Map<String, Object>) apiResponse.get("parkingOptions");
+            if (parkingOptions != null) {
+                boolean hasParking = parkingOptions.values().stream()
+                        .anyMatch(v -> Boolean.TRUE.equals(v));
+                if (hasParking) {
+                    cafeTags.add(CafeTag.PARKING_OPTIONS);
+                }
+            }
+
+        } catch (Exception e) {
+            log.error("Google Places v1 API 호출 실패 (카페 태그 조회)", e);
+            throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
+        }
+
+        return cafeTags;
+    }
+
 
 
 }
