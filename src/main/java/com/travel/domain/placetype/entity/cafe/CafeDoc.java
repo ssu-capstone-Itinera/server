@@ -23,4 +23,9 @@ public class CafeDoc extends PlaceDocument {
     @Field(type = FieldType.Keyword)
     private List<CafeTag> cafeTags;
 
+
+    @Field(type = FieldType.Text)
+    private String address;
+
+
 }

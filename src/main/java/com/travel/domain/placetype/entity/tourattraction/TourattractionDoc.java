@@ -25,6 +25,9 @@ public class TourattractionDoc extends PlaceDocument {
     @Field(type = FieldType.Nested)
     private List<TourattractionTag> apiTags;
 
+    @Field(type = FieldType.Text)
+    private String address;
+
     // 주관적 태그 (LLM 기반 분류)
     @Field(type = FieldType.Nested)
     private List<SubjectiveTag> subjectiveTags;
