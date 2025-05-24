@@ -1,11 +1,9 @@
 package com.travel.domain.place.api;
 
-import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
 import com.travel.domain.place.dto.*;
 import com.travel.domain.place.service.PlaceService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +17,7 @@ public class PlaceController {
 
     @Operation(summary = "장소 추천 api")
     @PostMapping
-    public ResponseEntity<PlaceResponse> searchRecommendation(
+    public ResponseEntity<PlaceListResponse> searchRecommendation(
             @RequestBody RecommendationRequest recommendationRequest) {
 
         return ResponseEntity.ok(placeService.searchRecommendation(recommendationRequest));

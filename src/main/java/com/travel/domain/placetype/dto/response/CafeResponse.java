@@ -1,7 +1,7 @@
 package com.travel.domain.placetype.dto.response;
 
 
-import com.travel.domain.place.dto.PlaceResponse;
+
 import lombok.Builder;
 import lombok.Getter;
 
