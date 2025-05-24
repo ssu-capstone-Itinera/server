@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface PlaceRepository extends JpaRepository<Place, Long>, PlaceRepositoryCustom{
     Optional<Place> findByPlaceGoogleId(String findByPlaceGoogleId);
 
-    boolean existsGoogleId(String placeId);
+    boolean existsByPlaceGoogleId(String placeId);
 }
