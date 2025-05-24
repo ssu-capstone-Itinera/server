@@ -32,8 +32,8 @@ public class GoogleService {
     @Value("${google.api.place-url}")
     private String placeUrl;
 
-    public PlaceListDto searchTourAttraction(GoogleRequest googleRequest) {
-        String type = "tourist_attraction";
+    public PlaceListDto searchTourAttraction(GoogleRequest googleRequest, String type) {
+
         try {
             Map<String, Object> apiResponse = WebClient.create(nearBySearchUrl)
                     .get()
@@ -71,7 +71,6 @@ public class GoogleService {
 
             List<Map<String, Object>> results = (List<Map<String, Object>>) apiResponse.get("results");
 
-            //TourAttractionListDto의 placeList 생성
             List<PlaceDto> placeList = getPlaceDtos(results);
 
             response.setResults(placeList);

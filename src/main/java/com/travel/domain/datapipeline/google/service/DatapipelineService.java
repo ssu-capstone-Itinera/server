@@ -1,12 +1,15 @@
 package com.travel.domain.datapipeline.google.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import com.travel.domain.categories.entity.Category;
+import com.travel.domain.datapipeline.google.dto.PlaceDto;
 import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
+import com.travel.domain.place.dao.PlaceRepository;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.place.entity.PlaceDocument;
 import com.travel.domain.placetype.entity.cafe.CafeDoc;
@@ -26,6 +29,12 @@ import lombok.RequiredArgsConstructor;
 public class DatapipelineService {
     private final GoogleService googleService;
     private final LLMService llmService;
+    private final PlaceRepository placeRepository;
+
+    private final String TOUR_ATTRACTION = "tourist_attraction";
+    private final String CAFE = "cafe";
+    private final String RESTAURANT = "restuarant";
+
 
     /*
     정적 키워드로 장소 리스트 반환 함수
@@ -33,7 +42,7 @@ public class DatapipelineService {
     @Transactional
     public PlaceListDto searchPlace(GoogleRequest googleRequest) {
         PlaceListDto placeListDto =
-                googleService.searchTourAttraction(googleRequest);
+                googleService.searchTourAttraction(googleRequest, TOUR_ATTRACTION);
 
         return placeListDto;
     }
@@ -43,7 +52,7 @@ public class DatapipelineService {
     */
     public List<PlaceDetailDto> searchPlaceDetail(GoogleRequest googleRequest) {
         PlaceListDto placeListDto =
-                googleService.searchTourAttraction(googleRequest);
+                googleService.searchTourAttraction(googleRequest, TOUR_ATTRACTION);
 
         return googleService.getPlaceDetail(placeListDto);
     }
@@ -55,7 +64,7 @@ public class DatapipelineService {
      */
     public List<TourAttractionLLMDto> searchTourAttractionWithLLM(GoogleRequest googleRequest) {
         PlaceListDto placeListDto =
-                googleService.searchTourAttraction(googleRequest);
+                googleService.searchTourAttraction(googleRequest,TOUR_ATTRACTION);
 
         List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
 
@@ -64,10 +73,10 @@ public class DatapipelineService {
 
     public List<SavePlaceDto> saveTourAttraction(GoogleRequest googleRequest){
         PlaceListDto placeListDto =
-                googleService.searchTourAttraction(googleRequest);
+                googleService.searchTourAttraction(googleRequest,TOUR_ATTRACTION);
 
-        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
 
+        List<PlaceDetailDto> placeDetailDtos = getPlaceDetailDtos(placeListDto);
 
         List<TourAttractionLLMDto> tourAttractionLLMDtos = llmService.generateTagsWithGemini(placeDetailDtos);
 
@@ -116,9 +125,9 @@ public class DatapipelineService {
 
     public List<SavePlaceDto> saveCafe(GoogleRequest googleRequest) {
         PlaceListDto placeListDto =
-                googleService.searchTourAttraction(googleRequest);
+                googleService.searchTourAttraction(googleRequest, CAFE);
 
-        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
+        List<PlaceDetailDto> placeDetailDtos = getPlaceDetailDtos(placeListDto);
 
         return getSaveCafeList(googleRequest, placeDetailDtos);
     }
@@ -156,12 +165,15 @@ public class DatapipelineService {
 
     public List<SavePlaceDto> saveRestaurant(GoogleRequest googleRequest) {
         PlaceListDto placeListDto =
-                googleService.searchTourAttraction(googleRequest);
+                googleService.searchTourAttraction(googleRequest, RESTAURANT);
 
-        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
+        List<PlaceDetailDto> placeDetailDtos = getPlaceDetailDtos(placeListDto);
 
         return getSaveRestaurantList(googleRequest, placeDetailDtos);
     }
+
+
+
 
     private List<SavePlaceDto> getSaveRestaurantList(GoogleRequest googleRequest, List<PlaceDetailDto> placeDetailDtos) {
         return IntStream.range(0, placeDetailDtos.size())
@@ -191,4 +203,20 @@ public class DatapipelineService {
                 })
                 .collect(Collectors.toList());
     }
+
+    private List<PlaceDetailDto> getPlaceDetailDtos(PlaceListDto placeListDto) {
+        //database에 저장된 place 제거
+        List<PlaceDto> newPlaceList = new ArrayList<>();
+        for(PlaceDto placeDto : placeListDto.getResults()){
+            if(!placeRepository.existsGoogleId(placeDto.getPlaceId())){
+                newPlaceList.add(placeDto);
+            }
+        }
+
+        placeListDto.setResults(newPlaceList);
+
+        List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
+        return placeDetailDtos;
+    }
+
 }
