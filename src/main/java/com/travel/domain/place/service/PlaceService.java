@@ -34,18 +34,17 @@ public class PlaceService {
 
 
     @Transactional
-    public PlaceResponse searchRecommendation(RecommendationRequest recommendationRequest) {
+    public PlaceListResponse searchRecommendation(RecommendationRequest recommendationRequest) {
         //setMainPlaceValues로 lng, lat 값 가져올 수 있음.
 
 
-        List<CafeResponse> cafeResponseList = getCafeList(recommendationRequest.getCafeTagList());
-        List<RestaurantResponse> restaurantResponseList = getRestaurantList(recommendationRequest.getRestaurantTypeList());
-        List<TourattractionResponse> tourattractionResponseList = getTourattractionList(recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList());
+        List<PlaceResponse> placeResponseList = getCafeList(recommendationRequest.getCafeTagList());
+        placeResponseList.addAll(getRestaurantList(recommendationRequest.getRestaurantTypeList()));
+        placeResponseList.addAll( getTourattractionList(recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList()));
 
-        return PlaceResponse.builder()
-                .cafeResponseList(cafeResponseList)
-                .restaurantResponseList(restaurantResponseList)
-                .tourattractionResponseList(tourattractionResponseList)
+
+        return PlaceListResponse.builder()
+                .placeResponseList(placeResponseList)
                 .build();
     }
 
@@ -76,15 +75,15 @@ public class PlaceService {
     tag 기반 -> elastic search에서 정보 가져오기
     코드 로직 추가 예정
      */
-    private List<CafeResponse> getCafeList(List<CafeTag> cafeTagList) {
+    private List<PlaceResponse> getCafeList(List<CafeTag> cafeTagList) {
         return null;
     }
 
-    private List<TourattractionResponse> getTourattractionList(List<TourattractionTag> tourattractionTagList, List<SubjectiveTag> subjectiveTagList) {
+    private List<PlaceResponse> getTourattractionList(List<TourattractionTag> tourattractionTagList, List<SubjectiveTag> subjectiveTagList) {
         return null;
     }
 
-    private List<RestaurantResponse> getRestaurantList(List<RestaurantType> restaurantTypeList) {
+    private List<PlaceResponse> getRestaurantList(List<RestaurantType> restaurantTypeList) {
         return null;
     }
 
