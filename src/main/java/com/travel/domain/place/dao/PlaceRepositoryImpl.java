@@ -16,6 +16,7 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom{
 
     private final JPAQueryFactory queryFactory;
 
+    @Override
     public List<Place> findByIdInOrderByRatingDescWithCursor(
             List<Long> placeIds,
             Double ratingCursor,

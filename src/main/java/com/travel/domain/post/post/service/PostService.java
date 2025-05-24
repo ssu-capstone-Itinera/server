@@ -3,18 +3,17 @@ package com.travel.domain.post.post.service;
 import com.travel.domain.member.dao.MemberRepository;
 import com.travel.domain.member.dto.MemberDto;
 import com.travel.domain.member.entity.Member;
+import com.travel.domain.member.service.MemberDtoService;
 import com.travel.domain.post.comment.domain.PostComment;
 import com.travel.domain.post.post.dao.PostLikeRepository;
 import com.travel.domain.post.post.dao.PostRepository;
-import com.travel.domain.post.post.domain.Post;
-import com.travel.domain.post.post.domain.PostLike;
+import com.travel.domain.post.post.entity.Post;
+import com.travel.domain.post.post.entity.PostLike;
 import com.travel.domain.post.post.dto.request.PostRequest;
-import com.travel.domain.post.post.dto.response.PostLikeResponse;
-import com.travel.domain.post.post.dto.response.PostDetailResponse;
-import com.travel.domain.post.post.dto.response.UserPostLikeResponse;
-import com.travel.domain.post.post.dto.response.UserPostListResponse;
+import com.travel.domain.post.post.dto.response.*;
 import com.travel.domain.trip.dto.response.TripResponse;
 import com.travel.domain.trip.service.TripService;
+import com.travel.global.common.response.CursorPageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,10 +25,12 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class PostService {
+    private static final Integer PAGE_SIZE = 20;
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
     private final PostLikeRepository postLikeRepository;
     private final TripService tripService;
+    private final MemberDtoService memberDtoService;
 
 
     @Transactional
@@ -111,5 +112,31 @@ public class PostService {
         return postLikes.stream()
                 .map(UserPostLikeResponse::of)
                 .collect(Collectors.toList());
+    }
+
+    public CursorPageResponse<PostResponse> getPostList(Long cursorId) {
+
+        List<Post> posts = postRepository.findRecentPosts(cursorId, PAGE_SIZE);
+
+        /*
+           private MemberDto memberDto;
+    private TripResponse tripResponse;
+    private String title;
+    private Long countLikes;
+    private Long postComments;
+
+         */
+        List<PostResponse> content = posts.stream()
+                .map(post -> PostResponse.builder()
+                        .memberDto(memberDtoService.getMemberDto(post.getMember().getId()))
+                        .tripResponse(tripService.getTrip(post.getTrip()))
+                        .postId(post.getId())
+                        .title(post.getTitle())
+                        .countLikes(post.getLikes().size())
+                        .postComments(post.getComments().size())
+                        .build())
+                .toList();
+
+        return CursorPageResponse.of(content, PAGE_SIZE, PostResponse::getPostId);
     }
 }
