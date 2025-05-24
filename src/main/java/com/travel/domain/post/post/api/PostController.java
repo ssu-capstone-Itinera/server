@@ -1,10 +1,12 @@
 package com.travel.domain.post.post.api;
 
-import com.travel.domain.post.post.domain.Post;
+import com.travel.domain.post.post.dto.response.PostResponse;
+import com.travel.domain.post.post.entity.Post;
 import com.travel.domain.post.post.dto.request.PostRequest;
 import com.travel.domain.post.post.dto.response.PostLikeResponse;
 import com.travel.domain.post.post.dto.response.PostDetailResponse;
 import com.travel.domain.post.post.service.PostService;
+import com.travel.global.common.response.CursorPageResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +40,13 @@ public class PostController {
 
         return ResponseEntity.ok(postService.likePost(postId, memberId));
     }
+
+    @Operation(summary = "게시글 List 조회(최신순)")
+    @GetMapping
+    public ResponseEntity<CursorPageResponse<PostResponse>> getPostList(@AuthenticationPrincipal Long memberId) {
+
+        return ResponseEntity.ok(postService.getPostList(memberId));
+    }
+
 
 }

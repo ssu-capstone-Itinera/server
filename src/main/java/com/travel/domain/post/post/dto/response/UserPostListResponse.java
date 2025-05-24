@@ -1,6 +1,6 @@
 package com.travel.domain.post.post.dto.response;
 
-import com.travel.domain.post.post.domain.Post;
+import com.travel.domain.post.post.entity.Post;
 import com.travel.domain.trip.entity.Trip;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

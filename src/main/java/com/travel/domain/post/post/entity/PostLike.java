@@ -1,4 +1,4 @@
-package com.travel.domain.post.post.domain;
+package com.travel.domain.post.post.entity;
 
 import jakarta.persistence.*;
 

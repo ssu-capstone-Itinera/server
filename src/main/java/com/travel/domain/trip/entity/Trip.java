@@ -6,9 +6,8 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
-import com.travel.domain.itinerary.entity.Itinerary;
 import com.travel.domain.member.entity.Member;
-import com.travel.domain.post.post.domain.Post;
+import com.travel.domain.post.post.entity.Post;
 import com.travel.domain.tripshare.entity.TripShare;
 import com.travel.global.common.entity.BaseTimeEntity;
 
