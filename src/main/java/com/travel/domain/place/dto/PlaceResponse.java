@@ -13,4 +13,6 @@ public class PlaceResponse {
     private String address;
     private Double rating;
     private Category category;
+    private Double lng;
+    private Double lat;
 }
