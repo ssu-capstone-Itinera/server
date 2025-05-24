@@ -208,7 +208,7 @@ public class DatapipelineService {
         //database에 저장된 place 제거
         List<PlaceDto> newPlaceList = new ArrayList<>();
         for(PlaceDto placeDto : placeListDto.getResults()){
-            if(!placeRepository.existsGoogleId(placeDto.getPlaceId())){
+            if(!placeRepository.existsByPlaceGoogleId(placeDto.getPlaceId())){
                 newPlaceList.add(placeDto);
             }
         }
