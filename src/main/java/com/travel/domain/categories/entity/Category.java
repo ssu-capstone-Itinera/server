@@ -4,5 +4,6 @@ public enum Category {
     TOURATTRACTION,
     RESTAURANT,
     CAFE,
+    MY_PLACE,
     OTHER
 }
