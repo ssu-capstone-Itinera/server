@@ -3,6 +3,7 @@ package com.travel.domain.itinerary.service;
 
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.itinerary.dao.ItineraryRepository;
+import com.travel.domain.itinerary.dto.ItineraryResponse;
 import com.travel.domain.itinerary.dto.ItinerarySaveRequest;
 import com.travel.domain.itinerary.dto.ItinerarySaveResponse;
 import com.travel.domain.itinerary.dto.SimplePlaceDto;
@@ -90,4 +91,63 @@ public class ItineraryService {
             }
         }
     }
+
+    public ItineraryResponse getItineraryById(Long itineraryId) {
+        Itinerary itinerary = itineraryRepository.findById(itineraryId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 itinerary가 없습니다: " + itineraryId));
+
+        List<Place> places = itinerary.getPlaces();
+        List<MyPlace> myPlaces = itinerary.getMyPlaces();
+        List<String> typeOrder = itinerary.getItineraryPlaceTypeOrder();
+
+        int placeIdx = 0;
+        int myPlaceIdx = 0;
+        List<SimplePlaceDto> simplePlaces = new ArrayList<>();
+
+        for (String type : typeOrder) {
+            if ("P".equals(type)) {
+                Place place = places.get(placeIdx++);
+                simplePlaces.add(toSimplePlace(place));
+            } else if ("M".equals(type)) {
+                MyPlace myPlace = myPlaces.get(myPlaceIdx++);
+                simplePlaces.add(toSimplePlace(myPlace));
+            } else {
+                throw new IllegalStateException("유효하지 않은 장소 타입: " + type);
+            }
+        }
+
+        return ItineraryResponse.builder()
+                .itineraryId(itinerary.getId())
+                .tourDate(itinerary.getTourDate())
+                .places(simplePlaces)
+                .build();
+    }
+
+    private SimplePlaceDto toSimplePlace(Place place) {
+        return SimplePlaceDto.builder()
+                .placeId(place.getId() != null ? place.getId().intValue() : null)
+                .placeGoogleId(place.getPlaceGoogleId())
+                .name(place.getName())
+                .address(place.getAddress())
+                .lat(place.getLat())
+                .lng(place.getLng())
+                .rating(place.getRating())
+                .category(place.getCategory())
+                .build();
+    }
+
+    private SimplePlaceDto toSimplePlace(MyPlace myPlace) {
+        return SimplePlaceDto.builder()
+                .placeId(null)
+                .placeGoogleId(myPlace.getPlaceGoogleId())
+                .name(myPlace.getName())
+                .address(null)
+                .lat(myPlace.getLat())
+                .lng(myPlace.getLng())
+                .rating(null)
+                .category(Category.MY_PLACE)
+                .build();
+    }
+
+
 }
