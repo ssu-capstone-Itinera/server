@@ -8,7 +8,7 @@ import lombok.Getter;
 @Builder
 public class PlaceResponse {
     private Long placeId;
-    private String googleId;
+    private String placeGoogleId;
     private String name;
     private String address;
     private Double rating;
