@@ -11,7 +11,7 @@ import com.travel.global.common.entity.BaseTimeEntity;
 import lombok.*;
 
 @Entity
-@Table(name = "place")
+@Table(name = "my_place")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
