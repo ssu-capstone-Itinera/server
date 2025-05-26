@@ -1,15 +1,15 @@
 package com.travel.domain.member.service;
 
-import com.travel.domain.follow.service.FollowService;
-import com.travel.domain.member.dto.response.ProfileResponse;
-import com.travel.domain.post.post.service.PostService;
-import com.travel.domain.trip.service.TripService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.travel.domain.follow.service.FollowService;
 import com.travel.domain.member.dao.MemberRepository;
 import com.travel.domain.member.dto.MemberDto;
+import com.travel.domain.member.dto.response.ProfileResponse;
 import com.travel.domain.member.entity.Member;
+import com.travel.domain.post.post.service.PostService;
+import com.travel.domain.trip.service.TripService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -28,10 +28,8 @@ public class MemberService {
         return MemberDto.of(member);
     }
 
-
     public ProfileResponse getMyPage(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
-
 
         return ProfileResponse.builder()
                 .memberId(member.getId())
@@ -46,7 +44,7 @@ public class MemberService {
                 .build();
     }
 
-    public Member getMember(Long memberId){
+    public Member getMember(Long memberId) {
         return memberRepository.findByIdOrElseThrow(memberId);
     }
 }

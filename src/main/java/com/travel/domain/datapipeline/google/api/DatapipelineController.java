@@ -3,15 +3,15 @@ package com.travel.domain.datapipeline.google.api;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.travel.domain.categories.entity.Category;
-import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
-import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.travel.domain.categories.entity.Category;
 import com.travel.domain.datapipeline.google.dto.PlaceDetailDto;
 import com.travel.domain.datapipeline.google.dto.PlaceListDto;
+import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
+import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
 import com.travel.domain.datapipeline.google.service.DatapipelineService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -36,16 +36,16 @@ public class DatapipelineController {
         return ResponseEntity.ok(response);
     }
 
-//    @Operation(summary = "장소 조회 (tourAttraction test) ")
-//    @PostMapping("/search/cafe")
-//    public ResponseEntity<CafeListDto> searchCafes(
-//            @RequestBody GoogleRequest googleRequest) {
-//        CafeListDto response = new TourAttractionListDto();
-//        if (googleRequest.getPlaceType().equals("tourist_attraction")) {
-//            response = datapipelineService.searchPlace(googleRequest);
-//        }
-//        return ResponseEntity.ok(response);
-//    }
+    //    @Operation(summary = "장소 조회 (tourAttraction test) ")
+    //    @PostMapping("/search/cafe")
+    //    public ResponseEntity<CafeListDto> searchCafes(
+    //            @RequestBody GoogleRequest googleRequest) {
+    //        CafeListDto response = new TourAttractionListDto();
+    //        if (googleRequest.getPlaceType().equals("tourist_attraction")) {
+    //            response = datapipelineService.searchPlace(googleRequest);
+    //        }
+    //        return ResponseEntity.ok(response);
+    //    }
 
     @Operation(summary = "장소 조회 디테일(test) ")
     @PostMapping("/search/detail")
@@ -62,7 +62,8 @@ public class DatapipelineController {
     @PostMapping("/llm/tagging")
     public ResponseEntity<List<TourAttractionLLMDto>> getLLMTagging(
             @RequestBody GoogleRequest googleRequest) {
-        List<TourAttractionLLMDto> response = datapipelineService.searchTourAttractionWithLLM(googleRequest);
+        List<TourAttractionLLMDto> response =
+                datapipelineService.searchTourAttractionWithLLM(googleRequest);
 
         return ResponseEntity.ok(response);
     }
@@ -78,8 +79,7 @@ public class DatapipelineController {
 
     @Operation(summary = "장소 조회 후 태깅, document 저장 (cafe test) ")
     @PostMapping("/save/cafe")
-    public ResponseEntity<List<SavePlaceDto>> saveCafe(
-            @RequestBody GoogleRequest googleRequest) {
+    public ResponseEntity<List<SavePlaceDto>> saveCafe(@RequestBody GoogleRequest googleRequest) {
         List<SavePlaceDto> response = datapipelineService.saveCafe(googleRequest);
 
         return ResponseEntity.ok(response);
@@ -93,6 +93,4 @@ public class DatapipelineController {
 
         return ResponseEntity.ok(response);
     }
-
-
 }

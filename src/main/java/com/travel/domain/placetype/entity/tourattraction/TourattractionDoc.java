@@ -3,13 +3,12 @@ package com.travel.domain.placetype.entity.tourattraction;
 import java.util.List;
 import java.util.Map;
 
-import jakarta.persistence.Id;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.elasticsearch.annotations.*;
 
-
 import com.travel.domain.place.entity.PlaceDocument;
+
+import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Getter
 @Setter
@@ -34,7 +33,6 @@ public class TourattractionDoc extends PlaceDocument {
 
     @Field(type = FieldType.Keyword)
     private String placeGoogleId;
-
 
     // 키워드 충돌 방지를 위한 필터링 설정
     @Field(type = FieldType.Object)

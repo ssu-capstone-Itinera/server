@@ -1,7 +1,8 @@
 package com.travel.domain.datapipeline.llm.dto;
 
-import lombok.Data;
 import java.util.List;
+
+import lombok.Data;
 
 @Data
 public class GeminiRequest {

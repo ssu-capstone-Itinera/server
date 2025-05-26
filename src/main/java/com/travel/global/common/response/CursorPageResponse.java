@@ -1,12 +1,10 @@
 package com.travel.global.common.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import java.util.List;
 import java.util.function.ToLongFunction;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
@@ -15,7 +13,8 @@ public class CursorPageResponse<T> {
     private final Long nextCursor;
     private final Boolean hasNext;
 
-    public static <T> CursorPageResponse<T> of(List<T> data, int pageSize, ToLongFunction<T> idExtractor) {
+    public static <T> CursorPageResponse<T> of(
+            List<T> data, int pageSize, ToLongFunction<T> idExtractor) {
         boolean hasNext = data.size() > pageSize;
         Long nextCursor = null;
 

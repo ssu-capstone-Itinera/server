@@ -1,6 +1,7 @@
 package com.travel.domain.place.dto;
 
 import com.travel.domain.categories.entity.Category;
+
 import lombok.Builder;
 import lombok.Getter;
 

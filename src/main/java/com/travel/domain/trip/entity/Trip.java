@@ -34,6 +34,7 @@ public class Trip extends BaseTimeEntity {
     @Column(name = "title", length = 100)
     private String title;
 
+
     @Column(name = "mainTourPlace", length = 100)
     private String mainTourPlace;
 
@@ -45,6 +46,7 @@ public class Trip extends BaseTimeEntity {
 
     @Column(name = "is_public")
     private Boolean isPublic;
+
 
     //List<Itinerary>사용 안하므로 삭제 시 Itinerary 먼저 삭제해야함에 주의
 

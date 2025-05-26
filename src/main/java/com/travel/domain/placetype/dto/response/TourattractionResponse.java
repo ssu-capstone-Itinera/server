@@ -1,11 +1,11 @@
 package com.travel.domain.placetype.dto.response;
 
+import java.util.List;
+
 import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
+
 import lombok.Builder;
 import lombok.Getter;
-
-
-import java.util.List;
 
 @Getter
 @Builder
@@ -17,5 +17,4 @@ public class TourattractionResponse {
     private Double rating;
 
     private List<TourattractionTag> tourattractionTags;
-
 }
