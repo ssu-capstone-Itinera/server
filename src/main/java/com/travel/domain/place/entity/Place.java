@@ -1,20 +1,16 @@
 package com.travel.domain.place.entity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
 
 import com.travel.domain.categories.entity.Category;
-import com.travel.domain.itineraryitem.entity.ItineraryItem;
 import com.travel.global.common.entity.BaseTimeEntity;
 
 import lombok.*;
 
 @Entity
 @Table(name = "place")
-//@Inheritance(strategy = InheritanceType.JOINED)
-//@DiscriminatorColumn(name = "place_type")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -37,7 +33,6 @@ public class Place extends BaseTimeEntity {
     @Column(name = "lng", nullable = false)
     private double lng;
 
-
     @Column(name = "place_google_id", length = 100)
     private String placeGoogleId;
 
@@ -56,23 +51,18 @@ public class Place extends BaseTimeEntity {
     @Column(name = "phone_number", length = 100)
     private String phoneNumber;
 
-
     @Column(name = "website", length = 100)
     private String webSite;
 
-
-    @Column(name = "opening_hours", length = 100)
+    @Column(name = "opening_hours", length = 500)
     private List<String> openingHours;
-
 
     @Column(name = "price_level", length = 100)
     private String priceLevel;
-
 
     @Column(name = "description", length = 1000)
     private String description;
 
     @Column(name = "reviews")
     private List<String> reviews;
-
 }
