@@ -74,6 +74,7 @@ public class ItineraryService {
                         .orElseGet(() -> {
                             MyPlace myPlace_ = MyPlace.builder()
                                     .placeGoogleId(simplePlace.getPlaceGoogleId())
+                                    .category(Category.MY_PLACE)
                                     .name(simplePlace.getName())
                                     .lat(simplePlace.getLat())
                                     .lng(simplePlace.getLng())
@@ -96,6 +97,15 @@ public class ItineraryService {
         Itinerary itinerary = itineraryRepository.findById(itineraryId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 itinerary가 없습니다: " + itineraryId));
 
+        List<SimplePlaceDto> simplePlaces = getSimplePlaceDtoList(itinerary);
+        return ItineraryResponse.builder()
+                .itineraryId(itinerary.getId())
+                .tourDate(itinerary.getTourDate())
+                .places(simplePlaces)
+                .build();
+    }
+
+    private List<SimplePlaceDto> getSimplePlaceDtoList(Itinerary itinerary) {
         List<Place> places = itinerary.getPlaces();
         List<MyPlace> myPlaces = itinerary.getMyPlaces();
         List<String> typeOrder = itinerary.getItineraryPlaceTypeOrder();
@@ -115,12 +125,7 @@ public class ItineraryService {
                 throw new IllegalStateException("유효하지 않은 장소 타입: " + type);
             }
         }
-
-        return ItineraryResponse.builder()
-                .itineraryId(itinerary.getId())
-                .tourDate(itinerary.getTourDate())
-                .places(simplePlaces)
-                .build();
+        return simplePlaces;
     }
 
     private SimplePlaceDto toSimplePlace(Place place) {
@@ -150,4 +155,12 @@ public class ItineraryService {
     }
 
 
+    public List<List<SimplePlaceDto>> getListOfPlaceByTripIdAndMemberId(Long tripId, Long memberId) {
+        List<Itinerary> itineraryList = itineraryRepository.findByTripIdAndMemberId(tripId, memberId);
+        List<List<SimplePlaceDto>> listOfPlaces = new ArrayList<>();
+        for(Itinerary itinerary: itineraryList){
+            listOfPlaces.add(getSimplePlaceDtoList(itinerary));
+        }
+        return listOfPlaces;
+    }
 }
