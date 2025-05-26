@@ -260,13 +260,13 @@ public class PlaceGoogleService {
         }
     }
 
-    private void getCafeDetailByPlaceId (PlaceDetailResponse cafeDetailResponse) {
+    public void getCafeDetailByPlaceId (PlaceDetailResponse cafeDetailResponse) {
         cafeDetailResponse.setCategory(Category.CAFE);
         List<CafeTag> cafeTags = getCafeTagsByPlaceId(cafeDetailResponse.getPlaceGoogleId());
         cafeDetailResponse.setCafeTags(cafeTags);
     }
 
-    private List<CafeTag> getCafeTagsByPlaceId(String placeId) {
+    public List<CafeTag> getCafeTagsByPlaceId(String placeId) {
         List<CafeTag> cafeTags = new ArrayList<>();
 
         String fields = String.join(",",
