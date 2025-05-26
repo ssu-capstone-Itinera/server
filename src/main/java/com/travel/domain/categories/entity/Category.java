@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum Category {
+
     TOURATTRACTION("tourist_attraction"),
     RESTAURANT("restaurant"),
     CAFE("cafe"),
@@ -16,4 +17,5 @@ public enum Category {
     public String getValue() {
         return value;
     }
+
 }
