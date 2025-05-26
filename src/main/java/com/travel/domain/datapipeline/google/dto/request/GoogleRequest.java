@@ -1,13 +1,16 @@
 package com.travel.domain.datapipeline.google.dto.request;
 
 
+import com.travel.domain.categories.entity.Category;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
 import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
 @AllArgsConstructor
 public class GoogleRequest {
     private double lat;
@@ -16,6 +19,6 @@ public class GoogleRequest {
     private CafeTag cafeTag;
     private RestaurantType restaurantType;
 
-    private String placeType;
+    private Category category;
     private int maxResults;
 }

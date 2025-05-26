@@ -17,13 +17,14 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom{
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Place> findByIdInOrderByRatingDescWithCursor(
-            List<Long> placeIds,
+    public List<Place> findByPlaceGoogleIdInOrderByRatingDescWithCursor(
+            List<String> plageGoogleIds,
             Double ratingCursor,
             Long idCursor,
             int pageSize
     ) {
-        BooleanExpression condition = place.id.in(placeIds);
+        BooleanExpression condition = place.placeGoogleId.in(plageGoogleIds);
+
 
         // 커서 페이징 조건
         if (ratingCursor != null && idCursor != null) {

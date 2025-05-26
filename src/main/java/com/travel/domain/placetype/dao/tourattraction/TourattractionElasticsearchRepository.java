@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface TourattractionElasticsearchRepository
-        extends ElasticsearchRepository<TourattractionDoc, Long> {
+        extends ElasticsearchRepository<TourattractionDoc, Long>, TourattractionRepositoryCustom{
     Optional<TourattractionDoc> findByPlaceGoogleId(String placeGoogleId);
 }

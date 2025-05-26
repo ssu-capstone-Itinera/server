@@ -9,6 +9,6 @@ import java.util.Optional;
 
 @Repository
 public interface RestaurantElasticsearchRepository
-        extends ElasticsearchRepository<RestaurantDoc, Long> {
+        extends ElasticsearchRepository<RestaurantDoc, Long>, RestaurantRepositoryCustom {
     Optional<RestaurantDoc> findByPlaceGoogleId(String placeGoogleId);
 }
