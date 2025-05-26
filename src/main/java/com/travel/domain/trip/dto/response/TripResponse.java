@@ -15,13 +15,12 @@ public class TripResponse {
     private Long tripId;
 
     private String title;
-    private String regin;
+    private String mainTourPlace;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
 
-    private Integer budget;
 
     public static TripResponse of(Trip trip) {
         return TripResponse.builder()

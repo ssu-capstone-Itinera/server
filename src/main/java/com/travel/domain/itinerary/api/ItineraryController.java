@@ -24,7 +24,7 @@ public class ItineraryController {
     }
 
     @Operation(summary = " itineraryId로 itinerary검색")
-    @GetMapping("/{itineraryid}")
+    @GetMapping("/{itineraryId}")
     public ResponseEntity<ItineraryResponse> getItinerary(@PathVariable Long itineraryId){
         return ResponseEntity.ok(itineraryService.getItineraryById(itineraryId));
     }
