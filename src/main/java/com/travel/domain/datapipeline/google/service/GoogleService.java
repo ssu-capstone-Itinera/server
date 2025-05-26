@@ -1,5 +1,6 @@
 package com.travel.domain.datapipeline.google.service;
 
+import com.travel.domain.categories.entity.Category;
 import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
 import com.travel.domain.datapipeline.google.dto.PlaceDto;
 import com.travel.domain.datapipeline.google.dto.PlaceDetailDto;
@@ -32,7 +33,19 @@ public class GoogleService {
     @Value("${google.api.place-url}")
     private String placeUrl;
 
-    public PlaceListDto searchTourAttraction(GoogleRequest googleRequest, String type) {
+    public PlaceListDto searchTourAttraction(GoogleRequest googleRequest) {
+        String getKeyword = "";
+        if(googleRequest.getCategory().equals(Category.TOURATTRACTION)){
+            getKeyword = googleRequest.getTourattractionTag().getValue();
+        }else if(googleRequest.getCategory().equals(Category.CAFE)){
+            getKeyword = googleRequest.getCafeTag().getValue();
+        }else if(googleRequest.getCategory().equals(Category.RESTAURANT)){
+            getKeyword = googleRequest.getRestaurantType().getValue();
+
+        }
+
+
+        final String keyword = getKeyword;
 
         try {
             Map<String, Object> apiResponse = WebClient.create(nearBySearchUrl)
@@ -40,8 +53,8 @@ public class GoogleService {
                     .uri(uriBuilder -> uriBuilder
                             .queryParam("location", googleRequest.getLat() + "," + googleRequest.getLng())
                             .queryParam("radius", 5000)
-                            .queryParam("keyword", googleRequest.getTourattractionTag().getValue())
-                            .queryParam("type", type)
+                            .queryParam("keyword", keyword)
+                            .queryParam("type", googleRequest.getCategory().getValue())
                             .queryParam("language", "ko")
                             .queryParam("key", googleApiKey)
                             .build())
@@ -129,13 +142,13 @@ public class GoogleService {
 
     public List<PlaceDetailDto> getPlaceDetail(PlaceListDto placeListDto) {
         return placeListDto.getResults().stream()
-                .map(PlaceDto::getPlaceId)
                 .map(this::getDetailByPlaceId)
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
     }
 
-    private PlaceDetailDto getDetailByPlaceId(String placeId) {
+    private PlaceDetailDto getDetailByPlaceId(PlaceDto placeDto) {
+        String placeId = placeDto.getPlaceId();
         try {
             Map<String, Object> response = WebClient.create(placeUrl)
                     .get()
@@ -155,7 +168,7 @@ public class GoogleService {
 
             if (result == null) return null;
 
-            return getPlaceDetailDto(placeId, result);
+            return getPlaceDetailDto(placeDto, result);
 
         } catch (Exception e) {
             log.error("WebClient call failed for placeId={}", placeId, e);
@@ -164,7 +177,7 @@ public class GoogleService {
         }
     }
 
-    private static PlaceDetailDto getPlaceDetailDto(String placeId, Map<String, Object> result) {
+    private static PlaceDetailDto getPlaceDetailDto(PlaceDto placeDto, Map<String, Object> result) {
         // 장소 사진 처리
         List<String> photos = new ArrayList<>();
         List<Map<String, Object>> photoRefs = (List<Map<String, Object>>) result.get("photos");
@@ -196,10 +209,12 @@ public class GoogleService {
         }
 
         return PlaceDetailDto.builder()
-                .placeId(placeId)
+                .placeId(placeDto.getPlaceId())
                 .name((String) result.get("name"))
                 .address((String) result.get("formatted_address"))
                 .photos(photos)
+                .lng(placeDto.getLng())
+                .lat(placeDto.getLat())
                 .priceLevel(result.containsKey("price_level") ? (String) result.get("price_level") : "가격정보 없음")
                 .rating((Double) result.get("rating"))
                 .openingHours(openingHours)

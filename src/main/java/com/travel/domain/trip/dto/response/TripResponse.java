@@ -1,12 +1,12 @@
 package com.travel.domain.trip.dto.response;
 
+import java.time.LocalDate;
+
 import com.travel.domain.trip.entity.Trip;
-import jakarta.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -22,7 +22,6 @@ public class TripResponse {
     private LocalDate endDate;
 
     private Integer budget;
-
 
     public static TripResponse of(Trip trip) {
         return TripResponse.builder()

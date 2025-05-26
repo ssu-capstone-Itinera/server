@@ -1,10 +1,10 @@
 package com.travel.domain.datapipeline.google.dto.request;
 
-
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
 import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

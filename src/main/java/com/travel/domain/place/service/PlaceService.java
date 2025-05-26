@@ -25,6 +25,7 @@ import com.travel.domain.placetype.service.PlacetypeService;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +35,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PlaceService {
@@ -57,9 +59,16 @@ public class PlaceService {
 
         PlaceCoordinate placeCoordinate = setMainPlaceValues(recommendationRequest);
 
-        List<PlaceResponse> placeResponseList = getCafeList(mainTourPlace, placeCoordinate, recommendationRequest.getCafeTagList());
-        placeResponseList.addAll(getRestaurantList(mainTourPlace, placeCoordinate, recommendationRequest.getRestaurantTypeList()));
-        placeResponseList.addAll( getTourattractionList(mainTourPlace, placeCoordinate, recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList()));
+        List<PlaceResponse> placeResponseList = new ArrayList<>();
+        if(!recommendationRequest.getCafeTagList().isEmpty()) {
+            placeResponseList.addAll(getCafeList(mainTourPlace, placeCoordinate, recommendationRequest.getCafeTagList()));
+        }
+        if(!recommendationRequest.getRestaurantTypeList().isEmpty()) {
+            placeResponseList.addAll(getRestaurantList(mainTourPlace, placeCoordinate, recommendationRequest.getRestaurantTypeList()));
+        }
+        if(!(recommendationRequest.getTourattractionTagList().isEmpty() && recommendationRequest.getSubjectiveTagList().isEmpty())) {
+            placeResponseList.addAll(getTourattractionList(mainTourPlace, placeCoordinate, recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList()));
+        }
 
 
         return PlaceListResponse.builder()
@@ -99,26 +108,33 @@ public class PlaceService {
     private List<PlaceResponse> getCafeList(String mainTourPlace, PlaceCoordinate placeCoordinate, List<CafeTag> cafeTagList) {
         List<String> getPlaceId = new ArrayList<>();
         for(CafeTag cafeTag : cafeTagList){
-            List<String> getRestaurantList = cafeElasticsearchRepository.findPlaceGoogleIdsByAddressAndCafeTags(mainTourPlace, cafeTag);
-            if(getRestaurantList.isEmpty()){
+            List<String> getCafeList = cafeElasticsearchRepository.findPlaceGoogleIdsByAddressAndCafeTags(mainTourPlace, cafeTag);
+
+            log.info("database "+ getCafeList.toString());
+            if(getCafeList.isEmpty()){
                 GoogleRequest googleRequest = GoogleRequest.builder()
+                        .category(Category.CAFE)
                         .lng(placeCoordinate.getLng())
                         .lat(placeCoordinate.getLat())
                         .cafeTag(cafeTag)
                         .maxResults(100)
                         .build();
                 List<SavePlaceDto> savePlaceDtoList =  datapipelineService.saveCafe(googleRequest);
-                getRestaurantList = savePlaceDtoList.stream()
+                log.info("saveDto : "+ savePlaceDtoList.size());
+                getCafeList = savePlaceDtoList.stream()
                         .map(dto -> dto.getPlace().getPlaceGoogleId())
                         .filter(Objects::nonNull)
                         .distinct()
                         .collect(Collectors.toList());
             }
 
-            getPlaceId.addAll(getRestaurantList);
+            log.info("database 1111", getCafeList.size());
+
+
+            getPlaceId.addAll(getCafeList);
 
         }
-        return getPlaceResponseList(getPlaceId);
+        return getPlaceResponseList(getPlaceId, Category.CAFE);
     }
 
     private List<PlaceResponse> getTourattractionList(String mainTourPlace, PlaceCoordinate placeCoordinate, List<TourattractionTag> tourattractionTagList, List<SubjectiveTag> subjectiveTagList) {
@@ -127,6 +143,7 @@ public class PlaceService {
             List<String> getRestaurantList = tourattractionElasticsearchRepository.findPlaceGoogleIdsByAddressAndTourattractionTags(mainTourPlace, tourattractionTag);
             if(getRestaurantList.isEmpty()){
                 GoogleRequest googleRequest = GoogleRequest.builder()
+                        .category(Category.TOURATTRACTION)
                         .lng(placeCoordinate.getLng())
                         .lat(placeCoordinate.getLat())
                         .tourattractionTag(tourattractionTag)
@@ -151,7 +168,7 @@ public class PlaceService {
             getPlaceId.addAll(getRestaurantList);
 
         }
-        return getPlaceResponseList(getPlaceId);
+        return getPlaceResponseList(getPlaceId, Category.TOURATTRACTION);
     }
 
     private List<PlaceResponse> getRestaurantList(String mainTourPlace, PlaceCoordinate placeCoordinate, List<RestaurantType> restaurantTypeList) {
@@ -160,14 +177,17 @@ public class PlaceService {
         List<String> getPlaceId = new ArrayList<>();
         for(RestaurantType restaurantType : restaurantTypeList){
             List<String> getRestaurantList = restaurantElasticsearchRepository.findPlaceGoogleIdsByAddressAndRestaurantType(mainTourPlace, restaurantType);
+            log.info("getRestaurantList List " + getRestaurantList.size());
             if(getRestaurantList.isEmpty()){
                 GoogleRequest googleRequest = GoogleRequest.builder()
+                        .category(Category.RESTAURANT)
                         .lng(placeCoordinate.getLng())
                         .lat(placeCoordinate.getLat())
                         .restaurantType(restaurantType)
                         .maxResults(100)
                         .build();
                 List<SavePlaceDto> savePlaceDtoList =  datapipelineService.saveRestaurant(googleRequest);
+                log.info("savePlaceDto List " + savePlaceDtoList.size());
                 getRestaurantList = savePlaceDtoList.stream()
                         .map(dto -> dto.getPlace().getPlaceGoogleId())
                         .filter(Objects::nonNull)
@@ -178,10 +198,10 @@ public class PlaceService {
             getPlaceId.addAll(getRestaurantList);
 
         }
-        return getPlaceResponseList(getPlaceId);
+        return getPlaceResponseList(getPlaceId, Category.RESTAURANT);
     }
 
-    private List<PlaceResponse>  getPlaceResponseList(List<String> getPlaceId) {
+    private List<PlaceResponse>  getPlaceResponseList(List<String> getPlaceId, Category category) {
         return getPlaceId.stream()
                 .map(googleId -> {
                     Place place = placeRepository.findByPlaceGoogleIdOrElseThrow(googleId);
@@ -192,7 +212,7 @@ public class PlaceService {
                             .lat(place.getLat())
                             .address(place.getAddress())
                             .rating(place.getRating())
-                            .category(Category.RESTAURANT)
+                            .category(category)
                             .name(place.getName())
                             .build();
                 })

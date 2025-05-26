@@ -24,12 +24,12 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom{
         try {
             // Elasticsearch 쿼리 빌드
             SearchRequest searchRequest = SearchRequest.of(s -> s
-                    .index("places") // 인덱스 이름 (실제 인덱스명으로 변경 필요)
+                    .index("cafe") // 인덱스 이름 (실제 인덱스명으로 변경 필요)
                     .query(q -> q
                             .bool(b -> b
                                     .must(m -> m
-                                            .match(ma -> ma
-                                                    .field("address") // 주소 필드명
+                                            .matchPhrase(ma -> ma
+                                                    .field("address")
                                                     .query(address)
                                             )
                                     )

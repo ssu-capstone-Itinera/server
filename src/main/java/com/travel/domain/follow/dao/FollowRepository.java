@@ -1,17 +1,15 @@
 package com.travel.domain.follow.dao;
 
-import com.travel.domain.follow.entity.Follow;
-import com.travel.domain.member.entity.Member;
-import com.travel.global.common.error.CustomException;
-import com.travel.global.common.error.ErrorCode;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.travel.domain.follow.entity.Follow;
+import com.travel.domain.member.entity.Member;
 
 public interface FollowRepository extends JpaRepository<Follow, Long> {
     List<Follow> findFollowingByFollower(Member follwer);
+
     List<Follow> findFollowersByFollowing(Member following);
 
     boolean existsByFollowerAndFollowing(Member member, Member followMember);

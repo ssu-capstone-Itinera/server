@@ -11,6 +11,10 @@
     "description": {
       "type": "text",
       "analyzer": "korean"
+    },
+    "address": {
+      "type": "text",
+      "analyzer": "korean"
     }
   }
 }
