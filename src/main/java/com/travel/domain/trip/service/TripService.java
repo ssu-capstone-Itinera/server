@@ -27,10 +27,9 @@ public class TripService {
         return TripResponse.builder()
                 .tripId(trip.getId())
                 .title(trip.getTitle())
-                .regin(trip.getRegin())
+                .mainTourPlace(trip.getMainTourPlace())
                 .startDate(trip.getStartDate())
                 .startDate(trip.getEndDate())
-                .budget(trip.getBudget())
                 .build();
     }
 }
