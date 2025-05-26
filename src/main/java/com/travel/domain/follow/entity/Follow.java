@@ -7,7 +7,6 @@ import com.travel.global.common.entity.BaseTimeEntity;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -30,7 +29,7 @@ public class Follow extends BaseTimeEntity {
     @JoinColumn(name = "following")
     private Member following;
 
-    public Follow(Member follower, Member following){
+    public Follow(Member follower, Member following) {
         this.follower = follower;
         this.following = following;
     }

@@ -122,6 +122,7 @@ public class DatapipelineService {
                                                             ? llmDto.getSubjectiveTags()
                                                             : null)
                                             .address(place.getAddress())
+                                            .placeGoogleId(place.getPlaceGoogleId())
                                             .build();
 
                             return new SavePlaceDto(place, document);
@@ -173,6 +174,7 @@ public class DatapipelineService {
                                                     placeGoogleService.getCafeTagsByPlaceId(
                                                             detailDto.getPlaceId()))
                                             .address(place.getAddress())
+                                            .placeGoogleId(place.getPlaceGoogleId())
                                             .build();
 
                             PlaceDocument document = cafeDoc;
@@ -221,6 +223,7 @@ public class DatapipelineService {
                                     RestaurantDoc.builder()
                                             .restaurantType(googleRequest.getRestaurantType())
                                             .address(place.getAddress())
+                                            .placeGoogleId(place.getPlaceGoogleId())
                                             .build();
 
                             PlaceDocument document = restaurantDoc;

@@ -23,7 +23,7 @@ public class CafeDoc extends PlaceDocument {
     @Field(type = FieldType.Keyword)
     private List<CafeTag> cafeTags;
 
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text, analyzer = "korean")
     private String address;
 
     @Field(type = FieldType.Keyword)

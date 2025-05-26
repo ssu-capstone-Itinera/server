@@ -2,6 +2,7 @@ package com.travel.domain.post.post.dto.response;
 
 import com.travel.domain.member.dto.MemberDto;
 import com.travel.domain.trip.dto.response.TripResponse;
+
 import lombok.Builder;
 import lombok.Getter;
 
@@ -14,5 +15,4 @@ public class PostResponse {
     private String title;
     private int countLikes;
     private int postComments;
-
 }

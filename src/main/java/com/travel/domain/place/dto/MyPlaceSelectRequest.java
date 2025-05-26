@@ -1,8 +1,8 @@
 package com.travel.domain.place.dto;
 
 import com.travel.domain.place.entity.Place;
+
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 

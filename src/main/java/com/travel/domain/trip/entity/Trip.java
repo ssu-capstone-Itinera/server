@@ -39,7 +39,6 @@ public class Trip extends BaseTimeEntity {
     @Column(name = "regin", length = 100)
     private String regin;
 
-
     @Column(name = "start_date")
     private LocalDate startDate;
 
@@ -51,7 +50,6 @@ public class Trip extends BaseTimeEntity {
 
     @Column(name = "is_public")
     private Boolean isPublic;
-
 
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();

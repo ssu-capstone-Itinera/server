@@ -35,7 +35,6 @@ public class KakaoUserInfo implements UserInfo {
         return id;
     }
 
-
     @Override
     public String getEmail() {
         return kakao_account.get("email") == null ? null : kakao_account.get("email").toString();

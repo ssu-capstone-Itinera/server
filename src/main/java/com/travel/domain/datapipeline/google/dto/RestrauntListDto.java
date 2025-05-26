@@ -4,5 +4,5 @@ import java.util.List;
 
 public class RestrauntListDto {
     private List<PlaceDetailDto> placeDetailDtoList;
-    //private
+    // private
 }

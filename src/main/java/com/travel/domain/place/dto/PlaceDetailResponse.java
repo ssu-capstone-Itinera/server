@@ -1,14 +1,14 @@
 package com.travel.domain.place.dto;
 
+import java.util.List;
+
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
-import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
 import com.travel.domain.placetype.entity.tourattraction.SubjectiveTag;
+import com.travel.domain.placetype.entity.tourattraction.TourattractionTag;
+
 import lombok.*;
-
-import java.util.List;
-
 
 @Getter
 @Setter
@@ -41,6 +41,4 @@ public class PlaceDetailResponse {
     private List<TourattractionTag> tourattractionTags;
 
     private List<SubjectiveTag> subjectiveTags;
-
-
 }

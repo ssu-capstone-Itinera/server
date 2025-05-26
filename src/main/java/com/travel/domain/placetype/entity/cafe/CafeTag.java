@@ -15,17 +15,16 @@ public enum CafeTag {
     PARKING_OPTIONS("parkingOptions"),
     RESERVABLE("reservable"),
 
-    //주류
+    // 주류
     SERVES_BEER("servesBeer"),
     SERVES_COCKTAILS("servesCocktails"),
     SERVES_WINE("servesWine"),
 
-    //식사
+    // 식사
     SERVES_BREAKFAST("servesBreakfast"),
     SERVES_LUNCH("servesLunch"),
     SERVES_DINNER("servesDinner"),
     SERVES_BRUNCH("servesBrunch"),
-
 
     SERVES_DESSERT("servesDessert"),
     SERVES_VEGETARIAN_FOOD("servesVegetarianFood");
@@ -35,5 +34,4 @@ public enum CafeTag {
     public String getValue() {
         return value;
     }
-
 }

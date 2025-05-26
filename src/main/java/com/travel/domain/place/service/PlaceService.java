@@ -62,9 +62,11 @@ public class PlaceService {
         List<PlaceResponse> placeResponseList = new ArrayList<>();
         if(!recommendationRequest.getCafeTagList().isEmpty()) {
             placeResponseList.addAll(getCafeList(mainTourPlace, placeCoordinate, recommendationRequest.getCafeTagList()));
-        }else if(!recommendationRequest.getRestaurantTypeList().isEmpty()) {
+        }
+        if(!recommendationRequest.getRestaurantTypeList().isEmpty()) {
             placeResponseList.addAll(getRestaurantList(mainTourPlace, placeCoordinate, recommendationRequest.getRestaurantTypeList()));
-        }else if(!(recommendationRequest.getTourattractionTagList().isEmpty() && recommendationRequest.getSubjectiveTagList().isEmpty())) {
+        }
+        if(!(recommendationRequest.getTourattractionTagList().isEmpty() && recommendationRequest.getSubjectiveTagList().isEmpty())) {
             placeResponseList.addAll(getTourattractionList(mainTourPlace, placeCoordinate, recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList()));
         }
 

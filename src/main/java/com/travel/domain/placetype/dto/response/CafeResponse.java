@@ -1,7 +1,5 @@
 package com.travel.domain.placetype.dto.response;
 
-
-
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,5 +11,4 @@ public class CafeResponse {
     private String name;
     private String address;
     private Double rating;
-
 }
