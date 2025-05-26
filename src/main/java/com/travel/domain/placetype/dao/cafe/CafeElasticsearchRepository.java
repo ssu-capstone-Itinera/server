@@ -7,7 +7,7 @@ import com.travel.domain.placetype.entity.cafe.CafeDoc;
 import java.util.Optional;
 
 @Repository
-public interface CafeElasticsearchRepository extends ElasticsearchRepository<CafeDoc, Long> {
+public interface CafeElasticsearchRepository extends ElasticsearchRepository<CafeDoc, Long>, CafeRepositoryCustom {
 
     Optional<CafeDoc> findByPlaceGoogleId(String placeGoogleId);
 }

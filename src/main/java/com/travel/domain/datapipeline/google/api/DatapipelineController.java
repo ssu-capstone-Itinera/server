@@ -3,6 +3,7 @@ package com.travel.domain.datapipeline.google.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.travel.domain.categories.entity.Category;
 import com.travel.domain.datapipeline.google.dto.TourAttractionLLMDto;
 import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class DatapipelineController {
     public ResponseEntity<PlaceListDto> searchAttractions(
             @RequestBody GoogleRequest googleRequest) {
         PlaceListDto response = new PlaceListDto();
-        if (googleRequest.getPlaceType().equals("tourist_attraction")) {
+        if (googleRequest.equals(Category.TOURATTRACTION)) {
             response = datapipelineService.searchPlace(googleRequest);
         }
         return ResponseEntity.ok(response);
@@ -51,7 +52,7 @@ public class DatapipelineController {
     public ResponseEntity<List<PlaceDetailDto>> searchPlaceDetail(
             @RequestBody GoogleRequest googleRequest) {
         List<PlaceDetailDto> response = new ArrayList<>();
-        if (googleRequest.getPlaceType().equals("tourist_attraction")) {
+        if (googleRequest.equals(Category.TOURATTRACTION)) {
             response = datapipelineService.searchPlaceDetail(googleRequest);
         }
         return ResponseEntity.ok(response);

@@ -114,7 +114,7 @@ public class DatapipelineService {
                     // PlaceDocument (Elasticsearch 문서)
                     PlaceDocument document = TourattractionDoc.builder()
                             .placeGoogleId(detailDto.getPlaceId())
-                            .apiTags(List.of(googleRequest.getTourattractionTag()))
+                            .tourattractionTags(List.of(googleRequest.getTourattractionTag()))
                             .subjectiveTags(llmDto != null ? llmDto.getSubjectiveTags() : null)
                             .build();
 

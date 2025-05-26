@@ -27,5 +27,8 @@ public class CafeDoc extends PlaceDocument {
     @Field(type = FieldType.Text)
     private String address;
 
+    @Field(type = FieldType.Keyword)
+    private String placeGoogleId;
+
 
 }

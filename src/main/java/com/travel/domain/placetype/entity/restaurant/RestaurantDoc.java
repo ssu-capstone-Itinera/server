@@ -24,6 +24,8 @@ import lombok.Setter;
 public class RestaurantDoc extends PlaceDocument {
     @Field(type = FieldType.Keyword)
     private RestaurantType restaurantType;
+    @Field(type = FieldType.Keyword)
+    private String placeGoogleId;
 
     @Field(type = FieldType.Text)
     private String address;
