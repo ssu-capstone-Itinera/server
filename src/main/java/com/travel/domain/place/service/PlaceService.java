@@ -75,6 +75,7 @@ public class PlaceService {
 
             //place.setSubjectiveTags(new ArrayList<>(newTags));
 
+    @Transactional
     public MyPlaceResponse searchMyPlace(MyPlaceRequest myPlaceRequest){
         if(myPlaceRequest.getSearchType().equals("myPlace_keyword")){
             return placeGoogleService.getPlaceByKeyword(myPlaceRequest);
@@ -94,6 +95,7 @@ public class PlaceService {
     tag 기반 -> elastic search에서 정보 가져오기
     코드 로직 추가 예정
      */
+
     private List<PlaceResponse> getCafeList(String mainTourPlace, PlaceCoordinate placeCoordinate, List<CafeTag> cafeTagList) {
         List<String> getPlaceId = new ArrayList<>();
         for(CafeTag cafeTag : cafeTagList){

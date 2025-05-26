@@ -12,6 +12,7 @@ import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
 import com.travel.domain.place.dao.PlaceRepository;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.place.entity.PlaceDocument;
+import com.travel.domain.place.service.PlaceGoogleService;
 import com.travel.domain.placetype.entity.cafe.CafeDoc;
 import com.travel.domain.placetype.entity.restaurant.RestaurantDoc;
 import com.travel.domain.placetype.entity.tourattraction.TourattractionDoc;
@@ -30,6 +31,7 @@ public class DatapipelineService {
     private final GoogleService googleService;
     private final LLMService llmService;
     private final PlaceRepository placeRepository;
+    private final PlaceGoogleService placeGoogleService;
 
     private final String TOUR_ATTRACTION = "tourist_attraction";
     private final String CAFE = "cafe";
@@ -129,6 +131,7 @@ public class DatapipelineService {
 
         List<PlaceDetailDto> placeDetailDtos = getPlaceDetailDtos(placeListDto);
 
+
         return getSaveCafeList(googleRequest, placeDetailDtos);
     }
 
@@ -154,8 +157,10 @@ public class DatapipelineService {
 
 
 
+
+
                     PlaceDocument document = CafeDoc.builder()
-                            .cafeTags(List.of(googleRequest.getCafeTag()))
+                            .cafeTags(placeGoogleService.getCafeTagsByPlaceId(detailDto.getPlaceId()))
                             .build();
 
                     return new SavePlaceDto(place, document);
