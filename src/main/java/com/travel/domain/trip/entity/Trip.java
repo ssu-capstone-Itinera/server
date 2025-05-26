@@ -48,9 +48,11 @@ public class Trip extends BaseTimeEntity {
 
     //List<Itinerary>사용 안하므로 삭제 시 Itinerary 먼저 삭제해야함에 주의
 
+    @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TripShare> tripShares = new ArrayList<>();
 }
