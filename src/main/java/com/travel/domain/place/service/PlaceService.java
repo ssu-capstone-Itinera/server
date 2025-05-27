@@ -108,7 +108,10 @@ public class PlaceService {
     private List<PlaceResponse> getCafeList(String mainTourPlace, PlaceCoordinate placeCoordinate, List<CafeTag> cafeTagList) {
         List<String> getPlaceId = new ArrayList<>();
         for(CafeTag cafeTag : cafeTagList){
-            List<String> getCafeList = cafeElasticsearchRepository.findPlaceGoogleIdsByAddressAndCafeTags(mainTourPlace, cafeTag);
+            List<CafeDoc> cafeDocList = cafeElasticsearchRepository.findCafesByAddressAndCafeTags(mainTourPlace, cafeTag);
+            List<String> getCafeList = cafeDocList.stream()
+                    .map(CafeDoc::getPlaceGoogleId)
+                    .collect(Collectors.toList());
 
             log.info("database "+ getCafeList.toString());
             if(getCafeList.isEmpty()){
@@ -176,7 +179,12 @@ public class PlaceService {
 
         List<String> getPlaceId = new ArrayList<>();
         for(RestaurantType restaurantType : restaurantTypeList){
-            List<String> getRestaurantList = restaurantElasticsearchRepository.findPlaceGoogleIdsByAddressAndRestaurantType(mainTourPlace, restaurantType);
+
+            List<RestaurantDoc> restaurantDocList = restaurantElasticsearchRepository.findRestaurantsByAddressAndRestaurantType(mainTourPlace, restaurantType);
+            List<String> getRestaurantList = restaurantDocList.stream()
+                    .map(RestaurantDoc::getPlaceGoogleId)
+                    .collect(Collectors.toList());
+
             log.info("getRestaurantList List " + getRestaurantList.size());
             if(getRestaurantList.isEmpty()){
                 GoogleRequest googleRequest = GoogleRequest.builder()

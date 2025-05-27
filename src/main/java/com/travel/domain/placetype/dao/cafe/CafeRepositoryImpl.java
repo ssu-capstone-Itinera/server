@@ -3,60 +3,61 @@ package com.travel.domain.placetype.dao.cafe;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import com.travel.domain.placetype.entity.cafe.CafeDoc;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
-import com.travel.domain.placetype.entity.restaurant.RestaurantType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
 @RequiredArgsConstructor
-public class CafeRepositoryImpl implements CafeRepositoryCustom{
+public class CafeRepositoryImpl implements CafeRepositoryCustom {
 
     private final ElasticsearchClient elasticsearchClient;
+
     @Override
-    public List<String> findPlaceGoogleIdsByAddressAndCafeTags(String address, CafeTag cafeTag) {
+    public List<CafeDoc> findCafesByAddressAndCafeTags(String address, CafeTag cafeTag) {
         try {
-            // Elasticsearch 쿼리 빌드
             SearchRequest searchRequest = SearchRequest.of(s -> s
-                    .index("cafe") // 인덱스 이름 (실제 인덱스명으로 변경 필요)
+                    .index("cafe")
                     .query(q -> q
-                            .bool(b -> b
-                                    .must(m -> m
-                                            .matchPhrase(ma -> ma
-                                                    .field("address")
-                                                    .query(address)
-                                            )
-                                    )
-                                    .must(m -> m
+                            .bool(b -> {
+                                // 주소 조건 - 키워드가 포함되어 있으면 찾기
+                                var builder = b.must(m -> m
+                                        .match(ma -> ma
+                                                .field("address")
+                                                .query(address)
+                                                .operator(co.elastic.clients.elasticsearch._types.query_dsl.Operator.And) // 모든 키워드 포함
+                                        )
+                                );
+
+                                // cafeTag가 null이 아닌 경우에만 태그 조건 추가 - 정확히 같은 값 찾기
+                                if (cafeTag != null) {
+                                    builder.must(m -> m
                                             .term(t -> t
-                                                    .field("cafeTags") // 레스토랑 타입 필드명
+                                                    .field("cafeTags")
                                                     .value(cafeTag.name())
                                             )
-                                    )
-                            )
+                                    );
+                                }
+
+                                return builder;
+                            })
                     )
-                    .source(so -> so
-                            .filter(f -> f
-                                    .includes("googlePlaceId") // Google Place ID 필드만 조회
-                            )
-                    )
-                    .size(100) // 최대 결과 수 (필요에 따라 조정)
+                    .size(100) // 필요에 따라 조정
             );
 
-            // 검색 실행
-            SearchResponse<Map> response = elasticsearchClient.search(searchRequest, Map.class);
+            SearchResponse<CafeDoc> response = elasticsearchClient.search(searchRequest, CafeDoc.class);
 
-            // 결과에서 Google Place ID 추출
+            log.info("검색 결과: {} 건 (주소: {}, 태그: {})",
+                    response.hits().total().value(), address, cafeTag);
+
             return response.hits().hits().stream()
                     .map(hit -> hit.source())
-                    .filter(Objects::nonNull)
-                    .map(source -> (String) source.get("googlePlaceId"))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
@@ -66,5 +67,11 @@ public class CafeRepositoryImpl implements CafeRepositoryCustom{
         }
     }
 
+    // 만약 Google ID만 필요한 경우를 위한 별도 메서드
+    public List<String> findPlaceGoogleIdsByAddressAndCafeTags(String address, CafeTag cafeTag) {
+        return findCafesByAddressAndCafeTags(address, cafeTag).stream()
+                .map(CafeDoc::getPlaceGoogleId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+    }
 }
-

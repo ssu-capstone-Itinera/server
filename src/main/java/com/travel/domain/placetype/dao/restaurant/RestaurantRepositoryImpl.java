@@ -3,6 +3,9 @@ package com.travel.domain.placetype.dao.restaurant;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import co.elastic.clients.elasticsearch.core.SearchResponse;
+import com.travel.domain.placetype.entity.cafe.CafeDoc;
+import com.travel.domain.placetype.entity.cafe.CafeTag;
+import com.travel.domain.placetype.entity.restaurant.RestaurantDoc;
 import com.travel.domain.placetype.entity.restaurant.RestaurantType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,43 +23,44 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom {
     private ElasticsearchClient elasticsearchClient;
 
     @Override
-    public List<String> findPlaceGoogleIdsByAddressAndRestaurantType(String address, RestaurantType restaurantType) {
+    public  List<RestaurantDoc> findRestaurantsByAddressAndRestaurantType(String address, RestaurantType restaurantType){
         try {
-            // Elasticsearch 쿼리 빌드
             SearchRequest searchRequest = SearchRequest.of(s -> s
-                    .index("restaurant") // 인덱스 이름 (실제 인덱스명으로 변경 필요)
+                    .index("cafe")
                     .query(q -> q
-                            .bool(b -> b
-                                    .must(m -> m
-                                            .match(ma -> ma
-                                                    .field("address") // 주소 필드명
-                                                    .query(address)
-                                            )
-                                    )
-                                    .must(m -> m
+                            .bool(b -> {
+                                // 주소 조건 - 키워드가 포함되어 있으면 찾기
+                                var builder = b.must(m -> m
+                                        .match(ma -> ma
+                                                .field("address")
+                                                .query(address)
+                                                .operator(co.elastic.clients.elasticsearch._types.query_dsl.Operator.And) // 모든 키워드 포함
+                                        )
+                                );
+
+
+                                if (restaurantType != null) {
+                                    builder.must(m -> m
                                             .term(t -> t
-                                                    .field("restaurantType") // 레스토랑 타입 필드명
+                                                    .field("restaurantType")
                                                     .value(restaurantType.name())
                                             )
-                                    )
-                            )
+                                    );
+                                }
+
+                                return builder;
+                            })
                     )
-                    .source(so -> so
-                            .filter(f -> f
-                                    .includes("googlePlaceId") // Google Place ID 필드만 조회
-                            )
-                    )
-                    .size(100) // 최대 결과 수 (필요에 따라 조정)
+                    .size(100) // 필요에 따라 조정
             );
 
-            // 검색 실행
-            SearchResponse<Map> response = elasticsearchClient.search(searchRequest, Map.class);
+            SearchResponse<RestaurantDoc> response = elasticsearchClient.search(searchRequest, RestaurantDoc.class);
 
-            // 결과에서 Google Place ID 추출
+            log.info("검색 결과: {} 건 (주소: {}, 태그: {})",
+                    response.hits().total().value(), address, restaurantType);
+
             return response.hits().hits().stream()
                     .map(hit -> hit.source())
-                    .filter(Objects::nonNull)
-                    .map(source -> (String) source.get("googlePlaceId"))
                     .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
@@ -64,6 +68,14 @@ public class RestaurantRepositoryImpl implements RestaurantRepositoryCustom {
             log.error("Elasticsearch 검색 중 오류 발생: {}", e.getMessage(), e);
             throw new RuntimeException("장소 검색 중 오류가 발생했습니다.", e);
         }
+    }
+
+    // 만약 Google ID만 필요한 경우를 위한 별도 메서드
+    public List<String> findPlaceGoogleIdsByAddressAndCafeTags(String address, RestaurantType restaurantType) {
+        return findRestaurantsByAddressAndRestaurantType(address, restaurantType).stream()
+                .map(RestaurantDoc::getPlaceGoogleId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
 
