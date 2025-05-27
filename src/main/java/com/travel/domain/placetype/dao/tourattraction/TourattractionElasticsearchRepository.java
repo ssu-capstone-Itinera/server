@@ -9,6 +9,6 @@ import com.travel.domain.placetype.entity.tourattraction.TourattractionDoc;
 
 @Repository
 public interface TourattractionElasticsearchRepository
-        extends ElasticsearchRepository<TourattractionDoc, Long>, TourattractionRepositoryCustom {
+        extends ElasticsearchRepository<TourattractionDoc, String>, TourattractionRepositoryCustom {
     Optional<TourattractionDoc> findByPlaceGoogleId(String placeGoogleId);
 }

@@ -20,6 +20,7 @@ import lombok.experimental.SuperBuilder;
 @Mapping(mappingPath = "elasticsearch/mappings.json")
 public class CafeDoc extends PlaceDocument {
 
+
     @Field(type = FieldType.Keyword)
     private List<CafeTag> cafeTags;
 

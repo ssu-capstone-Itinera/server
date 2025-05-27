@@ -21,7 +21,7 @@ import lombok.experimental.SuperBuilder;
 @Mapping(mappingPath = "elasticsearch/mappings.json")
 public class PlaceDocument {
 
-    @Id private Integer id;
+    @Id private String id;
 
     @Field(type = FieldType.Keyword)
     private Category Category;

@@ -9,6 +9,6 @@ import com.travel.domain.placetype.entity.restaurant.RestaurantDoc;
 
 @Repository
 public interface RestaurantElasticsearchRepository
-        extends ElasticsearchRepository<RestaurantDoc, Long>, RestaurantRepositoryCustom {
+        extends ElasticsearchRepository<RestaurantDoc, String>, RestaurantRepositoryCustom {
     Optional<RestaurantDoc> findByPlaceGoogleId(String placeGoogleId);
 }
