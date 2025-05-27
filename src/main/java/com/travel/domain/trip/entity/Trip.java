@@ -35,8 +35,11 @@ public class Trip extends BaseTimeEntity {
     private String title;
 
 
-    @Column(name = "mainTourPlace", length = 100)
-    private String mainTourPlace;
+    @Builder.Default
+    @ElementCollection
+    @CollectionTable(name = "trip_main_tour_place", joinColumns = @JoinColumn(name = "trip_id"))
+    @Column(name = "main_tour_place")
+    private List<String> mainTourPlace = new ArrayList<>();
 
     @Column(name = "start_date")
     private LocalDate startDate;

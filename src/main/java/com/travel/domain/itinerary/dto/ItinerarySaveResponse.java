@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ItinerarySaveResponse {
     private Long itineraryId;
+    private String dailyTourPlace;
     private LocalDate tourDate;
     private List<SimplePlaceDto> places;
 

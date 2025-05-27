@@ -9,6 +9,7 @@ import com.travel.domain.member.dao.MemberRepository;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -22,6 +23,7 @@ import com.travel.domain.trip.entity.Trip;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TripService {
@@ -47,13 +49,15 @@ public class TripService {
         for (int i = 0; i < request.getListOfPlaces().size(); i++) {
             List<SimplePlaceDto> dailyPlaceList = request.getListOfPlaces().get(i);
 
-            ItinerarySaveRequest itineraryRequest = new ItinerarySaveRequest();
-            itineraryRequest.setTripId(trip.getId());
-            itineraryRequest.setMemberId(member.getId());
-            itineraryRequest.setTourDate(request.getStartDate().plusDays(i));
-            itineraryRequest.setPlaces(dailyPlaceList);
+            ItinerarySaveRequest itinerarySaveRequest = new ItinerarySaveRequest();
+            itinerarySaveRequest.setTripId(trip.getId());
+            itinerarySaveRequest.setMemberId(member.getId());
+            itinerarySaveRequest.setTourDate(request.getStartDate().plusDays(i));
+            itinerarySaveRequest.setPlaces(dailyPlaceList);
+            itinerarySaveRequest.setDailyTourPlace(request.getMainTourPlace().get(i));
 
-            itineraryService.saveItinerary(itineraryRequest);
+            itineraryService.saveItinerary(itinerarySaveRequest);
+            log.info("itinerary {} save request send", request.getStartDate().plusDays(i));
         }
 
         return TripSaveResponse.builder()

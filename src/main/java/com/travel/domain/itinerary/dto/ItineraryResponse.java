@@ -13,6 +13,7 @@ import java.util.List;
 public class ItineraryResponse {
     private Long itineraryId;
     private LocalDate tourDate;
+    private String dailyTourPlace;
     private List<SimplePlaceDto> places;
 }
 

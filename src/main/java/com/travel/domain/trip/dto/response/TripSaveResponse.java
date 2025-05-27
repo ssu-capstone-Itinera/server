@@ -12,7 +12,7 @@ import java.util.List;
 public class TripSaveResponse {
     private Long tripId;
     private String title;
-    private String mainTourPlace;
+    private List<String> mainTourPlace;
     private LocalDate startDate;
     private LocalDate endDate;
     private Boolean isPublic;
