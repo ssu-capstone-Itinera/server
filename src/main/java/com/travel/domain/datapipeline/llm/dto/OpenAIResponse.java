@@ -24,4 +24,5 @@ public class OpenAIResponse {
             private String content;
         }
     }
+
 }

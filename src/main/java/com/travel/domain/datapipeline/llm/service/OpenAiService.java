@@ -60,6 +60,7 @@ public class OpenAiService {
         return allTags;
     }
 
+
     public List<List<String>> extractTags(Map<String, Object> request) {
         Mono<String> responseMono = webClient
                 .post()
