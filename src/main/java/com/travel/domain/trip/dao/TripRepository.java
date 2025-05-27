@@ -1,13 +1,14 @@
 package com.travel.domain.trip.dao;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.travel.domain.member.entity.Member;
 import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import java.util.List;
-import java.util.Optional;
 
 public interface TripRepository extends JpaRepository<Trip, Long> {
 
@@ -18,4 +19,6 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
     default Trip findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() -> new CustomException(ErrorCode.TRIP_NOT_FOUND));
     }
+
+    Optional<Trip> findByIdAndMemberId(Long tripId, Long memberId);
 }

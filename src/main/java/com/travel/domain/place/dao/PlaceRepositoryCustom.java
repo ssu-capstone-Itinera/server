@@ -1,14 +1,10 @@
 package com.travel.domain.place.dao;
 
-import com.travel.domain.place.entity.Place;
-
 import java.util.List;
 
+import com.travel.domain.place.entity.Place;
+
 public interface PlaceRepositoryCustom {
-    public List<Place> findByIdInOrderByRatingDescWithCursor(
-            List<Long> placeIds,
-            Double ratingCursor,
-            Long idCursor,
-            int pageSize
-    );
+    public List<Place> findByPlaceGoogleIdInOrderByRatingDescWithCursor(
+            List<String> placeGoogleIds, Double ratingCursor, Long idCursor, int pageSize);
 }

@@ -1,13 +1,15 @@
 package com.travel.domain.placetype.dao.cafe;
 
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
-import org.springframework.stereotype.Repository;
-import com.travel.domain.placetype.entity.cafe.CafeDoc;
-
 import java.util.Optional;
 
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Repository;
+
+import com.travel.domain.placetype.entity.cafe.CafeDoc;
+
 @Repository
-public interface CafeElasticsearchRepository extends ElasticsearchRepository<CafeDoc, Long> {
+public interface CafeElasticsearchRepository
+        extends ElasticsearchRepository<CafeDoc, String>, CafeRepositoryCustom {
 
     Optional<CafeDoc> findByPlaceGoogleId(String placeGoogleId);
 }

@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+
 import com.travel.domain.trip.entity.Trip;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +47,8 @@ public class PostService {
     @Transactional
     public Post uploadPost(Long memberId, PostRequest postRequest) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
-        Trip trip = tripService.getTripById(postRequest.getTripId());
 
+        Trip trip = tripService.getTripById(postRequest.getTripId());
 
         Post post =
                 Post.builder()

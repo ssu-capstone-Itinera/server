@@ -1,9 +1,9 @@
 package com.travel.security.auth.dto;
 
-
 import com.travel.domain.member.entity.Member;
 import com.travel.domain.member.entity.MemberRole;
 import com.travel.domain.member.entity.Provider;
+
 import lombok.*;
 
 @Builder
@@ -16,6 +16,7 @@ public class CustomUserInfo implements UserInfo {
     private String nickname;
     private String email;
     private String password;
+
     @Override
     public Member toEntity() {
         return Member.builder()
@@ -33,5 +34,7 @@ public class CustomUserInfo implements UserInfo {
     }
 
     @Override
-    public String getEmail(){return email;}
+    public String getEmail() {
+        return email;
+    }
 }

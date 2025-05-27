@@ -52,16 +52,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (requestPath.contains("/api/v1/auth/register")) {
             filterChain.doFilter(request, response);
             return;
-        }
-        else if (requestPath.contains("/api/v1/auth/signup")) {
+        } else if (requestPath.contains("/api/v1/auth/signup")) {
             filterChain.doFilter(request, response);
             return;
-        }
-        else if (requestPath.contains("/api/v1/auth/login")) {
+        } else if (requestPath.contains("/api/v1/auth/login")) {
             filterChain.doFilter(request, response);
             return;
-        }
-        else if (requestPath.contains("/api/v1/auth/refresh")) {
+        } else if (requestPath.contains("/api/v1/auth/refresh")) {
             filterChain.doFilter(request, response);
             return;
         }

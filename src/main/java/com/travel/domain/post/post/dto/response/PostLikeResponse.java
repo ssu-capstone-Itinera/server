@@ -2,6 +2,7 @@ package com.travel.domain.post.post.dto.response;
 
 import com.travel.domain.member.entity.Member;
 import com.travel.domain.post.post.entity.PostLike;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

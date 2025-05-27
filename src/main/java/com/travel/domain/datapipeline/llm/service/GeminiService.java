@@ -1,22 +1,24 @@
 package com.travel.domain.datapipeline.llm.service;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+
 import com.travel.domain.datapipeline.llm.dto.GeminiRequest;
 import com.travel.domain.datapipeline.llm.dto.GeminiResponse;
 import com.travel.domain.datapipeline.llm.dto.TourAttractionReviewDto;
 import com.travel.domain.datapipeline.llm.entity.Prompt;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -32,13 +34,11 @@ public class GeminiService {
     @Value("${ai.gemini.api-url}")
     private String apiUrl;
 
-
     private WebClient webClient = WebClient.create();
 
-    public List<List<String>> extractTourAttractionTags(List<TourAttractionReviewDto> tourAttractionReviewDtos) {
-        Prompt prompt = Prompt.builder()
-                .reviews(tourAttractionReviewDtos)
-                .build();
+    public List<List<String>> extractTourAttractionTags(
+            List<TourAttractionReviewDto> tourAttractionReviewDtos) {
+        Prompt prompt = Prompt.builder().reviews(tourAttractionReviewDtos).build();
 
         GeminiRequest request = convertPromptToGeminiRequest(prompt);
 
@@ -49,23 +49,24 @@ public class GeminiService {
 
     public List<List<String>> extractTags(GeminiRequest request) {
         // Gemini API에 요청 본문으로 GeminiRequest 객체를 전달
-        GeminiResponse response = webClient.post()
-                .uri(apiUrl + model + ":generateContent?key=" + apiKey)
-                .header("Content-Type", "application/json")
-                .bodyValue(request) // GeminiRequest 객체를 본문으로 전달
-                .retrieve()
-                .bodyToMono(GeminiResponse.class)
-                .block();
-
+        GeminiResponse response =
+                webClient
+                        .post()
+                        .uri(apiUrl + model + ":generateContent?key=" + apiKey)
+                        .header("Content-Type", "application/json")
+                        .bodyValue(request) // GeminiRequest 객체를 본문으로 전달
+                        .retrieve()
+                        .bodyToMono(GeminiResponse.class)
+                        .block();
 
         if (response == null || response.getCandidates().isEmpty()) {
             throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
         }
 
-        String resultText = response.getCandidates().get(0).getContent().getParts().get(0).getText();
+        String resultText =
+                response.getCandidates().get(0).getContent().getParts().get(0).getText();
 
-
-        log.info(resultText);
+        log.info("resultText " + resultText);
 
         return parseFixedFormatResult(resultText);
     }
@@ -73,18 +74,18 @@ public class GeminiService {
     private List<List<String>> parseFixedFormatResult(String resultText) {
         List<List<String>> tagLists = new ArrayList<>();
 
-        //( ) 안의 내용 찾기
+        // ( ) 안의 내용 찾기
         Pattern pattern = Pattern.compile("\\((.*?)\\)");
         Matcher matcher = pattern.matcher(resultText);
 
         while (matcher.find()) {
             String group = matcher.group(1);
-            List<String> tags = List.of(group.split(","))
-                    .stream()
-                    .map(String::trim)
-                    .map(tag -> tag.replaceAll("\"", "").replaceAll("'", "")) // 따옴표 제거
-                    .filter(tag -> !tag.isEmpty())
-                    .collect(Collectors.toList());
+            List<String> tags =
+                    List.of(group.split(",")).stream()
+                            .map(String::trim)
+                            .map(tag -> tag.replaceAll("\"", "").replaceAll("'", "")) // 따옴표 제거
+                            .filter(tag -> !tag.isEmpty())
+                            .collect(Collectors.toList());
             tagLists.add(tags);
         }
 
@@ -135,5 +136,4 @@ public class GeminiService {
 
         return request;
     }
-
 }

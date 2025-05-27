@@ -1,12 +1,12 @@
 package com.travel.domain.trip.dto.response;
 
+import java.time.LocalDate;
+
 import com.travel.domain.trip.entity.Trip;
-import jakarta.persistence.Column;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.time.LocalDate;
 
 @Getter
 @Builder
@@ -15,13 +15,11 @@ public class TripResponse {
     private Long tripId;
 
     private String title;
-    private String regin;
+    private String mainTourPlace;
 
     private LocalDate startDate;
 
     private LocalDate endDate;
-
-    private Integer budget;
 
 
     public static TripResponse of(Trip trip) {

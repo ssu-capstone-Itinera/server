@@ -1,11 +1,8 @@
 package com.travel.domain.placetype.entity;
 
+import java.util.Arrays;
 
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 public enum ApiTag {
@@ -100,11 +97,9 @@ public enum ApiTag {
 
     public static String getType(String group, String keyword) {
         return Arrays.stream(values())
-                .filter(e -> e.group.equalsIgnoreCase(group)
-                        && e.keyword.equalsIgnoreCase(keyword))
+                .filter(e -> e.group.equalsIgnoreCase(group) && e.keyword.equalsIgnoreCase(keyword))
                 .map(ApiTag::getType)
                 .findFirst()
                 .orElse(null);
     }
-
 }
