@@ -74,7 +74,7 @@ public class ItineraryService {
                         .orElseGet(() -> {
                             MyPlace myPlace_ = MyPlace.builder()
                                     .placeGoogleId(simplePlace.getPlaceGoogleId())
-                                    .category(Category.MY_PLACE)
+                                    .category(simplePlace.getCategory())
                                     .name(simplePlace.getName())
                                     .lat(simplePlace.getLat())
                                     .lng(simplePlace.getLng())

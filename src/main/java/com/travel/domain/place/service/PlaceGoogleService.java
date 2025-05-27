@@ -111,8 +111,13 @@ public class PlaceGoogleService {
                 name = (String) result.get("name");
             }
 
-            Place place =
-                    Place.builder().placeGoogleId(placeId).name(name).lat(lat).lng(lng).build();
+            Place place = Place.builder()
+                    .placeGoogleId(placeId)
+                    .name(name)
+                    .lat(lat)
+                    .lng(lng)
+                    .category(Category.MY_PLACE)
+                    .build();
 
             placeList.add(place);
         }
