@@ -130,7 +130,7 @@ public class PlaceGoogleService {
                             .build(false)
                             .encode(StandardCharsets.UTF_8)
                             .toUri();
-            log.info("mainPlace 주소 변환 오류:  {}", uri);
+            log.info("mainPlace 주소로 좌표 획득 url:  {}", uri);
 
             Map<String, Object> apiResponse =
                     WebClient.create().get().uri(uri).retrieve().bodyToMono(Map.class).block();
