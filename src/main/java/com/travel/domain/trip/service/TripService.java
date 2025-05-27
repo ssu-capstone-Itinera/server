@@ -106,4 +106,9 @@ public class TripService {
 
         return tripRepository.findByIdOrElseThrow(tripId);
     }
+
+    public List<Long> getTripIdListByMemberId(Long memberId) {
+        List<Trip> tripList = tripRepository.findByMemberId(memberId);
+        return tripList.stream().map(Trip::getId).collect(Collectors.toList());
+    }
 }
