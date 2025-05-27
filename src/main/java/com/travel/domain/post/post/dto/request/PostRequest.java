@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class PostRequest {
-    private Trip trip;
+    private Long tripId;
     private String title;
     private String content;
 }

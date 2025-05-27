@@ -1,10 +1,10 @@
 package com.travel.domain.trip.service;
 
-
 import com.travel.domain.itinerary.dto.ItinerarySaveRequest;
 import com.travel.domain.itinerary.dto.SimplePlaceDto;
 import com.travel.domain.itinerary.service.ItineraryService;
 import com.travel.domain.member.dao.MemberRepository;
+
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,7 +91,7 @@ public class TripService {
         return tripList.stream().map(TripResponse::of).collect(Collectors.toList());
     }
 
-    public TripResponse getTrip(Trip trip) {
+    public TripResponse getTripResponse(Trip trip) {
 
         return TripResponse.builder()
                 .tripId(trip.getId())
@@ -100,5 +100,10 @@ public class TripService {
                 .startDate(trip.getStartDate())
                 .startDate(trip.getEndDate())
                 .build();
+    }
+
+    public Trip getTripById(Long tripId) {
+
+        return tripRepository.findByIdOrElseThrow(tripId);
     }
 }
