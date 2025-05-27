@@ -4,6 +4,7 @@ import com.travel.domain.itinerary.dao.ItineraryRepository;
 import com.travel.domain.itinerary.dto.SimplePlaceDto;
 import com.travel.domain.itinerary.service.ItineraryService;
 import com.travel.domain.trip.dto.request.TripSaveRequest;
+import com.travel.domain.trip.dto.response.SimpleTripResponse;
 import com.travel.domain.trip.dto.response.TripGetResponse;
 import com.travel.domain.trip.dto.response.TripSaveResponse;
 import com.travel.domain.trip.entity.Trip;
@@ -32,10 +33,10 @@ public class TripController {
     }
 
 
-    @Operation(summary = "MemberId로 특정 사용자의 전체 TripIdList 획득. 이후 getTrip API로 단일 Trip조회")
+    @Operation(summary = "MemberId로 특정 사용자의 전체 TripList를 조회. 간단한 정보만 반환하고 세부정보는 getTrip 사용")
     @GetMapping("/{memberId}")
-    public ResponseEntity<List<Long>> getTripIdListByMemberId(@PathVariable Long memberId) {
-        return ResponseEntity.ok(tripService.getTripIdListByMemberId(memberId));
+    public ResponseEntity<List<SimpleTripResponse>> getSimpleTripListByMemberId(@PathVariable Long memberId) {
+        return ResponseEntity.ok(tripService.getSimpleTripListByMemberId(memberId));
     }
 
     @Operation(summary = "TripId와 MemberId로 단일 Trip 정보 get")

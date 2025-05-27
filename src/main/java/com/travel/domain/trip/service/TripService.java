@@ -6,9 +6,11 @@ import com.travel.domain.itinerary.service.ItineraryService;
 import com.travel.domain.member.dao.MemberRepository;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.travel.domain.trip.dto.response.SimpleTripResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -111,8 +113,17 @@ public class TripService {
         return tripRepository.findByIdOrElseThrow(tripId);
     }
 
-    public List<Long> getTripIdListByMemberId(Long memberId) {
+    public List<SimpleTripResponse> getSimpleTripListByMemberId(Long memberId) {
         List<Trip> tripList = tripRepository.findByMemberId(memberId);
-        return tripList.stream().map(Trip::getId).collect(Collectors.toList());
+        List<SimpleTripResponse> simpleTripResponseList= new ArrayList<>();
+        for(Trip trip : tripList) {
+            simpleTripResponseList.add(SimpleTripResponse.builder()
+                    .tripId(trip.getId())
+                    .title(trip.getTitle())
+                    .startDate(trip.getStartDate())
+                    .endDate(trip.getEndDate())
+                    .build());
+        }
+        return simpleTripResponseList;
     }
 }
