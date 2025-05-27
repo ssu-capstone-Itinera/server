@@ -1,13 +1,12 @@
 package com.travel.domain.post.post.dto.request;
 
-import com.travel.domain.member.entity.Member;
 import com.travel.domain.trip.entity.Trip;
+
 import lombok.Getter;
 
 @Getter
 public class PostRequest {
-    private Trip trip;
+    private Long tripId;
     private String title;
     private String content;
-
 }
