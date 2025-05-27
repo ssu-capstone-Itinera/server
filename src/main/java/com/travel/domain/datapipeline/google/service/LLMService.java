@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.travel.domain.datapipeline.llm.service.OpenAiService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import com.travel.domain.datapipeline.google.dto.PlaceDetailDto;
@@ -19,17 +21,24 @@ import lombok.RequiredArgsConstructor;
 /*
 LLM과 PlaceService 사이 데이터 가공
  */
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class LLMService {
     private final GeminiService geminiService;
+    private final OpenAiService openAiService;
 
     public List<TourAttractionLLMDto> generateTagsWithGemini(List<PlaceDetailDto> placeDetailDtos) {
 
         List<TourAttractionReviewDto> tourAttractionReviewDtos = extractsReviews(placeDetailDtos);
-        List<List<String>> tagLists =
-                geminiService.extractTourAttractionTags(tourAttractionReviewDtos);
+//        List<List<String>> tagLists =
+//                geminiService.extractTourAttractionTags(tourAttractionReviewDtos);
 
+        List<List<String>> tagLists =
+                openAiService.extractTourAttractionTags(tourAttractionReviewDtos);
+
+
+        log.info(tagLists.size() + "  vs " + tourAttractionReviewDtos.size());
         if (tagLists.size() != tourAttractionReviewDtos.size()) {
             throw new CustomException(ErrorCode.TAG_LIST_SIZE_MISMATCH);
         }

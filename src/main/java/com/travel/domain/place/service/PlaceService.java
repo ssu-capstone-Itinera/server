@@ -143,7 +143,12 @@ public class PlaceService {
     private List<PlaceResponse> getTourattractionList(String mainTourPlace, PlaceCoordinate placeCoordinate, List<TourattractionTag> tourattractionTagList, List<SubjectiveTag> subjectiveTagList) {
         List<String> getPlaceId = new ArrayList<>();
         for(TourattractionTag tourattractionTag : tourattractionTagList){
-            List<String> getRestaurantList = tourattractionElasticsearchRepository.findPlaceGoogleIdsByAddressAndTourattractionTags(mainTourPlace, tourattractionTag);
+            List<TourattractionDoc> tourattractionDocList = tourattractionElasticsearchRepository.findPlaceGoogleIdsByAddressAndTourattractionTags(mainTourPlace, tourattractionTag);
+
+            List<String> getRestaurantList = tourattractionDocList.stream()
+                    .map(TourattractionDoc::getPlaceGoogleId)
+                    .collect(Collectors.toList());
+
             if(getRestaurantList.isEmpty()){
                 GoogleRequest googleRequest = GoogleRequest.builder()
                         .category(Category.TOURATTRACTION)
@@ -165,8 +170,11 @@ public class PlaceService {
         }
 
         for(SubjectiveTag subjectiveTag : subjectiveTagList){
-            List<String> getRestaurantList = tourattractionElasticsearchRepository.findPlaceGoogleIdsByAddressAndSubjectiveTags(mainTourPlace, subjectiveTag);
+            List<TourattractionDoc> tourattractionDocList = tourattractionElasticsearchRepository.findPlaceGoogleIdsByAddressAndSubjectiveTags(mainTourPlace, subjectiveTag);
 
+            List<String> getRestaurantList = tourattractionDocList.stream()
+                    .map(TourattractionDoc::getPlaceGoogleId)
+                    .collect(Collectors.toList());
 
             getPlaceId.addAll(getRestaurantList);
 
