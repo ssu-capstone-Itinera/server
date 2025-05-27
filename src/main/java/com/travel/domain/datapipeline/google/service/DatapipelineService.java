@@ -177,6 +177,9 @@ public class DatapipelineService {
                                             .placeGoogleId(place.getPlaceGoogleId())
                                             .build();
 
+                            log.info(detailDto.getPlaceId() + "placeGoogleService : " +placeGoogleService.getCafeTagsByPlaceId(detailDto.getPlaceId()));
+
+
                             PlaceDocument document = cafeDoc;
 
                             cafeElasticsearchRepository.save(cafeDoc);
