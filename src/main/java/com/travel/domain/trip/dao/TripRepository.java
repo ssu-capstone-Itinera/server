@@ -16,6 +16,8 @@ public interface TripRepository extends JpaRepository<Trip, Long> {
 
     List<Trip> findByMember(Member member);
 
+    List<Trip> findByMemberId(Long memberId);
+
     default Trip findByIdOrElseThrow(Long id) {
         return findById(id).orElseThrow(() -> new CustomException(ErrorCode.TRIP_NOT_FOUND));
     }

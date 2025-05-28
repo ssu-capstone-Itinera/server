@@ -1,21 +1,16 @@
 package com.travel.domain.trip.dto.response;
 
-import com.travel.domain.itinerary.dto.SimplePlaceDto;
 import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
-import java.util.List;
 
-@Getter
 @Builder
-public class TripGetResponse {
+@Getter
+public class SimpleTripResponse {
     private Long tripId;
     private String title;
-    private List<String> mainTourPlace;
     private LocalDate startDate;
     private LocalDate endDate;
-    private Boolean isPublic;
-    private List<List<SimplePlaceDto>> listOfPlaces;
 
 }

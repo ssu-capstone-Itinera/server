@@ -6,9 +6,12 @@ import com.travel.domain.itinerary.service.ItineraryService;
 import com.travel.domain.member.dao.MemberRepository;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.travel.domain.trip.dto.response.SimpleTripResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 
@@ -22,6 +25,7 @@ import com.travel.domain.trip.entity.Trip;
 
 import lombok.RequiredArgsConstructor;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TripService {
@@ -47,13 +51,15 @@ public class TripService {
         for (int i = 0; i < request.getListOfPlaces().size(); i++) {
             List<SimplePlaceDto> dailyPlaceList = request.getListOfPlaces().get(i);
 
-            ItinerarySaveRequest itineraryRequest = new ItinerarySaveRequest();
-            itineraryRequest.setTripId(trip.getId());
-            itineraryRequest.setMemberId(member.getId());
-            itineraryRequest.setTourDate(request.getStartDate().plusDays(i));
-            itineraryRequest.setPlaces(dailyPlaceList);
+            ItinerarySaveRequest itinerarySaveRequest = new ItinerarySaveRequest();
+            itinerarySaveRequest.setTripId(trip.getId());
+            itinerarySaveRequest.setMemberId(member.getId());
+            itinerarySaveRequest.setTourDate(request.getStartDate().plusDays(i));
+            itinerarySaveRequest.setPlaces(dailyPlaceList);
+            itinerarySaveRequest.setDailyTourPlace(request.getMainTourPlace().get(i));
 
-            itineraryService.saveItinerary(itineraryRequest);
+            itineraryService.saveItinerary(itinerarySaveRequest);
+            log.info("itinerary {} save request send", request.getStartDate().plusDays(i));
         }
 
         return TripSaveResponse.builder()
@@ -105,5 +111,19 @@ public class TripService {
     public Trip getTripById(Long tripId) {
 
         return tripRepository.findByIdOrElseThrow(tripId);
+    }
+
+    public List<SimpleTripResponse> getSimpleTripListByMemberId(Long memberId) {
+        List<Trip> tripList = tripRepository.findByMemberId(memberId);
+        List<SimpleTripResponse> simpleTripResponseList= new ArrayList<>();
+        for(Trip trip : tripList) {
+            simpleTripResponseList.add(SimpleTripResponse.builder()
+                    .tripId(trip.getId())
+                    .title(trip.getTitle())
+                    .startDate(trip.getStartDate())
+                    .endDate(trip.getEndDate())
+                    .build());
+        }
+        return simpleTripResponseList;
     }
 }

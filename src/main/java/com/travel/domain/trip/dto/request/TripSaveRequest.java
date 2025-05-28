@@ -14,7 +14,7 @@ import java.util.List;
 public class TripSaveRequest {
     private Long memberId;
     private String title;
-    private String mainTourPlace;
+    private List<String> mainTourPlace;
     private LocalDate startDate;
     private LocalDate endDate;
     private Boolean isPublic;

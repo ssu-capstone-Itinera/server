@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 public class ItinerarySaveRequest {
     private LocalDate tourDate;
-
+    private String dailyTourPlace;
     private Long tripId;
     private Long memberId;
 

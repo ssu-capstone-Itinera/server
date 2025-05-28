@@ -1,6 +1,7 @@
 package com.travel.domain.trip.dto.response;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.travel.domain.trip.entity.Trip;
 
@@ -15,7 +16,7 @@ public class TripResponse {
     private Long tripId;
 
     private String title;
-    private String mainTourPlace;
+    private List<String> mainTourPlace;
 
     private LocalDate startDate;
 

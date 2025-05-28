@@ -35,6 +35,9 @@ public class Itinerary extends BaseTimeEntity {
     @Column(name = "tour_date")
     private LocalDate tourDate;
 
+    @Column(name = "DailyTourPlace")
+    private String dailyTourPlace;
+
     //note 사용하지 않을 듯 해서 지웠습니다.
     //@Column(name = "note", length = 1000)
     //private String note;

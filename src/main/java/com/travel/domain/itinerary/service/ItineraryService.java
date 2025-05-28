@@ -18,10 +18,12 @@ import com.travel.domain.trip.dao.TripRepository;
 import com.travel.domain.trip.entity.Trip;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ItineraryService {
@@ -48,12 +50,14 @@ public class ItineraryService {
                 .trip(trip)
                 .member(member)
                 .tourDate(itinerarySaveRequest.getTourDate())
+                .dailyTourPlace(itinerarySaveRequest.getDailyTourPlace())
                 .places(places)
                 .myPlaces(myPlaces)
                 .itineraryPlaceTypeOrder(itineraryPlaceTypeOrder)
                 .build();
 
         itineraryRepository.save(itinerary);
+        log.info("itinerary {} saved", itinerarySaveRequest.getTourDate());
 
         return ItinerarySaveResponse.builder()
                 .itineraryId(itinerary.getId())
@@ -74,7 +78,7 @@ public class ItineraryService {
                         .orElseGet(() -> {
                             MyPlace myPlace_ = MyPlace.builder()
                                     .placeGoogleId(simplePlace.getPlaceGoogleId())
-                                    .category(Category.MY_PLACE)
+                                    .category(simplePlace.getCategory())
                                     .name(simplePlace.getName())
                                     .lat(simplePlace.getLat())
                                     .lng(simplePlace.getLng())

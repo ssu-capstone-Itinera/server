@@ -111,8 +111,13 @@ public class PlaceGoogleService {
                 name = (String) result.get("name");
             }
 
-            Place place =
-                    Place.builder().placeGoogleId(placeId).name(name).lat(lat).lng(lng).build();
+            Place place = Place.builder()
+                    .placeGoogleId(placeId)
+                    .name(name)
+                    .lat(lat)
+                    .lng(lng)
+                    .category(Category.MY_PLACE)
+                    .build();
 
             placeList.add(place);
         }
@@ -130,7 +135,7 @@ public class PlaceGoogleService {
                             .build(false)
                             .encode(StandardCharsets.UTF_8)
                             .toUri();
-            log.info("mainPlace 주소 변환 오류:  {}", uri);
+            log.info("mainPlace 주소로 좌표 획득 url:  {}", uri);
 
             Map<String, Object> apiResponse =
                     WebClient.create().get().uri(uri).retrieve().bodyToMono(Map.class).block();
