@@ -35,17 +35,23 @@ public class GoogleService {
 
     public PlaceListDto searchTourAttraction(GoogleRequest googleRequest) {
         String getKeyword = "";
+        String getType = "";
         if(googleRequest.getCategory().equals(Category.TOURATTRACTION)){
-            getKeyword = googleRequest.getTourattractionTag().getValue();
+            getKeyword = googleRequest.getTourattractionTag().getKeyword();
+            getType = googleRequest.getTourattractionTag().getType();
         }else if(googleRequest.getCategory().equals(Category.CAFE)){
-            getKeyword = googleRequest.getCafeTag().getValue();
+            getKeyword = googleRequest.getCafeTag().getKeyword();
+            getType = googleRequest.getCafeTag().getType();
         }else if(googleRequest.getCategory().equals(Category.RESTAURANT)){
-            getKeyword = googleRequest.getRestaurantType().getValue();
+            getKeyword = googleRequest.getRestaurantType().getKeyword();
+            getType = googleRequest.getRestaurantType().getType();
 
         }
 
 
         final String keyword = getKeyword;
+        final String type = getType;
+
 
         try {
             Map<String, Object> apiResponse = WebClient.create(nearBySearchUrl)
@@ -54,7 +60,7 @@ public class GoogleService {
                             .queryParam("location", googleRequest.getLat() + "," + googleRequest.getLng())
                             .queryParam("radius", 5000)
                             .queryParam("keyword", keyword)
-                            .queryParam("type", googleRequest.getCategory().getValue())
+                            .queryParam("type", type)
                             .queryParam("language", "ko")
                             .queryParam("key", googleApiKey)
                             .build())
