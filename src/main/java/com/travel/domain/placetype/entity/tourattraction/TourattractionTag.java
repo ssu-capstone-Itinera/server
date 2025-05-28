@@ -6,70 +6,47 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum TourattractionTag {
-    자연("자연"),
-    해변("해변"),
-    산("산"),
-    공원("공원"),
-    국립공원("국립공원"),
-    호수("호수"),
-    폭포("폭포"),
-    섬("섬"),
-    계곡("계곡"),
+    BEACH("beach", "natural_feature"),
+    MOUNTAIN("mountain", "natural_feature"),
+    PARK( "park", "park"),
+    NATIONAL_PARK("national park", "park"),
+    LAKE( "lake", "natural_feature"),
+    WATERFALL("waterfall", "natural_feature"),
+    ISLAND("island", "natural_feature"),
 
-    // 문화/역사 태그
-    문화역사("문화/역사"),
-    박물관("박물관"),
-    미술관("미술관"),
-    성당("성당"),
-    교회("교회"),
-    사원("사원"),
-    절("절"),
-    궁전("궁전"),
-    문화유산("문화유산"),
-    구시가지("구시가지"),
+    MUSEUM("museum", "museum"),
+    ART_MUSEUM( "art museum", "art_gallery"),
+    CATHEDRAL( "cathedral", "church"),
+    CHURCH("church", "church"),
+    BUDDHIST_TEMPLE("buddhist temple", "place_of_worship"),
+    PALACE( "palace", "tourist_attraction"),
+    CULTURAL_HERITAGE_SITE("cultural heritage site", "tourist_attraction"),
+    HISTORIC_DISTRICT( "historic district", "tourist_attraction"),
 
-    // 엔터테인먼트/관광 태그
-    테마파크("테마파크"),
-    놀이공원("놀이공원"),
-    동물원("동물원"),
-    수족관("수족관"),
-    식물원("식물원"),
-    지역축제("지역축제"),
-    전통시장("전통시장"),
-    공연장("공연장"),
-    번화가("번화가"),
+    THEME_PARK("theme park", "amusement_park"),
+    AMUSEMENT_PARK("amusement park", "amusement_park"),
+    ZOO("zoo", "zoo"),
+    AQUARIUM("aquarium", "aquarium"),
+    BOTANICAL_GARDEN("botanical garden", "tourist_attraction"),
+    CAMPING_SITE( "camping site", "campground"),
+    TRADITIONAL_MARKET("traditional market", "tourist_attraction"),
+    PERFORMANCE_HALL("performance hall", "tourist_attraction"),
+    POPULAR_STREET("popular street", "tourist_attraction"),
 
-    // 레저/스포츠 태그
-    온천("온천"),
-    스키장("스키장"),
-    골프장("골프장"),
-    캠핑장("캠핑장"),
-    트레킹("트레킹"),
-    서핑("서핑"),
-    스노클링("스노클링"),
-    카약("카약"),
-    패러글라이딩장소("패러글라이딩 장소"),
-    자전거도로("자전거 도로"),
+    SHOPPING_MALL("shopping mall", "shopping_mall"),
+    OBSERVATORY("observatory", "tourist_attraction"),
+    BRIDGE("bridge", "tourist_attraction"),
+    UNIVERSITY_AREA( "university area", "tourist_attraction"),
+    STADIUM("stadium", "stadium"),
+    HARBOR("harbor", "tourist_attraction"),
+    LIGHTHOUSE( "lighthouse", "tourist_attraction"),
 
-    // 도시/건축 태그
-    쇼핑몰("쇼핑몰"),
-    야시장("야시장"),
-    전망대("전망대"),
-    다리("다리"),
-    대학가("대학가"),
-    스포츠경기장("스포츠 경기장"),
-    항구("항구"),
-    등대("등대"),
+    BIKE_TRAIL( "bike trail", "tourist_attraction"),
+    GOLF_COURSE( "golf course", "golf_course"),
+    NIGHT_VIEW_SPOT("night view spot", "tourist_attraction"),
+    FAMOUS_PLACE( "famous place", "tourist_attraction");
 
-    // 특성/편의 태그
-    애완동물동반가능("애완동물 동반 가능"),
-    야경명소("야경 명소"),
-    루프탑("루프탑"),
-    명소("명소");
+    private final String keyword;
+    private final String type;
 
-    private final String value;
-
-    public String getValue() {
-        return value;
-    }
 }
