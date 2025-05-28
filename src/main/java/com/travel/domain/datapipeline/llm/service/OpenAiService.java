@@ -45,8 +45,8 @@ public class OpenAiService {
     public List<List<String>> extractTourAttractionTags(List<TourAttractionReviewDto> tourAttractionReviewDtos) {
         List<List<String>> allTags = new ArrayList<>();
 
-        for (int i = 0; i < tourAttractionReviewDtos.size(); i += 10) {
-            int end = Math.min(i + 10, tourAttractionReviewDtos.size());
+        for (int i = 0; i < tourAttractionReviewDtos.size(); i += 5) {
+            int end = Math.min(i + 5, tourAttractionReviewDtos.size());
             List<TourAttractionReviewDto> subList = tourAttractionReviewDtos.subList(i, end);
             Prompt prompt = Prompt.builder().reviews(subList).build();
             Map<String, Object> openAiRequest = convertPromptToOpenAIRequest(prompt);
@@ -55,6 +55,12 @@ public class OpenAiService {
 
             List<List<String>> subTags = extractTags(openAiRequest);
             allTags.addAll(subTags);
+        }
+
+        try {
+            Thread.sleep(1500); // 1.5초 대기
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
 
         return allTags;
