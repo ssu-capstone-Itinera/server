@@ -41,7 +41,9 @@ public class PostService {
     public List<UserPostListResponse> getUserPostList(Member member) {
 
         List<Post> postList = postRepository.findByMember(member);
-        return postList.stream().map(UserPostListResponse::of).collect(Collectors.toList());
+        return postList.stream()
+                .map(post -> UserPostListResponse.of(post, tripService.getTripResponse(post.getTrip())))
+                .collect(Collectors.toList());
     }
 
     @Transactional
