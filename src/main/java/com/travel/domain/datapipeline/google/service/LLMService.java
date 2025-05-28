@@ -2,6 +2,7 @@ package com.travel.domain.datapipeline.google.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.travel.domain.datapipeline.llm.service.OpenAiService;
@@ -59,9 +60,17 @@ public class LLMService {
             List<String> tags = tagLists.get(i);
 
             // 문자열 태그들을 SubjectiveTag enum으로 바로 변환
+
             List<SubjectiveTag> subjectiveTagList =
                     tags.stream()
-                            .map(tag -> SubjectiveTag.valueOf(tag.trim())) // value 값으로 바로 매핑
+                            .map(tag -> {
+                                try {
+                                    return SubjectiveTag.valueOf(tag.trim());
+                                } catch (IllegalArgumentException e) {
+                                    return null; // 존재하지 않으면 null 리턴
+                                }
+                            })
+                            .filter(Objects::nonNull) // null 제거 → continue 효과
                             .toList();
 
             PlaceDetailDto detailDto = placeDetailDtos.get(i);
