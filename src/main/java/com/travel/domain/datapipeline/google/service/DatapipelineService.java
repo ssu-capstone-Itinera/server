@@ -82,7 +82,7 @@ public class DatapipelineService {
         return getSaveTourAttractionList(googleRequest, placeDetailDtos, tourAttractionLLMDtos);
     }
 
-    private static List<SavePlaceDto> getSaveTourAttractionList(
+    private  List<SavePlaceDto> getSaveTourAttractionList(
             GoogleRequest googleRequest,
             List<PlaceDetailDto> placeDetailDtos,
             List<TourAttractionLLMDto> tourAttractionLLMDtos) {
@@ -111,8 +111,10 @@ public class DatapipelineService {
                                             .priceLevel(detailDto.getPriceLevel())
                                             .build();
 
+                            placeRepository.save(place);
+
                             // PlaceDocument (Elasticsearch 문서)
-                            PlaceDocument document =
+                             TourattractionDoc tourattractionDoc =
                                     TourattractionDoc.builder()
                                             .placeGoogleId(detailDto.getPlaceId())
                                             .tourattractionTags(
@@ -124,6 +126,9 @@ public class DatapipelineService {
                                             .address(place.getAddress())
                                             .placeGoogleId(place.getPlaceGoogleId())
                                             .build();
+                             tourattractionElasticsearchRepository.save(tourattractionDoc);
+
+                            PlaceDocument document = tourattractionDoc;
 
                             return new SavePlaceDto(place, document);
                         })

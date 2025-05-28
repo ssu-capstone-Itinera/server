@@ -131,7 +131,7 @@ public class PlaceService {
                         .collect(Collectors.toList());
             }
 
-            log.info("database 1111", getCafeList.size());
+            log.info("database 1111"+ getCafeList.size());
 
 
             getPlaceId.addAll(getCafeList);
@@ -142,6 +142,7 @@ public class PlaceService {
 
     private List<PlaceResponse> getTourattractionList(String mainTourPlace, PlaceCoordinate placeCoordinate, List<TourattractionTag> tourattractionTagList, List<SubjectiveTag> subjectiveTagList) {
         List<String> getPlaceId = new ArrayList<>();
+        log.info("touattraction");
         for(TourattractionTag tourattractionTag : tourattractionTagList){
             List<TourattractionDoc> tourattractionDocList = tourattractionElasticsearchRepository.findPlaceGoogleIdsByAddressAndTourattractionTags(mainTourPlace, tourattractionTag);
 
@@ -220,6 +221,8 @@ public class PlaceService {
     private List<PlaceResponse>  getPlaceResponseList(List<String> getPlaceId, Category category) {
         return getPlaceId.stream()
                 .map(googleId -> {
+
+                    log.info("the problem placeId is : " + googleId);
                     Place place = placeRepository.findByPlaceGoogleIdOrElseThrow(googleId);
                     return PlaceResponse.builder()
                             .placeId(place.getId())

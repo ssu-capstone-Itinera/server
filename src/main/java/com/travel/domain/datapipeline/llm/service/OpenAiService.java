@@ -113,10 +113,10 @@ public class OpenAiService {
         messages.add(systemMessage);
 
         StringBuilder userContent = new StringBuilder();
-        userContent.append("Please extract 3-5 meaningful emotional or thematic tags for each of the following tourist attractions based on the reviews.\n\n");
+        userContent.append(Prompt.DEFAULT_QUESTION + "\n");
 
         for (TourAttractionReviewDto reviewDto : prompt.getReviews()) {
-            userContent.append("Place: ").append(reviewDto.getName()).append("\n");
+            userContent.append("placeName: ").append(reviewDto.getName()).append("\n");
             userContent.append("Reviews:\n");
             for (String review : reviewDto.getReviews()) {
                 userContent.append("- ").append(review).append("\n");
