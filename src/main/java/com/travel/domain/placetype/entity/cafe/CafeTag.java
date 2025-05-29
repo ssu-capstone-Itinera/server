@@ -26,8 +26,6 @@ public enum CafeTag {
 
     SERVES_DESSERT( "cafe servesDessert", "restaurant", "servesDessert"),
     SERVES_VEGETARIAN_FOOD("cafe servesVegetarianFood", "restaurant", "servesVegetarianFood");
-    OUTDOORSEATING("cafe outdoorSeating", "restaurant", "outdoorSeating"),
-    TAKEOUT("cafe takeout","restaurant","takeout"),
 
 
     private final String keyword;

@@ -298,8 +298,6 @@ public class PlaceGoogleService {
                         "goodForChildren",
                         "allowsDogs",
                         "goodForGroups",
-                        "takeout",
-                        "outdoorSeating",
                         "parkingOptions");
 
         URI uri =
