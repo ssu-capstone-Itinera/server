@@ -1,23 +1,25 @@
 package com.travel.domain.place.service;
 
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import com.travel.domain.categories.entity.Category;
 import com.travel.domain.place.dto.*;
 import com.travel.domain.place.entity.Place;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponentsBuilder;
-
-import java.net.URI;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @Service
@@ -39,22 +41,19 @@ public class PlaceGoogleService {
     @Value("${google.api.addresssearch-url}")
     private String addressSearchUrl;
 
-    public MyPlaceResponse getPlaceByKeyword(MyPlaceRequest myPlaceRequest){
-        URI uri = UriComponentsBuilder.fromUriString(textSearchUrl)
-                .queryParam("query", myPlaceRequest.getMyPlaceQuery())
-                .queryParam("language", "ko")
-                .queryParam("key", googleApiKey)
-                .build(false)
-                .encode(StandardCharsets.UTF_8)
-                .toUri();
+    public MyPlaceResponse getPlaceByKeyword(MyPlaceRequest myPlaceRequest) {
+        URI uri =
+                UriComponentsBuilder.fromUriString(textSearchUrl)
+                        .queryParam("query", myPlaceRequest.getMyPlaceQuery())
+                        .queryParam("language", "ko")
+                        .queryParam("key", googleApiKey)
+                        .build(false)
+                        .encode(StandardCharsets.UTF_8)
+                        .toUri();
         log.info("myPlace_keyword url:  {}", uri);
 
-        Map<String, Object> apiResponse = WebClient.create()
-                .get()
-                .uri(uri)
-                .retrieve()
-                .bodyToMono(Map.class)
-                .block();
+        Map<String, Object> apiResponse =
+                WebClient.create().get().uri(uri).retrieve().bodyToMono(Map.class).block();
         log.info("myPlace_keyword 응답: {}", apiResponse);
 
         List<Map<String, Object>> results = (List<Map<String, Object>>) apiResponse.get("results");
@@ -64,26 +63,24 @@ public class PlaceGoogleService {
         return getMyPlace(results);
     }
 
-    public MyPlaceResponse getPlaceByAddress(MyPlaceRequest myPlaceRequest){
+    public MyPlaceResponse getPlaceByAddress(MyPlaceRequest myPlaceRequest) {
         try {
-            URI uri = UriComponentsBuilder.fromUriString(addressSearchUrl)
-                    .queryParam("address", myPlaceRequest.getMyPlaceAddress())
-                    .queryParam("language", "ko")
-                    .queryParam("key", googleApiKey)
-                    .build(false)
-                    .encode(StandardCharsets.UTF_8)
-                    .toUri();
+            URI uri =
+                    UriComponentsBuilder.fromUriString(addressSearchUrl)
+                            .queryParam("address", myPlaceRequest.getMyPlaceAddress())
+                            .queryParam("language", "ko")
+                            .queryParam("key", googleApiKey)
+                            .build(false)
+                            .encode(StandardCharsets.UTF_8)
+                            .toUri();
             log.info("myPlace_address url:  {}", uri);
 
-            Map<String, Object> apiResponse = WebClient.create()
-                    .get()
-                    .uri(uri)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block();
+            Map<String, Object> apiResponse =
+                    WebClient.create().get().uri(uri).retrieve().bodyToMono(Map.class).block();
             log.info("myPlace_address 응답: {}", apiResponse);
 
-            List<Map<String, Object>> results = (List<Map<String, Object>>) apiResponse.get("results");
+            List<Map<String, Object>> results =
+                    (List<Map<String, Object>>) apiResponse.get("results");
             if (results == null || results.isEmpty()) {
                 throw new CustomException(ErrorCode.GOOGLE_API_NO_RESULT);
             }
@@ -92,7 +89,6 @@ public class PlaceGoogleService {
             log.error("mainPlace 주소 검색 중 geocode API 호출 실패", e);
             throw new CustomException(ErrorCode.GOOGLE_API_CALL_FAILED);
         }
-
     }
 
     private MyPlaceResponse getMyPlace(List<Map<String, Object>> results) {
@@ -102,7 +98,8 @@ public class PlaceGoogleService {
             String placeId = (String) result.get("place_id");
 
             Map<String, Object> geometry = (Map<String, Object>) result.get("geometry");
-            Map<String, Object> location = geometry != null ? (Map<String, Object>) geometry.get("location") : null;
+            Map<String, Object> location =
+                    geometry != null ? (Map<String, Object>) geometry.get("location") : null;
 
             Double lat = location != null ? (Double) location.get("lat") : null;
             Double lng = location != null ? (Double) location.get("lng") : null;
@@ -119,6 +116,7 @@ public class PlaceGoogleService {
                     .name(name)
                     .lat(lat)
                     .lng(lng)
+                    .category(Category.MY_PLACE)
                     .build();
 
             placeList.add(place);
@@ -129,29 +127,29 @@ public class PlaceGoogleService {
 
     public PlaceCoordinate getCoordinateByAddress(String mainPlace) {
         try {
-            URI uri = UriComponentsBuilder.fromUriString(addressSearchUrl)
-                    .queryParam("address", mainPlace)
-                    .queryParam("language", "ko")
-                    .queryParam("key", googleApiKey)
-                    .build(false)
-                    .encode(StandardCharsets.UTF_8)
-                    .toUri();
-            log.info("mainPlace 주소 변환 오류:  {}", uri);
+            URI uri =
+                    UriComponentsBuilder.fromUriString(addressSearchUrl)
+                            .queryParam("address", mainPlace)
+                            .queryParam("language", "ko")
+                            .queryParam("key", googleApiKey)
+                            .build(false)
+                            .encode(StandardCharsets.UTF_8)
+                            .toUri();
+            log.info("mainPlace 주소로 좌표 획득 url:  {}", uri);
 
-            Map<String, Object> apiResponse = WebClient.create()
-                    .get()
-                    .uri(uri)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block();
+            Map<String, Object> apiResponse =
+                    WebClient.create().get().uri(uri).retrieve().bodyToMono(Map.class).block();
             log.info("mainPlace 응답: {}", apiResponse);
 
-            List<Map<String, Object>> results = (List<Map<String, Object>>) apiResponse.get("results");
+            List<Map<String, Object>> results =
+                    (List<Map<String, Object>>) apiResponse.get("results");
             if (results == null || results.isEmpty()) {
                 throw new CustomException(ErrorCode.GOOGLE_API_NO_RESULT);
             }
             Map<String, Object> geometry = (Map<String, Object>) results.get(0).get("geometry");
-            Map<String, Object> location = (Map<String, Object>) geometry.get("Location");
+            log.info(geometry.toString());
+            Map<String, Object> location = (Map<String, Object>) geometry.get("location");
+            log.info(location.toString());
 
             Double lat = (Double) location.get("lat");
             Double lng = (Double) location.get("lng");
@@ -164,17 +162,17 @@ public class PlaceGoogleService {
 
     public PlaceDetailResponse getDetailByPlaceId(String placeId, Category category) {
         PlaceDetailResponse placeDetailResponse = getCommonPlaceDetail(placeId);
-        switch (category){
+        switch (category) {
             case CAFE -> {
                 getCafeDetailByPlaceId(placeDetailResponse);
                 break;
             }
             case RESTAURANT -> {
-                //getRestaurantDetailByPlaceId(placeDetailResponse);
+                // getRestaurantDetailByPlaceId(placeDetailResponse);
                 break;
             }
             case TOURATTRACTION -> {
-                //getTourAttractionDetailByPlaceId(placeDetailResponse);
+                // getTourAttractionDetailByPlaceId(placeDetailResponse);
                 break;
             }
             case OTHER -> {
@@ -184,42 +182,49 @@ public class PlaceGoogleService {
 
         return placeDetailResponse;
     }
+
     private PlaceDetailResponse getCommonPlaceDetail(String placeId) {
         try {
-            URI uri = UriComponentsBuilder.fromUriString(placeUrl)
-                    .queryParam("place_id", placeId)
-                    .queryParam("language", "ko")
-                    .queryParam("key", googleApiKey)
-                    .build(false)
-                    .encode(StandardCharsets.UTF_8)
-                    .toUri();
+            URI uri =
+                    UriComponentsBuilder.fromUriString(placeUrl)
+                            .queryParam("place_id", placeId)
+                            .queryParam("language", "ko")
+                            .queryParam("key", googleApiKey)
+                            .build(false)
+                            .encode(StandardCharsets.UTF_8)
+                            .toUri();
 
             log.info("Detail API URI: {}", uri);
 
-            Map<String, Object> apiResponse = WebClient.create()
-                    .get()
-                    .uri(uri)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block();
+            Map<String, Object> apiResponse =
+                    WebClient.create().get().uri(uri).retrieve().bodyToMono(Map.class).block();
 
-            if (apiResponse == null || apiResponse.isEmpty()) throw new CustomException(ErrorCode.GOOGLE_API_NO_RESULT);
+            if (apiResponse == null || apiResponse.isEmpty())
+                throw new CustomException(ErrorCode.GOOGLE_API_NO_RESULT);
 
             Map<String, Object> result = (Map<String, Object>) apiResponse.get("result");
-            if (result == null || result.isEmpty()) throw new CustomException(ErrorCode.GOOGLE_API_NO_RESULT);
+            if (result == null || result.isEmpty())
+                throw new CustomException(ErrorCode.GOOGLE_API_NO_RESULT);
 
             PlaceDetailResponse placeDetailResponse = new PlaceDetailResponse();
             placeDetailResponse.setPlaceGoogleId((String) result.get("place_id"));
             placeDetailResponse.setName((String) result.get("name"));
             placeDetailResponse.setAddress((String) result.get("formatted_address"));
-            placeDetailResponse.setLocation((String) result.get("vicinity")); // 또는 "location" 값이 따로 있으면 수정
+            placeDetailResponse.setLocation(
+                    (String) result.get("vicinity")); // 또는 "location" 값이 따로 있으면 수정
 
             Map<String, Object> geometry = (Map<String, Object>) result.get("geometry");
             if (geometry != null) {
                 Map<String, Object> location = (Map<String, Object>) geometry.get("location");
                 if (location != null) {
-                    placeDetailResponse.setLat(location.get("lat") != null ? ((Number) location.get("lat")).doubleValue() : 0.0);
-                    placeDetailResponse.setLng(location.get("lng") != null ? ((Number) location.get("lng")).doubleValue() : 0.0);
+                    placeDetailResponse.setLat(
+                            location.get("lat") != null
+                                    ? ((Number) location.get("lat")).doubleValue()
+                                    : 0.0);
+                    placeDetailResponse.setLng(
+                            location.get("lng") != null
+                                    ? ((Number) location.get("lng")).doubleValue()
+                                    : 0.0);
                 }
             }
 
@@ -229,20 +234,25 @@ public class PlaceGoogleService {
 
             placeDetailResponse.setPhoneNumber((String) result.get("formatted_phone_number"));
             placeDetailResponse.setWebSite((String) result.get("website"));
-            placeDetailResponse.setPriceLevel(result.get("price_level") != null
-                    ? String.valueOf(result.get("price_level")) : null);
+            placeDetailResponse.setPriceLevel(
+                    result.get("price_level") != null
+                            ? String.valueOf(result.get("price_level"))
+                            : null);
 
             Map<String, Object> openingHours = (Map<String, Object>) result.get("opening_hours");
             if (openingHours != null) {
-                placeDetailResponse.setOpeningHours((List<String>) openingHours.get("weekday_text"));
+                placeDetailResponse.setOpeningHours(
+                        (List<String>) openingHours.get("weekday_text"));
             }
 
-            Map<String, Object> editorialSummary = (Map<String, Object>) result.get("editorial_summary");
+            Map<String, Object> editorialSummary =
+                    (Map<String, Object>) result.get("editorial_summary");
             if (editorialSummary != null) {
                 placeDetailResponse.setDescription((String) editorialSummary.get("overview"));
             }
 
-            List<Map<String, Object>> rawReviews = (List<Map<String, Object>>) result.get("reviews");
+            List<Map<String, Object>> rawReviews =
+                    (List<Map<String, Object>>) result.get("reviews");
             if (rawReviews != null) {
                 List<String> reviewTexts = new ArrayList<>();
                 for (Map<String, Object> r : rawReviews) {
@@ -254,19 +264,19 @@ public class PlaceGoogleService {
                 placeDetailResponse.setReviews(reviewTexts);
             }
             return placeDetailResponse;
-        }catch (Exception e) {
+        } catch (Exception e) {
             log.error("Google Detail API 호출 실패: {}", placeId, e);
             return null;
         }
     }
 
-    private void getCafeDetailByPlaceId (PlaceDetailResponse cafeDetailResponse) {
+    public void getCafeDetailByPlaceId(PlaceDetailResponse cafeDetailResponse) {
         cafeDetailResponse.setCategory(Category.CAFE);
         List<CafeTag> cafeTags = getCafeTagsByPlaceId(cafeDetailResponse.getPlaceGoogleId());
         cafeDetailResponse.setCafeTags(cafeTags);
     }
 
-    private List<CafeTag> getCafeTagsByPlaceId(String placeId) {
+    public List<CafeTag> getCafeTagsByPlaceId(String placeId) {
         List<CafeTag> cafeTags = new ArrayList<>();
 
         String fields =
@@ -302,12 +312,8 @@ public class PlaceGoogleService {
                         .toUri();
 
         try {
-            Map<String, Object> apiResponse = WebClient.create()
-                    .get()
-                    .uri(uri)
-                    .retrieve()
-                    .bodyToMono(Map.class)
-                    .block();
+            Map<String, Object> apiResponse =
+                    WebClient.create().get().uri(uri).retrieve().bodyToMono(Map.class).block();
 
             if (apiResponse == null || apiResponse.isEmpty()) return cafeTags;
 
@@ -319,10 +325,11 @@ public class PlaceGoogleService {
                 }
             }
 
-            Map<String, Object> parkingOptions = (Map<String, Object>) apiResponse.get("parkingOptions");
+            Map<String, Object> parkingOptions =
+                    (Map<String, Object>) apiResponse.get("parkingOptions");
             if (parkingOptions != null) {
-                boolean hasParking = parkingOptions.values().stream()
-                        .anyMatch(v -> Boolean.TRUE.equals(v));
+                boolean hasParking =
+                        parkingOptions.values().stream().anyMatch(v -> Boolean.TRUE.equals(v));
                 if (hasParking) {
                     cafeTags.add(CafeTag.PARKING_OPTIONS);
                 }
@@ -335,7 +342,4 @@ public class PlaceGoogleService {
 
         return cafeTags;
     }
-
-
-
 }

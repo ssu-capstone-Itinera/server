@@ -1,14 +1,14 @@
 package com.travel.domain.place.api;
 
-import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
-import com.travel.domain.place.dto.*;
-import com.travel.domain.place.service.PlaceService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import com.travel.domain.place.dto.*;
+import com.travel.domain.place.service.PlaceService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +19,7 @@ public class PlaceController {
 
     @Operation(summary = "장소 추천 api")
     @PostMapping
-    public ResponseEntity<PlaceResponse> searchRecommendation(
+    public ResponseEntity<PlaceListResponse> searchRecommendation(
             @RequestBody RecommendationRequest recommendationRequest) {
 
         return ResponseEntity.ok(placeService.searchRecommendation(recommendationRequest));
@@ -27,25 +27,22 @@ public class PlaceController {
 
     @Operation(summary = "장소 정보 상세 조회")
     @GetMapping("/{placeGoogleId}")
-    public ResponseEntity<PlaceDetailResponse> getPlaceDetail(@PathVariable String placeGoogleId){
+    public ResponseEntity<PlaceDetailResponse> getPlaceDetail(@PathVariable String placeGoogleId) {
 
         return ResponseEntity.ok(placeService.getPlaceDetail(placeGoogleId));
     }
 
-
     @Operation(summary = "직접 장소 검색")
     @PostMapping("/myPlaceSearch")
     public ResponseEntity<MyPlaceResponse> searchMyPlace(
-            @RequestBody MyPlaceRequest myPlaceRequest){
+            @RequestBody MyPlaceRequest myPlaceRequest) {
         return ResponseEntity.ok(placeService.searchMyPlace(myPlaceRequest));
     }
 
     @Operation(summary = "직접 장소 선택")
     @PostMapping("/myPlaceSelect")
     public ResponseEntity<MyPlaceResponse> selectMyPlace(
-            @RequestBody MyPlaceSelectRequest myPlaceSelectRequest){
+            @RequestBody MyPlaceSelectRequest myPlaceSelectRequest) {
         return ResponseEntity.ok(placeService.selectMyPlace(myPlaceSelectRequest));
     }
-
-
 }

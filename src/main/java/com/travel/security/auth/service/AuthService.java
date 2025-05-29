@@ -1,27 +1,27 @@
 package com.travel.security.auth.service;
 
 import java.util.Date;
-import java.util.Optional;
 
-import com.travel.global.common.error.CustomException;
-import com.travel.global.common.error.ErrorCode;
-import com.travel.security.auth.dto.request.LoginRequest;
-import com.travel.security.auth.dto.request.RefreshTokenRequest;
-import com.travel.security.auth.dto.request.SignupRequest;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import com.travel.domain.member.dao.MemberRepository;
 import com.travel.domain.member.dao.RefreshTokenRepository;
 import com.travel.domain.member.entity.Member;
 import com.travel.domain.member.entity.MemberRole;
 import com.travel.domain.member.entity.RefreshToken;
+import com.travel.global.common.error.CustomException;
+import com.travel.global.common.error.ErrorCode;
 import com.travel.global.util.JwtUtil;
 import com.travel.security.auth.dto.UserInfo;
+import com.travel.security.auth.dto.request.LoginRequest;
+import com.travel.security.auth.dto.request.RefreshTokenRequest;
 import com.travel.security.auth.dto.request.RegisterRequest;
+import com.travel.security.auth.dto.request.SignupRequest;
 import com.travel.security.auth.dto.response.AuthResponse;
 import com.travel.security.auth.oauth.Oauth2Factory;
 import com.travel.security.auth.oauth.Oauth2Service;
@@ -119,12 +119,10 @@ public class AuthService {
 
     @Transactional
     public AuthResponse signin(LoginRequest loginRequest) {
-        Authentication authentication = authenticationProvider.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
-        );
+        Authentication authentication =
+                authenticationProvider.authenticate(
+                        new UsernamePasswordAuthenticationToken(
+                                loginRequest.getUsername(), loginRequest.getPassword()));
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         Member member = memberRepository.findByNicknameOrElseThrow(userDetails.getUsername());
@@ -136,10 +134,13 @@ public class AuthService {
         if (!jwtUtil.isTokenValid(refreshTokenRequest.getRefreshToken())) {
             throw new CustomException(ErrorCode.INVALID_REFRESH_TOKEN);
         }
-        String memberIdWithToken = jwtUtil.getMemberIdFromToken(refreshTokenRequest.getRefreshToken());
+        String memberIdWithToken =
+                jwtUtil.getMemberIdFromToken(refreshTokenRequest.getRefreshToken());
         Long memberId = Long.parseLong(memberIdWithToken);
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
+        Member member =
+                memberRepository
+                        .findById(memberId)
+                        .orElseThrow(() -> new CustomException(ErrorCode.MEMBER_NOT_FOUND));
 
         return generateResponse(member);
     }

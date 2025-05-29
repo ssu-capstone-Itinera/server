@@ -1,11 +1,10 @@
 package com.travel.domain.datapipeline.google.dto;
 
+import java.util.List;
 
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
@@ -24,5 +23,4 @@ public class PlaceDetailDto {
     private List<String> photos;
     private List<String> reviews;
     private List<String> types;
-
 }

@@ -6,16 +6,12 @@ import java.util.List;
 
 import jakarta.persistence.*;
 
-import com.travel.domain.itinerary.entity.Itinerary;
 import com.travel.domain.member.entity.Member;
-import com.travel.domain.post.post.domain.Post;
+import com.travel.domain.post.post.entity.Post;
 import com.travel.domain.tripshare.entity.TripShare;
 import com.travel.global.common.entity.BaseTimeEntity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name = "trip")
@@ -23,6 +19,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Trip extends BaseTimeEntity {
 
     @Id
@@ -37,9 +34,12 @@ public class Trip extends BaseTimeEntity {
     @Column(name = "title", length = 100)
     private String title;
 
-    @Column(name = "regin", length = 100)
-    private String regin;
 
+    @Builder.Default
+    @ElementCollection
+    @CollectionTable(name = "trip_main_tour_place", joinColumns = @JoinColumn(name = "trip_id"))
+    @Column(name = "main_tour_place")
+    private List<String> mainTourPlace = new ArrayList<>();
 
     @Column(name = "start_date")
     private LocalDate startDate;
@@ -47,16 +47,17 @@ public class Trip extends BaseTimeEntity {
     @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "budget")
-    private Integer budget;
-
     @Column(name = "is_public")
     private Boolean isPublic;
 
 
+    //List<Itinerary>사용 안하므로 삭제 시 Itinerary 먼저 삭제해야함에 주의
+
+    @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
 
+    @Builder.Default
     @OneToMany(mappedBy = "trip", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TripShare> tripShares = new ArrayList<>();
 }

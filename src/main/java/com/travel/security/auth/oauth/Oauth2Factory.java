@@ -1,8 +1,9 @@
 package com.travel.security.auth.oauth;
 
-import com.travel.security.auth.service.CustomAuthService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.stereotype.Component;
+
+import com.travel.security.auth.service.CustomAuthService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,4 @@ public class Oauth2Factory {
         }
         throw new OAuth2AuthenticationException("PROVIDER_NOT_SUPPORTED: " + provider);
     }
-
-
 }

@@ -1,5 +1,11 @@
 package com.travel.domain.follow.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.travel.domain.follow.dao.FollowRepository;
 import com.travel.domain.follow.dto.FollowResponse;
 import com.travel.domain.follow.entity.Follow;
@@ -7,12 +13,8 @@ import com.travel.domain.member.dao.MemberRepository;
 import com.travel.domain.member.entity.Member;
 import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +33,7 @@ public class FollowService {
         if (!followRepository.existsByFollowerAndFollowing(member, followMember)) {
             Follow follow = new Follow(member, followMember);
             followRepository.save(follow);
-        }else{
+        } else {
             throw new CustomException(ErrorCode.ALREADY_FOLLOWED);
         }
     }
@@ -61,28 +63,30 @@ public class FollowService {
     @Transactional(readOnly = true)
     public List<FollowResponse> getFollowing(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
-        return followRepository.findFollowingByFollower(member)
-                .stream()
-                .map(follow -> FollowResponse.builder()
-                        .memberId(follow.getFollowing().getId())
-                        .nickname(follow.getFollowing().getNickname())
-                        .profileImage(follow.getFollowing().getProfileImage())
-                        .followDate(follow.getCreatedDate())
-                        .build())
+        return followRepository.findFollowingByFollower(member).stream()
+                .map(
+                        follow ->
+                                FollowResponse.builder()
+                                        .memberId(follow.getFollowing().getId())
+                                        .nickname(follow.getFollowing().getNickname())
+                                        .profileImage(follow.getFollowing().getProfileImage())
+                                        .followDate(follow.getCreatedDate())
+                                        .build())
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
     public List<FollowResponse> getFollower(Long memberId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
-        return followRepository.findFollowersByFollowing(member)
-                .stream()
-                .map(follow -> FollowResponse.builder()
-                        .memberId(follow.getFollower().getId())
-                        .nickname(follow.getFollower().getNickname())
-                        .profileImage(follow.getFollower().getProfileImage())
-                        .followDate(follow.getCreatedDate())
-                        .build())
+        return followRepository.findFollowersByFollowing(member).stream()
+                .map(
+                        follow ->
+                                FollowResponse.builder()
+                                        .memberId(follow.getFollower().getId())
+                                        .nickname(follow.getFollower().getNickname())
+                                        .profileImage(follow.getFollower().getProfileImage())
+                                        .followDate(follow.getCreatedDate())
+                                        .build())
                 .collect(Collectors.toList());
     }
 

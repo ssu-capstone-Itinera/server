@@ -1,4 +1,4 @@
-package com.travel.domain.post.post.domain;
+package com.travel.domain.post.post.entity;
 
 import jakarta.persistence.*;
 
@@ -27,8 +27,6 @@ public class PostLike extends BaseTimeEntity {
     @ManyToOne
     @JoinColumn(name = "post_id")
     private Post post;
-
-
 
     @Builder
     public PostLike(Member member, Post post) {

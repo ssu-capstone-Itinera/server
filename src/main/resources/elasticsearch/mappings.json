@@ -11,6 +11,16 @@
     "description": {
       "type": "text",
       "analyzer": "korean"
+    },
+    "address": {
+      "type": "text",
+      "analyzer": "korean"
+    },
+    "googlePlaceId": {
+      "type": "keyword"
+    },
+    "cafeTags": {
+      "type": "keyword"
     }
   }
 }

@@ -1,11 +1,11 @@
-package com.travel.domain.post.post.domain;
+package com.travel.domain.post.post.entity;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.travel.domain.member.entity.Member;
 import jakarta.persistence.*;
 
+import com.travel.domain.member.entity.Member;
 import com.travel.domain.post.comment.domain.PostComment;
 import com.travel.domain.trip.entity.Trip;
 import com.travel.global.common.entity.BaseTimeEntity;
@@ -46,12 +46,13 @@ public class Post extends BaseTimeEntity {
     private List<PostLike> likes = new ArrayList<>();
 
     @Builder
-    public Post(Member member, Trip trip, String title, String content){
+    public Post(Member member, Trip trip, String title, String content) {
         this.member = member;
         this.trip = trip;
         this.title = title;
         this.content = content;
     }
+
     /*
     public Review(Member member, Book book, double rating, String content, Privacy privacy){
         this.member = member;
@@ -66,7 +67,7 @@ public class Post extends BaseTimeEntity {
         this.likes.add(postLike);
     }
 
-    public void unlikePost(PostLike postLike){
+    public void unlikePost(PostLike postLike) {
         this.likes.remove(postLike);
     }
 }

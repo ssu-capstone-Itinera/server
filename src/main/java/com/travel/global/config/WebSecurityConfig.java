@@ -3,13 +3,12 @@ package com.travel.global.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 import java.util.Collections;
+import java.util.List;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -24,7 +23,6 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.travel.global.security.JwtAuthenticationFilter;
-import com.travel.global.util.CookieUtil;
 import com.travel.security.auth.service.JwtTokenService;
 
 import lombok.RequiredArgsConstructor;
@@ -86,9 +84,13 @@ public class WebSecurityConfig {
 
         configuration.addAllowedHeader("*");
         configuration.addAllowedMethod("*");
-
-        configuration.addAllowedOrigin("http://3.36.60.210");
-        configuration.addAllowedOrigin("http://3.36.60.210:8080");
+        configuration.setAllowedOrigins(
+                List.of(
+                        "http://3.36.60.210",
+                        "http://3.36.60.210:8080",
+                        "http://localhost:5173", // Vite 개발 서버
+                        "http://3.36.60.210:5173" // 배포용 Vite 서버라면 이것도 허용
+                        ));
 
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Collections.singletonList("*"));
@@ -115,5 +117,4 @@ public class WebSecurityConfig {
         provider.setPasswordEncoder(passwordEncoder());
         return provider;
     }
-
 }

@@ -1,6 +1,7 @@
 package com.travel.domain.post.comment.dto.response;
 
 import com.travel.domain.member.dto.MemberDto;
+
 import lombok.Builder;
 import lombok.Getter;
 
