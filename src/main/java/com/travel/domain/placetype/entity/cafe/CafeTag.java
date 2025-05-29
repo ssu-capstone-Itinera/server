@@ -14,6 +14,9 @@ public enum CafeTag {
     MENU_FOR_CHILDREN("menuForChildren"),
     PARKING_OPTIONS("parkingOptions"),
     RESERVABLE("reservable"),
+    OUTDOORSEATING("outdoorSeating"),
+    TAKEOUT("takeout"),
+
 
     //주류
     SERVES_BEER("servesBeer"),

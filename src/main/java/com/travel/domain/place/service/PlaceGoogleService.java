@@ -269,21 +269,37 @@ public class PlaceGoogleService {
     private List<CafeTag> getCafeTagsByPlaceId(String placeId) {
         List<CafeTag> cafeTags = new ArrayList<>();
 
-        String fields = String.join(",",
-                "dineIn", "curbsidePickup", "reservable",
-                "servesBreakfast", "servesLunch", "servesDinner",
-                "servesBeer", "servesWine", "servesBrunch", "servesVegetarianFood",
-                "menuForChildren", "servesCocktails", "servesDessert",
-                "goodForChildren", "allowsDogs", "goodForGroups",
-                "parkingOptions"
-        );
+        String fields =
+                String.join(
+                        ",",
+                        "dineIn",
+                        "curbsidePickup",
+                        "reservable",
+                        "servesBreakfast",
+                        "servesLunch",
+                        "servesDinner",
+                        "servesBeer",
+                        "servesWine",
+                        "servesBrunch",
+                        "servesVegetarianFood",
+                        "menuForChildren",
+                        "servesCocktails",
+                        "servesDessert",
+                        "goodForChildren",
+                        "allowsDogs",
+                        "goodForGroups",
+                        "takeout",
+                        "outdoorSeating",
+                        "parkingOptions");
 
-        URI uri = UriComponentsBuilder.fromUriString("https://places.googleapis.com/v1/places/" + placeId)
-                .queryParam("fields", fields)
-                .queryParam("key", googleApiKey)
-                .build(false)
-                .encode(StandardCharsets.UTF_8)
-                .toUri();
+        URI uri =
+                UriComponentsBuilder.fromUriString(
+                                "https://places.googleapis.com/v1/places/" + placeId)
+                        .queryParam("fields", fields)
+                        .queryParam("key", googleApiKey)
+                        .build(false)
+                        .encode(StandardCharsets.UTF_8)
+                        .toUri();
 
         try {
             Map<String, Object> apiResponse = WebClient.create()
