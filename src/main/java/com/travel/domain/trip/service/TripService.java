@@ -41,7 +41,7 @@ public class TripService {
         Trip trip = Trip.builder()
                 .member(member)
                 .title(request.getTitle())
-                .mainTourPlace(request.getMainTourPlace())
+                .mainTourPlace(request.getMainTourPlaces())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
                 .isPublic(request.getIsPublic())
@@ -56,7 +56,7 @@ public class TripService {
             itinerarySaveRequest.setMemberId(member.getId());
             itinerarySaveRequest.setTourDate(request.getStartDate().plusDays(i));
             itinerarySaveRequest.setPlaces(dailyPlaceList);
-            itinerarySaveRequest.setDailyTourPlace(request.getMainTourPlace().get(i));
+            itinerarySaveRequest.setDailyTourPlace(request.getMainTourPlaces().get(i));
 
             itineraryService.saveItinerary(itinerarySaveRequest);
             log.info("itinerary {} save request send", request.getStartDate().plusDays(i));
