@@ -21,17 +21,66 @@
 #    ports:
 #      - "6379:6379"
 #
+#
+#
+#
 #volumes:
 #  mysql_data:
-#
+
+
+#version: '3.8'
+#services:
+#  app:
+#    build: .
+#    container_name: itinera_app_container
+#    restart: always
+#    ports:
+#      - "8080:8080"
+#    environment:
+#      - SPRING_PROFILES_ACTIVE=prod
+
 
 version: '3.8'
+
 services:
-  app:
-    build: .
-    container_name: itinera_app_container
+  mysql:
+    image: mysql:8
+    container_name: itinera_mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: itinera
+      MYSQL_DATABASE: itinera_db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: itinera
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    container_name: itinera_redis_container
     restart: always
     ports:
-      - "8080:8080"
+      - "6379:6379"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.5
+    container_name: itinera_elasticsearch
     environment:
-      - SPRING_PROFILES_ACTIVE=prod
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+
+volumes:
+  mysql_data:
+  es_data:
