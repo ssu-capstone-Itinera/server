@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,7 +112,13 @@ public class DatapipelineService {
                                             .priceLevel(detailDto.getPriceLevel())
                                             .build();
 
-                            placeRepository.save(place);
+                            try {
+                                placeRepository.save(place);
+                            } catch (DataIntegrityViolationException e) {
+                                // 중복으로 저장된 경우
+                                place = placeRepository.findByPlaceGoogleId(place.getPlaceGoogleId())
+                                        .orElseThrow(() -> new RuntimeException("Duplicate key but can't find place", e));
+                            }
 
                             // PlaceDocument (Elasticsearch 문서)
                              TourattractionDoc tourattractionDoc =
@@ -154,7 +161,7 @@ public class DatapipelineService {
                 .mapToObj(
                         i -> {
                             PlaceDetailDto detailDto = placeDetailDtos.get(i);
-
+                            log.info("place ID: " + detailDto.getPlaceId());
                             // Place (MySQL용 엔티티)
                             Place place =
                                     Place.builder()
@@ -171,7 +178,13 @@ public class DatapipelineService {
                                             .priceLevel(detailDto.getPriceLevel())
                                             .build();
 
-                            placeRepository.save(place);
+                            try {
+                                placeRepository.save(place);
+                            } catch (DataIntegrityViolationException e) {
+                                // 중복으로 저장된 경우
+                                place = placeRepository.findByPlaceGoogleId(place.getPlaceGoogleId())
+                                        .orElseThrow(() -> new RuntimeException("Duplicate key but can't find place", e));
+                            }
 
                             CafeDoc cafeDoc =
                                     CafeDoc.builder()
@@ -182,7 +195,7 @@ public class DatapipelineService {
                                             .placeGoogleId(place.getPlaceGoogleId())
                                             .build();
 
-                            log.info(detailDto.getPlaceId() + "placeGoogleService : " +placeGoogleService.getCafeTagsByPlaceId(detailDto.getPlaceId()));
+                            log.info(detailDto.getPlaceId() + "placeGoogleService : " + placeGoogleService.getCafeTagsByPlaceId(detailDto.getPlaceId()));
 
 
                             PlaceDocument document = cafeDoc;
@@ -225,7 +238,13 @@ public class DatapipelineService {
                                             .priceLevel(detailDto.getPriceLevel())
                                             .build();
 
-                            placeRepository.save(place);
+                            try {
+                                placeRepository.save(place);
+                            } catch (DataIntegrityViolationException e) {
+                                // 중복으로 저장된 경우
+                                place = placeRepository.findByPlaceGoogleId(place.getPlaceGoogleId())
+                                        .orElseThrow(() -> new RuntimeException("Duplicate key but can't find place", e));
+                            }
 
                             RestaurantDoc restaurantDoc =
                                     RestaurantDoc.builder()
