@@ -175,7 +175,9 @@ public class PlaceService {
 
             List<String> getRestaurantList = tourattractionDocList.stream()
                     .map(TourattractionDoc::getPlaceGoogleId)
+                    .filter(placeGoogleId -> !getPlaceId.contains(placeGoogleId)) // 포함 안된 경우만 필터링
                     .collect(Collectors.toList());
+
 
             getPlaceId.addAll(getRestaurantList);
 
