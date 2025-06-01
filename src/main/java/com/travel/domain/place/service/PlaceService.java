@@ -6,8 +6,10 @@ import com.travel.domain.datapipeline.google.dto.request.GoogleRequest;
 import com.travel.domain.datapipeline.google.dto.response.SavePlaceDto;
 import com.travel.domain.datapipeline.google.service.DatapipelineService;
 import com.travel.domain.place.dao.PlaceRepository;
+import com.travel.domain.place.dao.RecommendedPlaceRepository;
 import com.travel.domain.place.dto.*;
 import com.travel.domain.place.entity.Place;
+import com.travel.domain.place.entity.RecommendedPlace;
 import com.travel.domain.placetype.dao.cafe.CafeElasticsearchRepository;
 import com.travel.domain.placetype.dao.restaurant.RestaurantElasticsearchRepository;
 import com.travel.domain.placetype.dao.tourattraction.TourattractionElasticsearchRepository;
@@ -26,13 +28,12 @@ import com.travel.global.common.error.CustomException;
 import com.travel.global.common.error.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -48,6 +49,7 @@ public class PlaceService {
     private final CafeElasticsearchRepository cafeElasticsearchRepository;
     private final TourattractionElasticsearchRepository tourattractionElasticsearchRepository;
 
+    private final RecommendedPlaceRepository recommendedPlaceRepository;
     private final int PAGE_SIZE = 20;
 
 
@@ -70,6 +72,7 @@ public class PlaceService {
             placeResponseList.addAll(getTourattractionList(mainTourPlace, placeCoordinate, recommendationRequest.getTourattractionTagList(), recommendationRequest.getSubjectiveTagList()));
         }
 
+        saveRecommendedPlaces(placeResponseList);
 
         return PlaceListResponse.builder()
                 .placeResponseList(placeResponseList)
@@ -79,6 +82,20 @@ public class PlaceService {
 
     private PlaceCoordinate setMainPlaceValues(RecommendationRequest recommendationRequest){
         return placeGoogleService.getCoordinateByAddress(recommendationRequest.getMainTourPlace());
+    }
+    public void saveRecommendedPlaces(List<PlaceResponse> placeResponseList) {
+        List<PlaceResponse> shuffledList = new ArrayList<>(placeResponseList);
+        Collections.shuffle(shuffledList);
+
+        List<RecommendedPlace> toSave = shuffledList.stream()
+                .map(place -> {
+                    String placeGoogleId = place.getPlaceGoogleId();
+                    PlaceDetailResponse detail = getPlaceDetail(placeGoogleId);
+                    return RecommendedPlace.from(detail);
+                })
+                .toList();
+
+        recommendedPlaceRepository.saveAll(toSave);
     }
 
 
@@ -332,4 +349,17 @@ public class PlaceService {
                 .cafeTags(cafeDoc.getCafeTags())
                 .build();
     }
+
+    public List<RecommendedPlaceResponse> getRecentRecommendedPlaces(int size) {
+        List<RecommendedPlace> recent = recommendedPlaceRepository
+                .findTopRecent(PageRequest.of(0, size));
+
+        return recent.stream()
+                .map(rp -> {
+                    PlaceDetailResponse detail = getPlaceDetail(rp.getPlaceGoogleId());
+                    return RecommendedPlaceResponse.from(detail, rp.getCreatedDate());
+                })
+                .toList();
+    }
+
 }

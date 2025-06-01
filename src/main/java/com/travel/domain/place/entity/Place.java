@@ -51,7 +51,7 @@ public class Place extends BaseTimeEntity {
     @Column(name = "phone_number", length = 100)
     private String phoneNumber;
 
-    @Column(name = "website", length = 100)
+    @Column(name = "website", length = 256)
     private String webSite;
 
     @Column(name = "opening_hours", length = 1000)
