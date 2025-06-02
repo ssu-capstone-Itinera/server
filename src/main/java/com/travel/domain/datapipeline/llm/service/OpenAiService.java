@@ -53,19 +53,53 @@ public class OpenAiService {
 
             log.info("OpenAI Request [{} ~ {}]: {}", i, end - 1, openAiRequest);
 
-            List<List<String>> subTags = extractTags(openAiRequest);
-            allTags.addAll(subTags);
+
+            int retryCount = 0;
+            final int maxRetries = 3;
+            List<List<String>> subTags = new ArrayList<>();
+
+            while (retryCount < maxRetries) {
+                try {
+                    subTags = extractTags(openAiRequest);
+                    break; // 요청 성공 시 반복 종료
+                } catch (Exception e) {
+                    if (isTooManyRequestsError(e)) {
+                        retryCount++;
+                        log.warn("429 Too Many Requests 발생. {}초 후 재시도 중... (시도: {}/{})", 5 * retryCount, retryCount, maxRetries);
+                        try {
+                            Thread.sleep(5000L * retryCount); // 재시도 간 대기시간 증가
+                        } catch (InterruptedException ie) {
+                            Thread.currentThread().interrupt();
+                            break;
+                        }
+                    } else {
+                        log.error("OpenAI 요청 중 예외 발생: ", e);
+                        break;
+                    }
+                }
+            }
+
+            if (!subTags.isEmpty()) {
+                allTags.addAll(subTags);
+            } else {
+                log.warn("태그 추출 실패: [{} ~ {}] 범위", i, end - 1);
+            }
+
+            try {
+                Thread.sleep(5000); // 기본 대기 (Rate 제한 방지)
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
         }
 
-        try {
-            Thread.sleep(1500); // 1.5초 대기
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
+
 
         return allTags;
     }
 
+    private boolean isTooManyRequestsError(Exception e) {
+        return e.getMessage() != null && e.getMessage().contains("429");
+    }
 
     public List<List<String>> extractTags(Map<String, Object> request) {
         Mono<String> responseMono = webClient
