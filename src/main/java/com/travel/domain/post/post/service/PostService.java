@@ -37,7 +37,7 @@ public class PostService {
     private final TripService tripService;
     private final MemberDtoService memberDtoService;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<UserPostListResponse> getUserPostList(Member member) {
 
         List<Post> postList = postRepository.findByMember(member);
@@ -57,13 +57,13 @@ public class PostService {
                         .member(member)
                         .trip(trip)
                         .title(postRequest.getTitle())
-                        .content(postRequest.getTitle())
+                        .content(postRequest.getContent())
                         .build();
 
         return postRepository.save(post);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PostDetailResponse getPostDetail(Long memberId, Long postId) {
         Member member = memberRepository.findByIdOrElseThrow(memberId);
         Post post = postRepository.findByIdOrElseThrow(postId);
