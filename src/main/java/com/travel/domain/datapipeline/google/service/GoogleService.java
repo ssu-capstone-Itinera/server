@@ -33,7 +33,7 @@ public class GoogleService {
     @Value("${google.api.place-url}")
     private String placeUrl;
 
-    public PlaceListDto searchTourAttraction(GoogleRequest googleRequest) {
+    public PlaceListDto searchPlace(GoogleRequest googleRequest) {
         String getKeyword = "";
         String getType = "";
         if(googleRequest.getCategory().equals(Category.TOURATTRACTION)){
