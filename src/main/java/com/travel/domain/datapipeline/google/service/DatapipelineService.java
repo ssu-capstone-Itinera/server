@@ -111,6 +111,7 @@ public class DatapipelineService {
                                             .openingHours(detailDto.getOpeningHours())
                                             .priceLevel(detailDto.getPriceLevel())
                                             .photo(detailDto.getPhotos().get(0))
+                                            .viewCount(0)
                                             .build();
 
                             try {
@@ -178,6 +179,7 @@ public class DatapipelineService {
                                             .openingHours(detailDto.getOpeningHours())
                                             .priceLevel(detailDto.getPriceLevel())
                                             .photo(detailDto.getPhotos().get(0))
+                                            .viewCount(0)
                                             .build();
 
                             try {
@@ -239,6 +241,7 @@ public class DatapipelineService {
                                             .openingHours(detailDto.getOpeningHours())
                                             .priceLevel(detailDto.getPriceLevel())
                                             .photo(detailDto.getPhotos().get(0))
+                                            .viewCount(0)
                                             .build();
 
                             try {
