@@ -47,7 +47,7 @@ public class DatapipelineService {
      */
     @Transactional
     public PlaceListDto searchPlace(GoogleRequest googleRequest) {
-        PlaceListDto placeListDto = googleService.searchTourAttraction(googleRequest);
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
 
         return placeListDto;
     }
@@ -56,7 +56,7 @@ public class DatapipelineService {
     정적 키워드로 장소 '세부정보' 리스트 반환 함수
      */
     public List<PlaceDetailDto> searchPlaceDetail(GoogleRequest googleRequest) {
-        PlaceListDto placeListDto = googleService.searchTourAttraction(googleRequest);
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
 
         return googleService.getPlaceDetail(placeListDto);
     }
@@ -65,7 +65,7 @@ public class DatapipelineService {
     정적 키워드로 장소 세부 정보 및 llm 태깅 정보 포함하는 함수
      */
     public List<TourAttractionLLMDto> searchTourAttractionWithLLM(GoogleRequest googleRequest) {
-        PlaceListDto placeListDto = googleService.searchTourAttraction(googleRequest);
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
 
         List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
 
@@ -73,7 +73,7 @@ public class DatapipelineService {
     }
 
     public List<SavePlaceDto> saveTourAttraction(GoogleRequest googleRequest) {
-        PlaceListDto placeListDto = googleService.searchTourAttraction(googleRequest);
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
 
         List<PlaceDetailDto> placeDetailDtos = getPlaceDetailDtos(placeListDto);
 
@@ -143,7 +143,7 @@ public class DatapipelineService {
     }
 
     public List<SavePlaceDto> saveCafe(GoogleRequest googleRequest) {
-        PlaceListDto placeListDto = googleService.searchTourAttraction(googleRequest);
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
 
 
         List<PlaceDetailDto> placeDetailDtos = getPlaceDetailDtos(placeListDto);
@@ -208,7 +208,7 @@ public class DatapipelineService {
     }
 
     public List<SavePlaceDto> saveRestaurant(GoogleRequest googleRequest) {
-        PlaceListDto placeListDto = googleService.searchTourAttraction(googleRequest);
+        PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
 
         List<PlaceDetailDto> placeDetailDtos = getPlaceDetailDtos(placeListDto);
 
