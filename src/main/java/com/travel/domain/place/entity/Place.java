@@ -68,4 +68,7 @@ public class Place extends BaseTimeEntity {
 
     @Column(name = "reviews")
     private List<String> reviews;
+
+    @Column(name = "view_count", nullable = false)
+    private int viewCount;
 }
