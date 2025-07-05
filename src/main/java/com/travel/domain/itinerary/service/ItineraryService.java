@@ -14,6 +14,7 @@ import com.travel.domain.place.dao.MyPlaceRepository;
 import com.travel.domain.place.dao.PlaceRepository;
 import com.travel.domain.place.entity.MyPlace;
 import com.travel.domain.place.entity.Place;
+import com.travel.domain.place.service.PlaceViewService;
 import com.travel.domain.trip.dao.TripRepository;
 import com.travel.domain.trip.entity.Trip;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,8 @@ public class ItineraryService {
     private final PlaceRepository placeRepository;
     private final ItineraryRepository itineraryRepository;
     private final MyPlaceRepository myPlaceRepository;
+
+    private final PlaceViewService placeViewService;
 
     public ItinerarySaveResponse saveItinerary(ItinerarySaveRequest itinerarySaveRequest) {
         //Trip을 저장할 때, Trip을 먼저 저장을 하고 Itinerary를 저장하는 과정을 반복해야합니다(중요)
@@ -55,6 +58,10 @@ public class ItineraryService {
                 .myPlaces(myPlaces)
                 .itineraryPlaceTypeOrder(itineraryPlaceTypeOrder)
                 .build();
+
+        for(Place place : places){
+            placeViewService.increaseViewCount(place.getId());
+        }
 
         itineraryRepository.save(itinerary);
         log.info("itinerary {} saved", itinerarySaveRequest.getTourDate());
