@@ -45,4 +45,11 @@ public class PlaceController {
             @RequestBody MyPlaceSelectRequest myPlaceSelectRequest) {
         return ResponseEntity.ok(placeService.selectMyPlace(myPlaceSelectRequest));
     }
+
+    @Operation(summary = "인기 장소 조회")
+    @PostMapping("/popular")
+    public ResponseEntity<PlaceListResponse> getPopularPlaces() {
+
+        return ResponseEntity.ok(placeService.getPopularPlaces());
+    }
 }
