@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class PlaceService {
     private final PlaceRepository placeRepository;
+    private final PlaceRankingService placeRankingService;
     private final PlacetypeService placetypeService;
     private final PlaceGoogleService placeGoogleService;
     private final DatapipelineService datapipelineService;
@@ -49,6 +50,7 @@ public class PlaceService {
     private final TourattractionElasticsearchRepository tourattractionElasticsearchRepository;
 
     private final int PAGE_SIZE = 20;
+    private final int HOME_LIMIT = 20;
 
 
     @Transactional
@@ -330,6 +332,30 @@ public class PlaceService {
                 .priceLevel(place.getPriceLevel())
                 .reviews(place.getReviews())
                 .cafeTags(cafeDoc.getCafeTags())
+                .build();
+    }
+
+    public PlaceListResponse getPopularPlaces() {
+
+        List<Place> placeList = placeRankingService.getTopPlaces(HOME_LIMIT);
+        List<PlaceResponse> placeResponseList = placeList.stream()
+                .map(place -> {
+                    return PlaceResponse.builder()
+                            .placeId(place.getId())
+                            .placeGoogleId(place.getPlaceGoogleId())
+                            .lng(place.getLng())
+                            .lat(place.getLat())
+                            .address(place.getAddress())
+                            .rating(place.getRating())
+                            .category(place.getCategory())
+                            .photo(place.getPhoto())
+                            .name(place.getName())
+                            .build();
+                })
+                .collect(Collectors.toList());
+
+        return PlaceListResponse.builder()
+                .placeResponseList(placeResponseList)
                 .build();
     }
 }

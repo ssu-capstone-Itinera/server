@@ -14,6 +14,7 @@ public class PlaceResponse {
     private String address;
     private Double rating;
     private Category category;
+    private String photo;
     private Double lng;
     private Double lat;
 }
