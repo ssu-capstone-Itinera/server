@@ -14,7 +14,7 @@ import com.travel.domain.place.dao.MyPlaceRepository;
 import com.travel.domain.place.dao.PlaceRepository;
 import com.travel.domain.place.entity.MyPlace;
 import com.travel.domain.place.entity.Place;
-import com.travel.domain.place.service.PlaceViewService;
+import com.travel.domain.place.service.viewcount.PlaceViewService;
 import com.travel.domain.trip.dao.TripRepository;
 import com.travel.domain.trip.entity.Trip;
 import lombok.RequiredArgsConstructor;

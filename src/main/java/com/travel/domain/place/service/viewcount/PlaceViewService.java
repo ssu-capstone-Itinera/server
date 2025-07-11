@@ -1,4 +1,4 @@
-package com.travel.domain.place.service;
+package com.travel.domain.place.service.viewcount;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

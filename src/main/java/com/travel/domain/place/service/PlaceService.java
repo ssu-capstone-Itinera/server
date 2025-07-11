@@ -8,12 +8,10 @@ import com.travel.domain.datapipeline.google.service.DatapipelineService;
 import com.travel.domain.place.dao.PlaceRepository;
 import com.travel.domain.place.dto.*;
 import com.travel.domain.place.entity.Place;
+import com.travel.domain.place.service.viewcount.PlaceRankingService;
 import com.travel.domain.placetype.dao.cafe.CafeElasticsearchRepository;
 import com.travel.domain.placetype.dao.restaurant.RestaurantElasticsearchRepository;
 import com.travel.domain.placetype.dao.tourattraction.TourattractionElasticsearchRepository;
-import com.travel.domain.placetype.dto.response.CafeResponse;
-import com.travel.domain.placetype.dto.response.RestaurantResponse;
-import com.travel.domain.placetype.dto.response.TourattractionResponse;
 import com.travel.domain.placetype.entity.cafe.CafeDoc;
 import com.travel.domain.placetype.entity.cafe.CafeTag;
 import com.travel.domain.placetype.entity.restaurant.RestaurantDoc;
@@ -32,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j

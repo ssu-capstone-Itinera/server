@@ -1,4 +1,4 @@
-package com.travel.domain.place.service;
+package com.travel.domain.place.service.viewcount;
 
 import com.travel.domain.place.dao.PlaceRepository;
 import com.travel.domain.place.entity.Place;
