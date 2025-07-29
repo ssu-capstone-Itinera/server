@@ -97,22 +97,7 @@ public class DatapipelineService {
                                             : null;
 
                             // Place (MySQL용 엔티티)
-                            Place place =
-                                    Place.builder()
-                                            .category(Category.TOURATTRACTION)
-                                            .placeGoogleId(detailDto.getPlaceId())
-                                            .name(detailDto.getName())
-                                            .lat(detailDto.getLat())
-                                            .lng(detailDto.getLng())
-                                            .address(detailDto.getAddress())
-                                            .rating(detailDto.getRating())
-                                            .phoneNumber(detailDto.getPhoneNumber())
-                                            .webSite(detailDto.getWebsite())
-                                            .openingHours(detailDto.getOpeningHours())
-                                            .priceLevel(detailDto.getPriceLevel())
-                                            .photo(detailDto.getPhotos().get(0))
-                                            .viewCount(0)
-                                            .build();
+                            Place place = getPlace(detailDto, Category.TOURATTRACTION);
 
                             try {
                                 placeRepository.save(place);
@@ -144,6 +129,8 @@ public class DatapipelineService {
                 .collect(Collectors.toList());
     }
 
+
+
     public List<SavePlaceDto> saveCafe(GoogleRequest googleRequest) {
         PlaceListDto placeListDto = googleService.searchPlace(googleRequest);
 
@@ -155,7 +142,7 @@ public class DatapipelineService {
         return getSaveCafeList(googleRequest, placeDetailDtos);
     }
 
-    // 키워드로 cafe 검색 후 -> detail로 상세 세부 tag 가져오는 코드 추가해야함
+
     private List<SavePlaceDto> getSaveCafeList(
             GoogleRequest googleRequest, List<PlaceDetailDto> placeDetailDtos) {
 
@@ -165,22 +152,7 @@ public class DatapipelineService {
                             PlaceDetailDto detailDto = placeDetailDtos.get(i);
                             log.info("place ID: " + detailDto.getPlaceId());
                             // Place (MySQL용 엔티티)
-                            Place place =
-                                    Place.builder()
-                                            .category(Category.CAFE)
-                                            .placeGoogleId(detailDto.getPlaceId())
-                                            .name(detailDto.getName())
-                                            .lat(detailDto.getLat())
-                                            .lng(detailDto.getLng())
-                                            .address(detailDto.getAddress())
-                                            .rating(detailDto.getRating())
-                                            .phoneNumber(detailDto.getPhoneNumber())
-                                            .webSite(detailDto.getWebsite())
-                                            .openingHours(detailDto.getOpeningHours())
-                                            .priceLevel(detailDto.getPriceLevel())
-                                            .photo(detailDto.getPhotos().get(0))
-                                            .viewCount(0)
-                                            .build();
+                            Place place = getPlace(detailDto, Category.CAFE);
 
                             try {
                                 placeRepository.save(place);
@@ -227,22 +199,7 @@ public class DatapipelineService {
                             PlaceDetailDto detailDto = placeDetailDtos.get(i);
 
                             // Place (MySQL용 엔티티)
-                            Place place =
-                                    Place.builder()
-                                            .category(Category.RESTAURANT)
-                                            .placeGoogleId(detailDto.getPlaceId())
-                                            .name(detailDto.getName())
-                                            .address(detailDto.getAddress())
-                                            .rating(detailDto.getRating())
-                                            .lat(detailDto.getLat())
-                                            .lng(detailDto.getLng())
-                                            .phoneNumber(detailDto.getPhoneNumber())
-                                            .webSite(detailDto.getWebsite())
-                                            .openingHours(detailDto.getOpeningHours())
-                                            .priceLevel(detailDto.getPriceLevel())
-                                            .photo(detailDto.getPhotos().get(0))
-                                            .viewCount(0)
-                                            .build();
+                            Place place = getPlace(detailDto, Category.RESTAURANT);
 
                             try {
                                 placeRepository.save(place);
@@ -280,5 +237,25 @@ public class DatapipelineService {
 
         List<PlaceDetailDto> placeDetailDtos = googleService.getPlaceDetail(placeListDto);
         return placeDetailDtos;
+    }
+
+    public Place getPlace(PlaceDetailDto detailDto, Category category) {
+        Place place =
+                Place.builder()
+                        .category(category)
+                        .placeGoogleId(detailDto.getPlaceId())
+                        .name(detailDto.getName())
+                        .lat(detailDto.getLat())
+                        .lng(detailDto.getLng())
+                        .address(detailDto.getAddress())
+                        .rating(detailDto.getRating())
+                        .phoneNumber(detailDto.getPhoneNumber())
+                        .webSite(detailDto.getWebsite())
+                        .openingHours(detailDto.getOpeningHours())
+                        .priceLevel(detailDto.getPriceLevel())
+                        .photo(detailDto.getPhotos().get(0))
+                        .viewCount(0)
+                        .build();
+        return place;
     }
 }
