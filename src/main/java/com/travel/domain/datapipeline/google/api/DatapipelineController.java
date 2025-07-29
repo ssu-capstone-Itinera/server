@@ -26,7 +26,7 @@ public class DatapipelineController {
     private final DatapipelineService datapipelineService;
 
     @Operation(summary = "장소 조회 (tourAttraction test) ")
-    @PostMapping("/search/tourattraction")
+    @PostMapping("/search/tourattractions")
     public ResponseEntity<PlaceListDto> searchAttractions(
             @RequestBody GoogleRequest googleRequest) {
         PlaceListDto response = new PlaceListDto();
@@ -69,7 +69,7 @@ public class DatapipelineController {
     }
 
     @Operation(summary = "장소 조회 후 태깅, document 저장 (tourAttraction test) ")
-    @PostMapping("/save/tourattraction")
+    @PostMapping("/tourattraction")
     public ResponseEntity<List<SavePlaceDto>> saveTourAttraction(
             @RequestBody GoogleRequest googleRequest) {
         List<SavePlaceDto> response = datapipelineService.saveTourAttraction(googleRequest);
@@ -78,7 +78,7 @@ public class DatapipelineController {
     }
 
     @Operation(summary = "장소 조회 후 태깅, document 저장 (cafe test) ")
-    @PostMapping("/save/cafe")
+    @PostMapping("/cafe")
     public ResponseEntity<List<SavePlaceDto>> saveCafe(@RequestBody GoogleRequest googleRequest) {
         List<SavePlaceDto> response = datapipelineService.saveCafe(googleRequest);
 
@@ -86,7 +86,7 @@ public class DatapipelineController {
     }
 
     @Operation(summary = "장소 조회 후 태깅, document 저장 (restaurant test) ")
-    @PostMapping("/save/restaurant")
+    @PostMapping("/restaurant")
     public ResponseEntity<List<SavePlaceDto>> saveRestaurant(
             @RequestBody GoogleRequest googleRequest) {
         List<SavePlaceDto> response = datapipelineService.saveRestaurant(googleRequest);
