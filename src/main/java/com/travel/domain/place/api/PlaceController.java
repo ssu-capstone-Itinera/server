@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/place")
+@RequestMapping("/api/v1/places")
 @Tag(name = "Place", description = "여행지 추천 api")
 public class PlaceController {
     private final PlaceService placeService;
